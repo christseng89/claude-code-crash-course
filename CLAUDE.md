@@ -6,6 +6,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **Claude Code Crash Course** - a branch-based learning repository designed to teach Claude Code concepts through hands-on examples. Each topic is taught through a separate branch with chronologically ordered commits that guide learners step-by-step.
 
+## Getting Started
+
+When first working with this repository:
+
+```bash
+# Clone the repository
+git clone https://github.com/christseng89/claude-code-crash-course.git crash-course
+cd crash-course
+
+# Start Claude Code
+claude
+
+# Initialize Claude Code context (recommended)
+/init
+```
+
+The `/init` command analyzes the codebase and creates [CLAUDE.md](CLAUDE.md) (this file) to help Claude understand the repository structure and conventions.
+
 ## Repository Architecture
 
 ### Branch-Based Learning Structure
@@ -210,7 +228,9 @@ uv run python --version
 - `README-1GistOfClaudeCode.md` - Bilingual introduction to Claude Code (Chinese/English)
 - `static/banner.png` - Course banner image
 - `.claude/settings.local.json` - Base permissions and MCP server configuration
+- `.gitignore` - Excludes video files (*.mp4) from version control
 - `hookhub/` - Next.js application for hook management demonstration
+- `resources/` - Video tutorials on Context Engineering (not tracked in git)
 
 ### Project Branches
 Each branch may contain:
@@ -262,17 +282,21 @@ Agent instructions and personality...
 
 ### Permission Patterns
 
-Common permission configurations across branches:
+**Main Branch Permissions:**
 ```json
 {
   "permissions": {
     "allow": [
       "Bash(git checkout:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
 ```
+
+Other branches may have different permission configurations. Check [.claude/settings.local.json](.claude/settings.local.json) when switching branches.
 
 ### MCP Server Configuration
 
@@ -347,6 +371,18 @@ When adding new content:
 3. Make commits that tell a learning story (each commit = one concept)
 4. Open PR against main branch
 5. Update README.md topic table
+
+## Video Resources
+
+The `resources/` directory contains video tutorials on Context Engineering (not tracked in git due to file size):
+
+1. **Context Engineering: The Key to Building and Using Successful AI Agents**
+2. **Context Engineering: From Principles to Practice with Claude Code**
+3. **Context Engineering: System Prompt**
+
+These videos provide in-depth explanations of context engineering concepts that complement the hands-on examples in this repository.
+
+**Note:** Video files (*.mp4) are excluded from git via [.gitignore](.gitignore) to keep the repository size manageable.
 
 ## Resources
 
