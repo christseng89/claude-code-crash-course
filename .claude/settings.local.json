@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git stash:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "weather",
+    "puppeteer-mcp-server",
+    "sequential-thinking",
+    "github"
+  ],
+  "enableAllProjectMcpServers": true
+}

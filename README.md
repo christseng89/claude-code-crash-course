@@ -48,8 +48,8 @@ Before you start, make sure you have the following installed:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/emarco177/claude-code-crash-course.git
-    cd claude-code-crash-course
+    git clone https://github.com/christseng89/claude-code-crash-course.git crash-course
+    cd crash-course
     ```
 2.  **Choose a topic and check out the branch:**
     ```bash
@@ -72,3 +72,10 @@ Contributions are welcome! If you'd like to add a new topic or improve an existi
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
 Happy learning! 🎉
+
+## Resources 📖
+
+*   [Claude Code Official Documentation](https://code.claude.com/docs/)
+*   [Course Github Repository](https://github.com/christseng89/claude-code-crash-course)
+*   [Model Context Protocol (MCP) Official Documentation](https://modelcontextprotocol.io/docs)
+*   [Cursor MCP Official Documentation](https://cursor.com/docs)
