@@ -24,6 +24,9 @@ The repository uses a unique educational pattern:
 - `project/subagents` - Specialized AI agents (Code Comedy Carl, Mermaid diagram generator)
 - `project/hooks-notifications` - Workflow automation with hooks and sound notifications
 - `project/hookhub` - Advanced hook management systems
+- `project/hookhub2` - Alternative hook management implementation
+- `project/skills` - Custom skills and extensions
+- `project/output-styles` - Customizing Claude Code output formatting
 
 ### Working with the Repository
 
@@ -42,10 +45,11 @@ git log --oneline --reverse
 git checkout <commit_hash>
 ```
 
-**Important:** The `main` branch contains only the course overview. All learning content lives in `project/*` branches. When switching between branches, be aware that:
+**Important:** The `main` branch contains the course overview plus a working Next.js application (`hookhub/`). Most learning content lives in `project/*` branches. When switching between branches, be aware that:
 - `.claude/` directory contents change per branch
 - Some branches have Python code examples (e.g., `project/subagents` has `main.py`)
 - Some branches include MCP configurations (e.g., `project/mcp` has `.mcp.json`)
+- The `hookhub/` Next.js application exists on main and demonstrates hook management concepts
 
 ## Branch-Specific Configurations
 
@@ -111,6 +115,23 @@ uv sync
 uv run play_sound.py
 ```
 
+### Main Branch: HookHub Next.js Application
+
+**Key Files:**
+
+- `hookhub/` - Next.js 16.1.4 application demonstrating hook management concepts
+- `hookhub/app/page.tsx` - Main page component
+- `hookhub/app/layout.tsx` - Root layout with Geist fonts
+- `hookhub/package.json` - Project dependencies and scripts
+
+**Tech Stack:**
+
+- Next.js 16.1.4 with App Router
+- React 19.2.3
+- TypeScript 5
+- Tailwind CSS 4
+- ESLint 9
+
 ## Development Commands
 
 ### Git Operations
@@ -132,6 +153,28 @@ git show <commit_hash>
 git checkout main
 ```
 
+### Next.js Application (main branch)
+
+```bash
+# Navigate to hookhub directory
+cd hookhub
+
+# Install dependencies
+npm install
+
+# Start development server (http://localhost:3000)
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Run linter
+npm run lint
+```
+
 ### Python Project (hooks-notifications branch)
 
 ```bash
@@ -145,19 +188,29 @@ uv run play_sound.py
 uv run python --version
 ```
 
-### MCP Server Testing (mcp branch)
+### MCP Server Testing
 
 ```bash
-# Test Context7 MCP integration
-# Ask Claude about LangGraph topics to trigger MCP usage
+# Main branch has weather, puppeteer, sequential-thinking, and github MCP servers
+# Test by asking Claude to:
+# - Get weather forecasts for a location
+# - Take screenshots of websites
+# - Use step-by-step reasoning for complex problems
+# - Interact with GitHub API
+
+# For mcp branch specifically:
+# Test Context7 MCP integration by asking about LangGraph topics
 ```
 
 ## File Organization Logic
 
 ### Main Branch
+
 - `README.md` - Course landing page with topic index
+- `README-1GistOfClaudeCode.md` - Bilingual introduction to Claude Code (Chinese/English)
 - `static/banner.png` - Course banner image
-- `.claude/settings.local.json` - Base permissions (git checkout allowed)
+- `.claude/settings.local.json` - Base permissions and MCP server configuration
+- `hookhub/` - Next.js application for hook management demonstration
 
 ### Project Branches
 Each branch may contain:
@@ -227,7 +280,14 @@ MCP servers can be configured at:
 1. **Project level** - `.mcp.json` in branch root
 2. **Settings level** - `enabledMcpjsonServers` array in `settings.local.json`
 
-Example from hooks-notifications branch:
+**Enabled MCP Servers (Main Branch):**
+
+- **weather** - Weather forecasts and alerts
+- **puppeteer-mcp-server** - Browser automation and screenshots
+- **sequential-thinking** - Step-by-step reasoning for complex problems
+- **github** - GitHub API integration
+
+Configuration example:
 ```json
 {
   "enabledMcpjsonServers": [
