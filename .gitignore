@@ -1,2 +1,6 @@
 *.mp4
 test.txt
+
+# Environment variables
+.env
+.env.local

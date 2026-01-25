@@ -18,11 +18,16 @@ cd crash-course
 # Start Claude Code
 claude
 
+# Or, to use GitHub MCP server (requires .env setup):
+.\start-claude.ps1
+
 # Initialize Claude Code context (recommended)
 /init
 ```
 
 The `/init` command analyzes the codebase and creates [CLAUDE.md](CLAUDE.md) (this file) to help Claude understand the repository structure and conventions.
+
+**Note:** To use the GitHub MCP server, you'll need to set up a `.env` file with your GitHub token. See the [GitHub MCP Server Setup](#github-mcp-server-setup) section below.
 
 ## Repository Architecture
 
@@ -323,6 +328,32 @@ Configuration example:
   "enableAllProjectMcpServers": true
 }
 ```
+
+#### GitHub MCP Server Setup
+
+The GitHub MCP server requires a Personal Access Token for authentication. This is configured using environment variables for security.
+
+**Files:**
+- `.env` - Contains your actual GitHub token (git-ignored)
+- `.env.example` - Template file showing required variables
+- `.mcp.json` - MCP server configuration (no hardcoded tokens)
+- `start-claude.ps1` - PowerShell script to load .env and start Claude Code
+
+**Quick Setup:**
+1. Add your GitHub token to `.env`:
+   ```env
+   GITHUB_PERSONAL_ACCESS_TOKEN=your_token_here
+   ```
+2. Start Claude Code with environment variables loaded:
+   ```powershell
+   .\start-claude.ps1
+   ```
+
+**Generate a token:**
+- Visit: https://github.com/settings/tokens
+- Required scopes: `repo`, `read:org`, `read:user`
+
+For detailed setup instructions, see [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md).
 
 ## Learning Path Workflow
 

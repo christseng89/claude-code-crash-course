@@ -49,6 +49,8 @@ Using git add . for new files and deleted files.
 /clear
 ```
 
+## MCP Playwright Server Setup
+
 ```bash
 claude
 Add playwright mcp server for this project (.mcp.json)
