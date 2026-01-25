@@ -41,4 +41,16 @@ npm run dev
 ```bash
 claude
 /init
+/commit
+
+Using git add . for new files and deleted files.
+
+/security-review
+/clear
+```
+
+```bash
+claude
+Add playwright mcp server for this project (.mcp.json)
+    Extract all links from www.chinatimes.com
 ```
