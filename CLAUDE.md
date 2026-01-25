@@ -315,6 +315,7 @@ MCP servers can be configured at:
 - **puppeteer-mcp-server** - Browser automation and screenshots
 - **sequential-thinking** - Step-by-step reasoning for complex problems
 - **github** - GitHub API integration
+- **playwright** - Microsoft Playwright browser automation and testing
 
 Configuration example:
 ```json
@@ -323,7 +324,8 @@ Configuration example:
     "weather",
     "puppeteer-mcp-server",
     "sequential-thinking",
-    "github"
+    "github",
+    "playwright"
   ],
   "enableAllProjectMcpServers": true
 }
