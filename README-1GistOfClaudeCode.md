@@ -148,6 +148,7 @@ Can you now implement the main page grid as specified in memory/spec/CLAUDE.md?
 Update the README.md in the hookhub directory.
 
 Move the memory directory to the hookhub directory.
+/auto-commit
 /clear
 
 ```
