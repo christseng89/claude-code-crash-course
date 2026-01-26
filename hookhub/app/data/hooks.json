@@ -1,0 +1,202 @@
+{
+  "hooks": [
+    {
+      "id": "1",
+      "name": "format-typescript",
+      "category": "PostToolUse",
+      "description": "Automatically formats TypeScript/TSX files using Prettier after Write/Edit operations",
+      "repoUrl": "https://github.com/disler/claude-code-hooks-mastery",
+      "repoOwner": "disler",
+      "repoName": "claude-code-hooks-mastery"
+    },
+    {
+      "id": "2",
+      "name": "activity-logger",
+      "category": "PreToolUse",
+      "description": "Logs all tool usage to daily log files with JSON parsing and fallback handling",
+      "repoUrl": "https://github.com/ChrisWiles/claude-code-showcase",
+      "repoOwner": "ChrisWiles",
+      "repoName": "claude-code-showcase"
+    },
+    {
+      "id": "3",
+      "name": "git-auto-stage",
+      "category": "PostToolUse",
+      "description": "Automatically stages files in git after formatting completes successfully",
+      "repoUrl": "https://github.com/decider/claude-hooks",
+      "repoOwner": "decider",
+      "repoName": "claude-hooks"
+    },
+    {
+      "id": "4",
+      "name": "session-logger",
+      "category": "SessionStart",
+      "description": "Logs session start time and project context for tracking development sessions",
+      "repoUrl": "https://github.com/disler/claude-code-hooks-mastery",
+      "repoOwner": "disler",
+      "repoName": "claude-code-hooks-mastery"
+    },
+    {
+      "id": "5",
+      "name": "cleanup-temp-files",
+      "category": "SessionEnd",
+      "description": "Automatically removes temporary files and cleanup artifacts when session ends",
+      "repoUrl": "https://github.com/ChrisWiles/claude-code-showcase",
+      "repoOwner": "ChrisWiles",
+      "repoName": "claude-code-showcase"
+    },
+    {
+      "id": "6",
+      "name": "sound-notification",
+      "category": "Stop",
+      "description": "Plays a sound notification when Claude Code session stops using pygame",
+      "repoUrl": "https://github.com/hesreallyhim/awesome-claude-code",
+      "repoOwner": "hesreallyhim",
+      "repoName": "awesome-claude-code"
+    },
+    {
+      "id": "7",
+      "name": "eslint-validator",
+      "category": "PostToolUse",
+      "description": "Runs ESLint validation after code changes and reports warnings/errors",
+      "repoUrl": "https://github.com/decider/claude-hooks",
+      "repoOwner": "decider",
+      "repoName": "claude-hooks"
+    },
+    {
+      "id": "8",
+      "name": "backup-before-change",
+      "category": "PreToolUse",
+      "description": "Creates backup copies of files before Write/Edit operations for safety",
+      "repoUrl": "https://github.com/affaan-m/everything-claude-code",
+      "repoOwner": "affaan-m",
+      "repoName": "everything-claude-code"
+    },
+    {
+      "id": "9",
+      "name": "typescript-type-check",
+      "category": "Workflow",
+      "description": "Complete workflow: format → type check → lint → stage changes automatically",
+      "repoUrl": "https://github.com/johnlindquist/claude-hooks",
+      "repoOwner": "johnlindquist",
+      "repoName": "claude-hooks"
+    },
+    {
+      "id": "10",
+      "name": "memory-bank-updater",
+      "category": "SubagentStop",
+      "description": "Updates memory bank with learnings when subagent completes its task",
+      "repoUrl": "https://github.com/centminmod/my-claude-code-setup",
+      "repoOwner": "centminmod",
+      "repoName": "my-claude-code-setup"
+    },
+    {
+      "id": "11",
+      "name": "context-compactor",
+      "category": "PreCompact",
+      "description": "Optimizes context before compaction to preserve important information",
+      "repoUrl": "https://github.com/disler/claude-code-hooks-mastery",
+      "repoOwner": "disler",
+      "repoName": "claude-code-hooks-mastery"
+    },
+    {
+      "id": "12",
+      "name": "prompt-validator",
+      "category": "UserPromptSubmit",
+      "description": "Validates user prompts for security issues before processing",
+      "repoUrl": "https://github.com/ChrisWiles/claude-code-showcase",
+      "repoOwner": "ChrisWiles",
+      "repoName": "claude-code-showcase"
+    },
+    {
+      "id": "13",
+      "name": "permission-auditor",
+      "category": "PermissionRequest",
+      "description": "Logs all permission requests for security auditing and compliance",
+      "repoUrl": "https://github.com/affaan-m/everything-claude-code",
+      "repoOwner": "affaan-m",
+      "repoName": "everything-claude-code"
+    },
+    {
+      "id": "14",
+      "name": "desktop-notification",
+      "category": "Notification",
+      "description": "Sends desktop notifications for important events during development",
+      "repoUrl": "https://github.com/carlrannaberg/claudekit",
+      "repoOwner": "carlrannaberg",
+      "repoName": "claudekit"
+    },
+    {
+      "id": "15",
+      "name": "test-runner",
+      "category": "PostToolUse",
+      "description": "Automatically runs relevant tests after code changes are written",
+      "repoUrl": "https://github.com/decider/claude-hooks",
+      "repoOwner": "decider",
+      "repoName": "claude-hooks"
+    },
+    {
+      "id": "16",
+      "name": "dependency-checker",
+      "category": "Utility",
+      "description": "Checks and validates project dependencies for security vulnerabilities",
+      "repoUrl": "https://github.com/carlrannaberg/claudekit",
+      "repoOwner": "carlrannaberg",
+      "repoName": "claudekit"
+    },
+    {
+      "id": "17",
+      "name": "code-complexity-analyzer",
+      "category": "Utility",
+      "description": "Analyzes code complexity metrics and suggests refactoring opportunities",
+      "repoUrl": "https://github.com/johnlindquist/claude-hooks",
+      "repoOwner": "johnlindquist",
+      "repoName": "claude-hooks"
+    },
+    {
+      "id": "18",
+      "name": "documentation-generator",
+      "category": "PostToolUse",
+      "description": "Automatically generates or updates documentation after code changes",
+      "repoUrl": "https://github.com/centminmod/my-claude-code-setup",
+      "repoOwner": "centminmod",
+      "repoName": "my-claude-code-setup"
+    },
+    {
+      "id": "19",
+      "name": "git-commit-workflow",
+      "category": "Workflow",
+      "description": "Complete git workflow: stage → validate → generate message → commit → push",
+      "repoUrl": "https://github.com/hesreallyhim/awesome-claude-code",
+      "repoOwner": "hesreallyhim",
+      "repoName": "awesome-claude-code"
+    },
+    {
+      "id": "20",
+      "name": "project-initializer",
+      "category": "SessionStart",
+      "description": "Sets up development environment and loads project-specific configurations",
+      "repoUrl": "https://github.com/affaan-m/everything-claude-code",
+      "repoOwner": "affaan-m",
+      "repoName": "everything-claude-code"
+    },
+    {
+      "id": "21",
+      "name": "ai-code-review",
+      "category": "Workflow",
+      "description": "Triggers automated AI-powered code review workflow with detailed feedback",
+      "repoUrl": "https://github.com/johnlindquist/claude-hooks",
+      "repoOwner": "johnlindquist",
+      "repoName": "claude-hooks"
+    },
+    {
+      "id": "22",
+      "name": "changelog-updater",
+      "category": "PostToolUse",
+      "description": "Updates CHANGELOG.md automatically based on commits and code changes",
+      "repoUrl": "https://github.com/carlrannaberg/claudekit",
+      "repoOwner": "carlrannaberg",
+      "repoName": "claudekit"
+    }
+  ]
+}
