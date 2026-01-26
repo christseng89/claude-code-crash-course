@@ -238,7 +238,7 @@ Contributions are welcome! To contribute:
 - [Claude Code Documentation](https://code.claude.com/docs)
 - [Claude Code Hooks Guide](https://code.claude.com/docs/en/hooks-guide)
 - [Model Context Protocol](https://modelcontextprotocol.io/docs)
-- [Project Specification](../memory/spec/CLAUDE.md)
+- [Project Specification](memory/spec/CLAUDE.md)
 
 ## Featured Hook Repositories
 
