@@ -132,4 +132,16 @@ EOF
 claude
 What are you expert in?
   # It is not working as expected.
+
+# Plan mode
+I want you to help me write a spec file for a project I am building called "hookhub". Its a place where cool open source cloude hooks are displayed and browse. Search on claude hooks and write an initial spec for this. remember its an MVP. And we need only the functionality of displaying the hooks. hooks are found in github repository, they have name, category, description and link to repo. the main page should display the hooks in a grid like view.
+
+# MVP = Minimum Viable Product（最小可行產品）
+
+Write the spec into the spec directory with a filename as CLAUDE.md
+Move the spec directory to the subdirectory in the memory directory
+
+/clear
+
+Can you now implement the main page grid as specified in memory/spec/CLAUDE.md?
 ```
