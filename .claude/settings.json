@@ -1,15 +1,1 @@
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "uv run play_sound.py"
-          }
-        ]
-      }
-    ]
-  }
-}
+{}
