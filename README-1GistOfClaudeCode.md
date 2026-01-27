@@ -152,3 +152,28 @@ Move the memory directory to the hookhub directory.
 /clear
 
 ```
+
+### Run the Development Server
+
+```cmd
+cd hookhub
+npm run dev
+```
+
+<http://localhost:3000>
+
+## Useful Slash Commands
+
+```bash
+claude
+
+/init
+/clear
+/cost
+/config
+/agents
+/ide
+/mcp
+/hooks
+/skills
+```
