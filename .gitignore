@@ -1,5 +1,5 @@
 *.mp4
-test.txt
+test*.txt
 
 # Environment variables
 .env
