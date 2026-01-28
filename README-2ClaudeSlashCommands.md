@@ -291,4 +291,34 @@ Update footer in my-app project to © 2026 HooksHub. Made for China Systems comm
   ❯ 1. Restore code and conversation
 
 create a footer, make it minimalistic
+
+/clear
+/rewind
+   /clear
+   No code changes
+```
+
+## Slash Commands
+
+<https://code.claude.com/docs/en/slash-commands#custom-slash-commands>
+<https://github.com/emarco177/claude-code-crash-course/tree/project/custom-commands/.claude/commands>
+
+```bash
+mkdir -p .claude/commands
+
+cat > .claude/commands/commit-code.md << EOF
+# Commit Code
+
+Review the files that have changed, and create a commit with a commit message summrizing the changes made.
+Always try to give short and concise messages that convey the buisness logic.
+
+Use user hints to be the message main subject $arguments
+EOF
+
+cat > .claude/commands/deploy-app.md << EOF
+## Dad Joke
+
+Generate a dad joke about $arguments
+EOF
+
 ```
