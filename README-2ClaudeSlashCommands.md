@@ -252,3 +252,27 @@ FACTUAL INFORMATION (事實類型優先順序): Session > File memory
 
 ./examples/load-context.sh "Create a new API endpoint"
 -> 結果：CLAUDE.md 會加入 @./context/api-context.md
+
+## Rewinding Changes and Check Pointing
+
+<https://code.claude.com/docs/en/checkpointing#rewinding-changes>
+
+```bash
+claude
+How do I bootstrap a next.js project
+
+```
+
+```bash
+# Using npm
+npx create-next-app@latest my-app
+
+cd my-app
+npm run dev
+```
+
+```bash
+claude
+/auto-commit
+
+```
