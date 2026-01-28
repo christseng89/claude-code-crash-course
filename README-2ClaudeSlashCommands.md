@@ -315,10 +315,16 @@ Always try to give short and concise messages that convey the buisness logic.
 Use user hints to be the message main subject $arguments
 EOF
 
-cat > .claude/commands/deploy-app.md << EOF
+cat > .claude/commands/dad-joke.md << EOF
 ## Dad Joke
 
 Generate a dad joke about $arguments
 EOF
 
+```
+
+```bash
+claude
+/commit-code Add Slash Commands
+/dad-joke programming
 ```
