@@ -17,7 +17,11 @@
       "mcp__puppeteer-mcp-server__puppeteer_click",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_close",
-      "Bash(git rev-parse:*)"
+      "Bash(git rev-parse:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)",
+      "mcp__playwright__browser_snapshot",
+      "Bash(git reset:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

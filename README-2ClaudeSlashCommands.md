@@ -274,5 +274,21 @@ npm run dev
 ```bash
 claude
 /auto-commit
+/clear
 
+/model 
+  - Sonnet 4.5
+
+add a landing page for hookshub to publish claude code hooks by using Claude Code style.  In project my-app directory, make it cool and rainy.
+
+add a FAQ section to the landing page.
+
+add a footer.
+
+Update footer in my-app project to © 2026 HooksHub. Made for China Systems community.
+
+/rewind
+  ❯ 1. Restore code and conversation
+
+create a footer, make it minimalistic
 ```
