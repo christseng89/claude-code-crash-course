@@ -2,20 +2,13 @@
 
 ## Claude Code
 
-### Resources
-
 <https://code.claude.com/docs/en/overview>
-<https://code.claude.com/docs/en/costs>
-<https://support.claude.com/en/articles/9797557-usage-limit-best-practices>
-<https://code.claude.com/docs/en/slash-commands>
-<https://code.claude.com/docs/en/vs-code>
-<https://code.claude.com/docs/en/hooks-guide>
-<https://code.claude.com/docs/en/memory#manage-claudes-memory>
-<https://code.claude.com/docs/en/checkpointing#rewinding-changes>
 
 ### Using Claude Subscription
 
 When you log in to Claude Code using a Claude account with an active subscription (Pro, Max, Team, or Enterprise), you can access the features of Claude Code without incurring additional costs for API usage. Your subscription covers the usage of Claude Code.
+
+<https://code.claude.com/docs/en/costs>
 
 ```bash
 claude
@@ -45,6 +38,8 @@ Hello, Claude!
 
 ### Using Anthropic Console Account via API Billing
 
+<https://support.claude.com/en/articles/9797557-usage-limit-best-practices>
+
 If you log in to Claude Code using an Anthropic Console account, your usage will be billed based on the API pricing for the models you use within Claude Code.
 
 ```bash
@@ -67,7 +62,18 @@ Hello, Claude!
 
 ```
 
+## Claude IDE
+
+<https://code.claude.com/docs/en/vs-code>
+
+```bash
+claude
+/ide
+```
+
 ## Hooks Hands on
+
+<https://code.claude.com/docs/en/hooks-guide>
 
 ```bash
 git branch
@@ -112,7 +118,7 @@ Hello, how r u?
   }
 ```
 
-## Hook Output
+### Hook Output
 
 There are two ways for hooks to return output back to Claude Code. The output communicates whether to block and any feedback that should be shown to Claude and the user.
 
@@ -154,7 +160,9 @@ Write it to a Project_stack.md file.
 /clear
 ```
 
-## Manage Claude's Memory
+### Manage Claude's Memory
+
+<https://code.claude.com/docs/en/memory#manage-claudes-memory>
 
 ```bash
 claude
@@ -214,9 +222,9 @@ INSTRUCTION PRIORITY (指令類型優先順序): File memory > Session
 FACTUAL INFORMATION (事實類型優先順序): Session > File memory
 ```
 
-## Claude Code 如何查找記憶檔案
+### Claude Code 如何查找記憶檔案
 
-### 📍 啟動時立即載入（按順序）
+#### 📍 啟動時立即載入（按順序）
 
 1. **全域記憶**：~/.claude/CLAUDE.md
    * 適用於所有專案的個人偏好
@@ -239,13 +247,13 @@ FACTUAL INFORMATION (事實類型優先順序): Session > File memory
    * **只在** Claude 讀取該子目錄中的檔案時才載入
    * 節省啟動時的 token 消耗
 
-### 📝 補充細節
+#### 📝 補充細節
 
 1 **@import 遞迴限制**：最多 **5 層**深度
 2. **檔案格式**：僅支援 **.md** 檔案
 3. **自動忽略**：CLAUDE.local.md 自動加入 .gitignore
 
-## Example Context Switch
+#### Example Context Switch
 
 ./examples/load-context.sh "I need help with database migration"
 -> 結果：CLAUDE.md 會加入 @./context/database-context.md
@@ -300,6 +308,7 @@ create a footer, make it minimalistic
 
 ## Slash Commands
 
+<https://code.claude.com/docs/en/slash-commands>
 <https://code.claude.com/docs/en/slash-commands#custom-slash-commands>
 <https://github.com/emarco177/claude-code-crash-course/tree/project/custom-commands/.claude/commands>
 
