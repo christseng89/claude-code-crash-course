@@ -75,6 +75,52 @@ claude
 
 <https://code.claude.com/docs/en/hooks-guide>
 
+```mermaid
+flowchart TD
+    Start([Session Start])
+    UserPrompt[UserPromptSubmit]
+    
+    subgraph AgenticLoop["AGENTIC LOOP"]
+        PreTool[PreToolUse]
+        Permission[PermissionRequest]
+        ToolExec[[tool executes]]
+        PostTool[PostToolUse / PostToolUseFailure]
+        Subagent[SubagentStart / SubagentStop]
+        
+        PreTool --> Permission
+        Permission --> ToolExec
+        ToolExec --> PostTool
+        PostTool --> Subagent
+        Subagent -.-> PreTool
+    end
+    
+    Notification[Notification<br/>Async]
+    
+    Stop([Stop])
+    PreCompact[PreCompact]
+    End([SessionEnd])
+    
+    Start --> UserPrompt
+    UserPrompt --> PreTool
+    Subagent --> Stop
+    Stop --> PreCompact
+    PreCompact -.-> Start
+    PreCompact --> End
+    
+    style Start fill:#90EE90
+    style Stop fill:#FFB6C1
+    style UserPrompt fill:#E8E8E8
+    style PreCompact fill:#E8E8E8
+    style End fill:#E8E8E8
+    style ToolExec fill:#ADD8E6
+    style PreTool fill:#F5F5DC
+    style Permission fill:#F5F5DC
+    style PostTool fill:#F5F5DC
+    style Subagent fill:#F5F5DC
+    style AgenticLoop fill:#FFF8DC,stroke:#FFA500,stroke-width:3px,stroke-dasharray: 5 5
+    style Notification fill:#FFF,stroke:#999,stroke-dasharray: 5 5
+```
+
 ```bash
 git branch
 git switch project/hooks-notifications
@@ -384,4 +430,57 @@ EOF
 ```bash
 claude
 How does the code page.tsx in my-app directory work?
+```
+
+## LSP - Language Server Protocol
+
+<https://code.claude.com/docs/en/settings#managing-plugins>
+<https://code.claude.com/docs/en/plugins-reference>
+<https://code.claude.com/docs/en/plugins-reference#lsp-servers>
+
+```bash
+claude
+/plugin
+
+  Discover plugins (1/48)
+  ╭────────────────────────────────────────────────────────────────────────────────────────────────────╮   
+  │ ⌕ Search…                                                                                          │   
+  ╰────────────────────────────────────────────────────────────────────────────────────────────────────╯   
+
+    ◯ frontend-design · claude-plugins-official · 120.6K installs
+      Create distinctive, production-grade frontend interfaces ...
+
+    ◯ context7 · claude-plugins-official [Community Managed] · 83.1K installs
+      Upstash Context7 MCP server for up-to-date documentation ...
+
+    ◯ code-review · claude-plugins-official · 57.7K installs
+      Automated code review for pull requests using multiple sp...
+
+    ...
+
+# Search lsp
+
+lsp
+
+   V  typescript-lsp · claude-plugins-official · 40.3K installs
+     TypeScript/JavaScript language server for enhanced code i...
+
+   ◯ pyright-lsp · claude-plugins-official · 21.7K installs
+     Python language server (Pyright) for type checking and co...
+
+   ◯ gopls-lsp · claude-plugins-official · 8K installs
+     Go language server for code intelligence and refactoring
+
+   ...
+
+
+   Install for you (user scope)
+ > Install for all collaborators on this repository (project scope)
+   Install for you, in this repo only (local scope)
+   Back to plugin list
+
+/exit
+
+claude
+Find me all of the occurrences of footer in my-app directory, use the language server protocol.
 ```
