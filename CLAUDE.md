@@ -494,6 +494,46 @@ The GitHub MCP server requires a Personal Access Token for authentication. This 
 
 For detailed setup instructions, see [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md).
 
+#### Context7 MCP Server Integration
+
+The Context7 MCP server provides up-to-date documentation for libraries and frameworks. It's already configured in the `.mcp.json` file.
+
+**LangGraph Documentation Preference:**
+
+When discussing LangGraph topics (agents, workflows, checkpoints, state management, etc.), always use the Context7 MCP server to fetch current documentation before answering questions.
+
+**Primary Library IDs:**
+- `/langchain-ai/langgraph` - Official repository (latest version: 1.0.6)
+- `/llmstxt/langchain-ai_github_io_langgraph_llms-full_txt` - Full documentation (3115 snippets, 91.9 benchmark score)
+- `/websites/langchain_oss_python_langgraph` - Python OSS docs (880 snippets, 82 score)
+- `/websites/langchain-ai_github_io_langgraphjs` - JavaScript docs (2177 snippets, 90 score)
+
+**Query Pattern:**
+```bash
+# Step 1: Resolve library ID (if unknown)
+mcp__context7__resolve-library-id(libraryName="LangGraph", query="user question")
+
+# Step 2: Query specific documentation
+mcp__context7__query-docs(
+  libraryId="/llmstxt/langchain-ai_github_io_langgraph_llms-full_txt",
+  query="specific question about LangGraph feature"
+)
+```
+
+**Best Practices:**
+- Use the full docs library (`/llmstxt/...`) for comprehensive coverage (highest code snippet count)
+- Query specific version if needed: `/langchain-ai/langgraph/1.0.6`
+- Limit Context7 calls to 3 per question to manage token usage
+- Always cite sources from Context7 responses
+
+**Example Questions:**
+- "How do I implement checkpoints in LangGraph?"
+- "What's the latest LangGraph version?"
+- "Show me examples of state management in LangGraph"
+- "How do I create a multi-agent workflow with LangGraph?"
+
+This preference aligns with the pattern demonstrated in the `project/mcp` branch, where Context7 integration for LangGraph is already configured and documented.
+
 ## Context Management
 
 ### Memory System

@@ -22,7 +22,12 @@
       "Bash(npm install:*)",
       "mcp__playwright__browser_snapshot",
       "Bash(git reset:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebSearch",
+      "mcp__weather__get-forecast",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(claude:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
