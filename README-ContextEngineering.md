@@ -143,4 +143,6 @@ This diagram is warning against:
 If 50k tokens of unused tools are loaded before executing even a simple prompt, context, cost, and reasoning capacity are already wasted before the model begins processing.
 
 ```bash
-git branch project/context-engineering-mcp
+git branch -r
+git switch -c project/mcp origin/project/mcp
+```
