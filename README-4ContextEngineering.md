@@ -142,7 +142,89 @@ This diagram is warning against:
 
 If 50k tokens of unused tools are loaded before executing even a simple prompt, context, cost, and reasoning capacity are already wasted before the model begins processing.
 
+## Hands on
+
 ```bash
-git branch -r
-git switch -c project/mcp origin/project/mcp
+cd context-engineering-mcp
+uv sync
+uv run verbose_mcp_server.py
+
+source .venv/Scripts/activate
+
+fastmcp --help
+fastmcp run verbose_mcp_server.py --transport http
+
+```
+
+```json (.mcp.json in parent directory)
+      "verbose-server": {
+        "type": "http",
+        "url": "http://127.0.0.1:8000/mcp"
+      },
+```
+
+```bash
+cd context-engineering-mcp
+claude --mcp-config ../.mcp.json
+
+/mcp
+/context
+
+```
+
+```md
+⎿  Context Usage
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   claude-sonnet-4-5-20250929 · 50k/200k tokens (25%)                                       
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛀ ⛁ ⛁                                                                                            
+     ⛁ ⛁ ⛁ ⛁ ⛀ ⛀ ⛀ ⛶ ⛶ ⛶   Estimated usage by category                                                                   ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System prompt: 2.8k tokens (1.4%)            
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System tools: 16.6k tokens (8.3%)                                                      
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ MCP tools: **17.1k** tokens (8.5%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Memory files: 13.0k tokens (6.5%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Skills: 386 tokens (0.2%)
+     ⛶ ⛶ ⛶ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛁ Messages: 8 tokens (0.0%)
+     ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛶ Free space: 117k (58.6%)
+                           ⛝ Autocompact buffer: 33.0k tokens (16.5%)
+
+     MCP tools · /mcp
+     └ mcp__verbose-server__add_two_numbers: 327 tokens
+     └ mcp__verbose-server__subtract_two_numbers: 364 tokens
+     └ mcp__verbose-server__multiply_two_numbers: 439 tokens
+      ...
+     └ mcp__playwright__browser_tabs: 154 tokens
+     └ mcp__playwright__browser_wait_for: 152 tokens
+
+```
+
+```bash
+# Option 1
+/exit
+claude --mcp-config ../.mcp.json.verbose --strict-mcp-config
+/mcp
+/context
+
+# Option 2
+/exit
+claude --mcp-config ../.mcp.json --strict-mcp-config
+
+/mcp
+
+   Built-in MCPs (always available)
+ ❯ context7 · ✔ connected
+   github · ✔ connected
+   playwright · ✔ connected
+   verbose-server · ✔ connected
+
+ ❯ 3. Disable  
+
+   Built-in MCPs (always available)
+ ❯ context7 · ◯ disabled
+   github · ◯ disabled
+   playwright · ◯ disabled 
+   verbose-server · ✔ connected    
+
+/exit
+
+claude --mcp-config ../.mcp.json 
+/mcp
+/context    
 ```

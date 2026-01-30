@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(.venvScriptspython.exe -c \"from verbose_mcp_server import add_two_numbers; result = add_two_numbers\\(9, 8\\); print\\(f''9 + 8 = {result}''\\)\")",
+      "Bash(\".venv/Scripts/python.exe\" -c \"from verbose_mcp_server import add_two_numbers; result = add_two_numbers\\(9, 8\\); print\\(f''9 + 8 = {result}''\\)\")",
+      "Bash(\".venv/Scripts/python.exe\" -c \"from verbose_mcp_server import add_two_numbers; result = add_two_numbers.fn\\(9, 8\\); print\\(f''9 + 8 = {result}''\\)\")",
+      "mcp__verbose-server__add_two_numbers"
+    ]
+  }
+}
