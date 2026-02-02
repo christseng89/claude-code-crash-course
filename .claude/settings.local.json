@@ -27,7 +27,8 @@
       "mcp__weather__get-forecast",
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
-      "Bash(claude:*)"
+      "Bash(claude:*)",
+      "Bash(xargs:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
