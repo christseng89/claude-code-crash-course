@@ -6,159 +6,185 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **Claude Code Crash Course** - a branch-based learning repository designed to teach Claude Code concepts through hands-on examples. Each topic is taught through a separate branch with chronologically ordered commits that guide learners step-by-step.
 
+**Repository Structure:**
+- **Main branch**: Landing page, documentation, and two working Next.js applications (hookhub + my-app)
+- **Project branches** (`project/*`): Each teaches a specific Claude Code feature through commit-based progression
+- **Context engineering examples**: Demonstrates MCP integration and fine-grained configuration
+
 ## Getting Started
 
-When first working with this repository:
-
 ```bash
-# Clone the repository
+# Clone and start
 git clone https://github.com/christseng89/claude-code-crash-course.git crash-course
 cd crash-course
 
-# Start Claude Code
-claude
-
-# Or, to use GitHub MCP server (requires .env setup):
+# Start Claude Code (with GitHub MCP server)
 .\start-claude.ps1
 
-# Initialize Claude Code context (recommended)
+# Or without MCP
+claude
+
+# Initialize context
 /init
 ```
 
-The `/init` command analyzes the codebase and creates [CLAUDE.md](CLAUDE.md) (this file) to help Claude understand the repository structure and conventions.
+**GitHub MCP Setup:** To use the GitHub MCP server, copy `.env.example` to `.env` and add your GitHub Personal Access Token. See [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md).
 
-**Note:** To use the GitHub MCP server, you'll need to set up a `.env` file with your GitHub token. See the [GitHub MCP Server Setup](#github-mcp-server-setup) section below.
+## Development Commands
 
-## Repository Architecture
+### Next.js Applications
 
-### Branch-Based Learning Structure
-
-The repository uses a unique educational pattern:
-
-1. **Main branch** - Landing page with course overview, topic index, and two working Next.js applications
-2. **Project branches** (`project/*`) - Each branch teaches a specific Claude Code feature
-3. **Commit-based progression** - Within each branch, commits are ordered chronologically to create a learning path
-
-**Available Learning Topics:**
-
-- `project/custom-commands` - Custom slash commands (dad jokes, automated commits)
-- `project/mcp` - Model Context Protocol integration with Context7 MCP server
-- `project/context-engineering-mcp` - Fine-grained MCP configuration using `--mcp-config` flag
-- `project/subagents` - Specialized AI agents (Code Comedy Carl, Mermaid diagram generator)
-- `project/hooks-notifications` - Workflow automation with hooks and sound notifications
-- `project/hookhub` - Advanced hook management systems
-- `project/hookhub2` - Alternative hook management implementation
-- `project/skills` - Custom skills and extensions
-- `project/output-styles` - Customizing Claude Code output formatting
-
-### Working with the Repository
-
-**Switching between topics:**
+**HookHub** (main marketplace app in `hookhub/`):
 ```bash
-# View available branches
+cd hookhub
+npm install
+npm run dev    # http://localhost:3000
+npm run build  # Production build
+npm run lint   # ESLint check
+```
+
+**My-App** (tutorial app in `my-app/`):
+```bash
+cd my-app
+npm install
+npm run dev    # http://localhost:3000
+npm run build
+npm run lint
+```
+
+### Python Projects
+
+**Text Processor** (root level):
+```bash
+# Full processing (clean + reformat)
+python text_processor.py test.txt
+
+# With output file
+python text_processor.py test.txt -o output.txt
+
+# Clean only or reformat only
+python text_processor.py test.txt --clean-only
+python text_processor.py test.txt --reformat-only
+```
+
+**Context Engineering MCP** (`context-engineering-mcp/`):
+```bash
+cd context-engineering-mcp
+uv sync                    # Install dependencies
+uv run python main.py      # Run main script
+uv run python verbose_mcp_server.py  # Verbose MCP server
+```
+
+### Git Branch Navigation
+
+```bash
+# List available topic branches
 git branch -r | grep project/
 
-# Check out a topic branch
+# Switch to a topic
 git checkout project/custom-commands
 
-# View commits in chronological order
+# View commits chronologically (learning path)
 git log --oneline --reverse
 
 # Step through commits
 git checkout <commit_hash>
+
+# Return to main
+git checkout main
 ```
 
-**Important:** The `main` branch contains:
-- Course overview documentation
-- Two working Next.js applications: `hookhub/` (hook marketplace) and `my-app/` (created during tutorials)
-- Examples of custom commands and skills
-- MCP server configurations
+## Architecture & Key Files
 
-When switching between branches, be aware that:
-- `.claude/` directory contents change per branch
-- Some branches have Python code examples (e.g., `project/subagents` has `main.py`)
-- Some branches include MCP configurations (e.g., `project/mcp` has `.mcp.json`)
+### Main Branch Structure
 
-## Branch-Specific Configurations
-
-### project/custom-commands
-
-**Key Files:**
-- `.claude/commands/commit-code.md` - Smart git commit command using `$arguments`
-- `.claude/commands/dad-joke.md` - Dad joke generator command
-
-**Permissions:** Configured for git operations (`git checkout`, `git stash`)
-
-### project/mcp
-
-**Key Files:**
-- `.mcp.json` - Context7 MCP server configuration for LangGraph documentation
-- `CLAUDE.md` - Interaction preference to use Context7 MCP for LangGraph discussions
-
-**MCP Configuration:**
-```json
-{
-  "mcpServers": {
-    "context7": {
-      "type": "http",
-      "url": "https://mcp.context7.com/mcp"
-    }
-  }
-}
+```
+crash-course/
+├── .claude/
+│   ├── commands/              # Custom slash commands
+│   ├── skills/                # Custom skills
+│   └── settings.local.json    # Permissions & MCP config
+├── hookhub/                   # Hook marketplace Next.js app
+│   ├── app/
+│   │   ├── components/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── memory/                # Context documentation
+│   │   ├── spec/CLAUDE.md
+│   │   └── frontend/CLAUDE.md
+│   └── types/hook.ts
+├── my-app/                    # Tutorial Next.js app
+├── context-engineering-mcp/   # MCP integration examples
+│   ├── main.py
+│   ├── verbose_mcp_server.py
+│   └── pyproject.toml
+├── examples/
+│   └── context-switch.sh      # Dynamic context loading
+├── static/                    # Assets (banner.png)
+├── README.md                  # Course landing page
+├── README-*.md                # Learning documentation
+├── HooksMarketplaceSpecV2.1.md  # Detailed marketplace spec
+├── text_processor.py          # Text processing utility
+├── .mcp.json                  # MCP server configurations
+└── start-claude.ps1           # PowerShell launcher with env
 ```
 
-### project/subagents
+### Project Branches
 
-**Key Files:**
-- `.claude/agents/code-comedy-carl.md` - Humorous code review agent (staff senior engineer persona)
-- `.claude/agents/mermaid-diagram-generator.md` - Diagram generation agent
-- `main.py` - Example Fibonacci code for agent testing
-- `README.md` - Comprehensive subagent usage guide
+Each `project/*` branch contains:
+- Learning progression through commits (view with `git log --oneline --reverse`)
+- Branch-specific `.claude/` configurations
+- Example code demonstrating the feature
+- Optional `CLAUDE.md` with branch-specific instructions
 
-**Agent Usage:**
-```bash
-# Invoke Code Comedy Carl for entertaining code reviews
-@code-comedy-carl review main.py
-```
+**Available Topics:**
+- `project/custom-commands` - Custom slash commands with `$arguments`
+- `project/mcp` - Context7 MCP server integration
+- `project/context-engineering-mcp` - Fine-grained MCP config with `--mcp-config`
+- `project/subagents` - Specialized AI agents (Code Comedy Carl, Mermaid generator)
+- `project/hooks-notifications` - Workflow automation with hooks and sound
+- `project/hookhub` - Advanced hook management systems
+- `project/hookhub2` - Alternative hook implementation
+- `project/skills` - Custom skills and extensions
+- `project/output-styles` - Output formatting customization
 
-### project/hooks-notifications
+## Custom Commands vs Skills
 
-**Key Files:**
-- `.claude/settings.json` - Hooks configuration with Stop event
-- `play_sound.py` - Pygame-based sound notification script
-- `ulala.wav` - Sound file for notifications
-- `pyproject.toml` - Python project configuration with pygame dependency
-- `.python-version` - Python version specification
+### Commands (`.claude/commands/*.md`)
+- Simple text-based prompt templates
+- Use `$arguments` placeholder for user input
+- Invoked with `/command-name arguments`
+- No tool permission control
+- Example: `/dad-joke programming`
 
-**Hook Configuration:**
-- **Stop hook** - Plays sound when Claude Code session stops
-- Command: `uv run play_sound.py` (uses uv for dependency management)
+### Skills (`.claude/skills/*/SKILL.md`)
+- More powerful with YAML frontmatter
+- Can specify `allowed-tools` in frontmatter
+- Auto-triggered based on description or invoked with `/skill-name`
+- Example: `/git-commit`
 
-**Python Setup:**
-```bash
-# Install dependencies
-uv sync
+**Available on Main Branch:**
+- Commands: `commit-code`, `dad-joke`
+- Skills: `explain-code`, `git-commit`
 
-# Test sound playback
-uv run play_sound.py
-```
+## MCP Server Configuration
 
-### Main Branch Applications
+**Enabled Servers** (see `.mcp.json` and `settings.local.json`):
+- **weather** - Weather forecasts and alerts
+- **puppeteer-mcp-server** - Browser automation and screenshots
+- **sequential-thinking** - Step-by-step reasoning for complex problems
+- **github** - GitHub API integration (requires `.env` with `GITHUB_PERSONAL_ACCESS_TOKEN`)
+- **playwright** - Microsoft Playwright browser automation
 
-#### HookHub Next.js Application
+**Adding New MCP Servers:**
+1. Edit `.mcp.json` to add server configuration
+2. Update `enabledMcpjsonServers` array in `settings.local.json`
+3. Restart Claude Code
+4. Test with relevant MCP tool calls
 
-**Directory:** `hookhub/`
+## Key Development Patterns
 
-A marketplace application demonstrating hook management concepts for the Claude Code community.
-
-**Key Files:**
-- `app/page.tsx` - Main page with hook grid display
-- `app/layout.tsx` - Root layout with Geist fonts
-- `app/components/` - Reusable components (HookCard, HookGrid, SearchBar, CategoryFilter)
-- `types/hook.ts` - TypeScript type definitions for hooks
-- `memory/` - Contains spec and frontend development guidelines
-  - `memory/spec/CLAUDE.md` - Project specification
-  - `memory/frontend/CLAUDE.md` - Frontend development rules (React, Next.js, TypeScript, TailwindCSS)
+### HookHub Application
 
 **Tech Stack:**
 - Next.js 16.1.4 with App Router
@@ -167,508 +193,148 @@ A marketplace application demonstrating hook management concepts for the Claude 
 - Tailwind CSS 4
 - ESLint 9
 
-**Development:**
-```bash
-cd hookhub
-npm install
-npm run dev  # http://localhost:3000
+**Architecture:**
+- Component-based UI in `app/components/`
+- TypeScript types in `types/hook.ts`
+- Memory-based context in `memory/spec/` and `memory/frontend/`
+
+**Specification:** See [HooksMarketplaceSpecV2.1.md](HooksMarketplaceSpecV2.1.md) for comprehensive marketplace specification including:
+- Hook types and categories
+- Card design and layout
+- API endpoints
+- Security and authentication
+- Testing strategy
+- Accessibility standards (WCAG 2.1 AA)
+
+### Context Engineering
+
+The `context-engineering-mcp/` directory demonstrates:
+- **Fine-grained MCP configuration** using `--mcp-config` flag
+- **Verbose MCP server** for debugging MCP interactions
+- **Python-based MCP tools** with `uv` dependency management
+
+**Key Files:**
+- `main.py` - Example MCP client usage
+- `verbose_mcp_server.py` - Debugging MCP server with detailed logging
+- `pyproject.toml` - Python dependencies (FastAPI, MCP SDK)
+
+### Text Processing Utility
+
+The `text_processor.py` demonstrates:
+- Clean invalid character sequences from text files
+- Reformat text with proper paragraph breaks
+- CLI argument parsing with `argparse`
+- Step-by-step processing pipeline
+
+**Usage Pattern:**
+```python
+# Full processing pipeline
+process_all(input_file, output_file)  # Clean + reformat
+
+# Individual operations
+clean_invalid_chars(input_file, output_file)
+reformat_text(input_file, output_file)
 ```
 
-#### My-App Next.js Application
+## Permission Management
 
-**Directory:** `my-app/`
+**Configured Permissions** (in `settings.local.json`):
+- Git operations: `checkout`, `stash`, `add`, `commit`, `reset`, `rev-parse`
+- npm operations: `audit`, `run build`, `install`
+- Python: `python:*`
+- Browser automation: Puppeteer and Playwright tools
+- Web: `WebFetch` (restricted domains), `WebSearch`
+- System: `powershell`, `curl`, `ls`, `xargs`
 
-A secondary Next.js application created during the tutorial workflow for testing features like /rewind, checkpointing, and landing page creation.
+When adding new workflows requiring tools, add permissions to `settings.local.json`.
 
-**Development:**
-```bash
-cd my-app
-npm install
-npm run dev  # http://localhost:3000
-```
+## Memory System
 
-## Development Commands
-
-### Git Operations
-
-```bash
-# List all remote branches
-git branch -r
-
-# Check out a specific topic
-git checkout project/<topic-name>
-
-# View commit history chronologically
-git log --oneline --reverse
-
-# See changes in a specific commit
-git show <commit_hash>
-
-# Return to main branch
-git checkout main
-```
-
-### Next.js Applications
-
-```bash
-# For hookhub
-cd hookhub
-npm install
-npm run dev    # Start development server (http://localhost:3000)
-npm run build  # Build for production
-npm start      # Start production server
-npm run lint   # Run linter
-
-# For my-app
-cd my-app
-npm install
-npm run dev    # Start development server (http://localhost:3000)
-npm run build  # Build for production
-npm start      # Start production server
-npm run lint   # Run linter
-```
-
-### Python Projects (hooks-notifications branch)
-
-```bash
-# Install dependencies with uv
-uv sync
-
-# Run Python scripts
-uv run play_sound.py
-
-# Test with specific Python version
-uv run python --version
-```
-
-### MCP Server Testing
-
-```bash
-# Main branch has weather, puppeteer, sequential-thinking, github, and playwright MCP servers
-# Test by asking Claude to:
-# - Get weather forecasts for a location
-# - Take screenshots of websites with Puppeteer or Playwright
-# - Use step-by-step reasoning for complex problems
-# - Interact with GitHub API
-# - Automate browser testing with Playwright
-
-# For project/mcp branch specifically:
-# Test Context7 MCP integration by asking about LangGraph topics
-```
-
-## File Organization Logic
-
-### Main Branch Structure
-
-```
-crash-course/
-├── .claude/
-│   ├── commands/           # Slash commands (commit-code, dad-joke)
-│   ├── skills/             # Custom skills (explain-code, git-commit)
-│   └── settings.local.json # Permissions and MCP configuration
-├── hookhub/                # Primary Next.js app (hook marketplace)
-│   ├── app/
-│   │   ├── components/
-│   │   ├── layout.tsx
-│   │   └── page.tsx
-│   ├── memory/             # Context documentation
-│   │   ├── spec/CLAUDE.md
-│   │   └── frontend/CLAUDE.md
-│   └── types/
-├── my-app/                 # Tutorial Next.js app
-├── examples/               # Example scripts
-│   └── context-switch.sh   # Dynamic context loading
-├── resources/              # Video tutorials (not tracked in git)
-├── static/                 # Static assets (banner.png)
-├── README.md               # Course landing page
-├── README-1GistOfClaudeCode.md  # Introduction guide
-├── README-2ClaudeSlashCommands.md  # Commands and skills documentation
-├── .mcp.json               # MCP server configurations
-├── .env                    # Environment variables (git-ignored)
-└── start-claude.ps1        # PowerShell launcher with env vars
-```
-
-### Project Branches
-Each branch may contain:
-- `.claude/commands/` - Custom slash commands
-- `.claude/agents/` - Custom subagent definitions
-- `.claude/settings.json` - Hook configurations
-- `.claude/settings.local.json` - Permission configurations
-- `.mcp.json` - MCP server configurations (project-specific)
-- `CLAUDE.md` - Branch-specific interaction preferences
-- Example code files (`main.py`, etc.)
-- Dependencies (`pyproject.toml`, `uv.lock`, `.python-version`)
-
-## Custom Commands, Skills, and Agents
-
-### Commands vs Skills
-
-**Custom Commands** (`.claude/commands/*.md`):
-- Simple text-based prompt templates
-- Use `$arguments` placeholder for user input
-- Invoked with `/command-name arguments`
-- No permission control
-- Example: `/dad-joke programming`
-
-**Custom Skills** (`.claude/skills/*/SKILL.md`):
-- More powerful, can specify allowed tools in frontmatter
-- Structured with YAML frontmatter
-- Invoked with `/skill-name` or automatically based on description
-- Can have tool permissions
-- Example: `/git-commit`
-
-### Available Commands (Main Branch)
-
-**commit-code** - Smart git commit with user hints
-```bash
-/commit-code Add new feature for user authentication
-```
-
-**dad-joke** - Generate dad jokes about any topic
-```bash
-/dad-joke programming
-```
-
-### Available Skills (Main Branch)
-
-**explain-code** - Code explanation with visual diagrams and analogies
-```markdown
----
-name: explain-code
-description: Explains code with visual diagrams and analogies. Use when explaining how code works, teaching about a codebase, or when the user asks "how does this work?"
----
-
-When explaining code, always include:
-1. Start with an analogy: Compare the code to something from everyday life
-2. Draw a diagram: Use ASCII art to show the flow, structure, or relationships
-3. Walk through the code: Explain step-by-step what happens
-4. Highlight a gotcha: What's a common mistake or misconception?
-```
-
-Usage:
-```bash
-# Ask about code and skill is triggered automatically
-How does the code page.tsx in hookhub directory work?
-```
-
-**git-commit** - Automated git commit creation
-```markdown
----
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*)
-description: Create a git commit
----
-
-Gathers git context (status, diff, branch, recent commits) and creates
-a commit with an appropriate message.
-```
-
-Usage:
-```bash
-/git-commit
-```
-
-### Custom Agents
-
-**Syntax:** Agent files use frontmatter with metadata
-
-Example structure:
-```yaml
----
-name: agent-name
-description: >
-  Agent description and activation triggers
-tools: Glob, Grep, Read, WebSearch
-model: sonnet
-color: yellow
----
-
-Agent instructions and personality...
-```
-
-Available on other branches (see branch-specific sections above).
-
-## Settings and Permissions
-
-### Permission Patterns
-
-**Main Branch Permissions:**
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(git checkout:*)",
-      "Bash(git stash:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git reset:*)",
-      "Bash(git rev-parse:*)",
-      "Bash(npm audit:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm install:*)",
-      "Bash(powershell -Command:*)",
-      "Bash(python:*)",
-      "Bash(curl:*)",
-      "WebFetch(domain:www.tt1069.com)",
-      "mcp__puppeteer-mcp-server__puppeteer_navigate",
-      "mcp__puppeteer-mcp-server__puppeteer_screenshot",
-      "mcp__puppeteer-mcp-server__puppeteer_evaluate",
-      "mcp__puppeteer-mcp-server__puppeteer_fill",
-      "mcp__puppeteer-mcp-server__puppeteer_click",
-      "mcp__playwright__browser_navigate",
-      "mcp__playwright__browser_close",
-      "mcp__playwright__browser_snapshot"
-    ]
-  }
-}
-```
-
-Other branches may have different permission configurations. Check `.claude/settings.local.json` when switching branches.
-
-### MCP Server Configuration
-
-MCP servers can be configured at:
-1. **Project level** - `.mcp.json` in branch root
-2. **Settings level** - `enabledMcpjsonServers` array in `settings.local.json`
-
-**Enabled MCP Servers (Main Branch):**
-
-- **weather** - Weather forecasts and alerts
-- **puppeteer-mcp-server** - Browser automation and screenshots
-- **sequential-thinking** - Step-by-step reasoning for complex problems
-- **github** - GitHub API integration (requires .env setup)
-- **playwright** - Microsoft Playwright browser automation and testing
-
-Configuration in `settings.local.json`:
-```json
-{
-  "enabledMcpjsonServers": [
-    "weather",
-    "puppeteer-mcp-server",
-    "sequential-thinking",
-    "github",
-    "playwright"
-  ],
-  "enableAllProjectMcpServers": true
-}
-```
-
-Configuration in `.mcp.json`:
-```json
-{
-  "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"]
-    },
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    }
-  }
-}
-```
-
-#### GitHub MCP Server Setup
-
-The GitHub MCP server requires a Personal Access Token for authentication. This is configured using environment variables for security.
-
-**Files:**
-- `.env` - Contains your actual GitHub token (git-ignored)
-- `.env.example` - Template file showing required variables
-- `.mcp.json` - MCP server configuration (no hardcoded tokens)
-- `start-claude.ps1` - PowerShell script to load .env and start Claude Code
-
-**Quick Setup:**
-1. Add your GitHub token to `.env`:
-   ```env
-   GITHUB_PERSONAL_ACCESS_TOKEN=your_token_here
-   ```
-2. Start Claude Code with environment variables loaded:
-   ```powershell
-   .\start-claude.ps1
-   ```
-
-**Generate a token:**
-- Visit: https://github.com/settings/tokens
-- Required scopes: `repo`, `read:org`, `read:user`
-
-For detailed setup instructions, see [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md).
-
-#### Context7 MCP Server Integration
-
-The Context7 MCP server provides up-to-date documentation for libraries and frameworks. It's already configured in the `.mcp.json` file.
-
-**LangGraph Documentation Preference:**
-
-When discussing LangGraph topics (agents, workflows, checkpoints, state management, etc.), always use the Context7 MCP server to fetch current documentation before answering questions.
-
-**Primary Library IDs:**
-- `/langchain-ai/langgraph` - Official repository (latest version: 1.0.6)
-- `/llmstxt/langchain-ai_github_io_langgraph_llms-full_txt` - Full documentation (3115 snippets, 91.9 benchmark score)
-- `/websites/langchain_oss_python_langgraph` - Python OSS docs (880 snippets, 82 score)
-- `/websites/langchain-ai_github_io_langgraphjs` - JavaScript docs (2177 snippets, 90 score)
-
-**Query Pattern:**
-```bash
-# Step 1: Resolve library ID (if unknown)
-mcp__context7__resolve-library-id(libraryName="LangGraph", query="user question")
-
-# Step 2: Query specific documentation
-mcp__context7__query-docs(
-  libraryId="/llmstxt/langchain-ai_github_io_langgraph_llms-full_txt",
-  query="specific question about LangGraph feature"
-)
-```
-
-**Best Practices:**
-- Use the full docs library (`/llmstxt/...`) for comprehensive coverage (highest code snippet count)
-- Query specific version if needed: `/langchain-ai/langgraph/1.0.6`
-- Limit Context7 calls to 3 per question to manage token usage
-- Always cite sources from Context7 responses
-
-**Example Questions:**
-- "How do I implement checkpoints in LangGraph?"
-- "What's the latest LangGraph version?"
-- "Show me examples of state management in LangGraph"
-- "How do I create a multi-agent workflow with LangGraph?"
-
-This preference aligns with the pattern demonstrated in the `project/mcp` branch, where Context7 integration for LangGraph is already configured and documented.
-
-## Context Management
-
-### Memory System
-
-Claude Code uses a hierarchical memory system:
-
-**INSTRUCTION PRIORITY (File memory > Session):**
+**Priority Hierarchy:**
 1. Enterprise Policy (highest)
-2. CLAUDE.local.md (project-specific, git-ignored)
-3. CLAUDE.md (project)
-4. .claude/rules/*.md
-5. ~/.claude/CLAUDE.md (global)
+2. `CLAUDE.local.md` (project-specific, git-ignored)
+3. `CLAUDE.md` (this file)
+4. `.claude/rules/*.md`
+5. `~/.claude/CLAUDE.md` (global)
 6. Session prompts (lowest)
 
-**FACTUAL INFORMATION (Session > File memory):**
-- Current session statements have highest priority for facts
-- Recent conversation context
-- File-based memories
+**Factual Information:** Current session statements override file-based memories.
 
-### Memory Commands
+**Commands:**
+- `/memory` - View loaded memory
+- `/clear` - Clear conversation history
+- `#` - Add temporary session context (e.g., `# use camelCase for Python`)
 
-```bash
-/memory  # View currently loaded memory
-/clear   # Clear conversation history
-```
+## Common Workflows
 
-### Dynamic Context Loading
+### Adding a New Learning Topic
 
-The `examples/context-switch.sh` script demonstrates dynamic context loading based on user input:
-
-```bash
-./examples/context-switch.sh "I need help with database migration"
-# Result: Adds @./context/database-context.md to CLAUDE.md
-
-./examples/context-switch.sh "Create a new API endpoint"
-# Result: Adds @./context/api-context.md to CLAUDE.md
-```
-
-This pattern can be used to load relevant context files based on the task at hand.
-
-## Learning Path Workflow
-
-When contributing new topics or working with this repository:
-
-1. **Check out the branch** for the topic you're studying/modifying
-2. **Follow commits chronologically** using `git log --oneline --reverse`
-3. **Examine `.claude/` directory** to understand configurations
-4. **Test features** as you progress through commits
-5. **Return to main** when switching topics
-
-## Common Patterns
-
-### Creating New Learning Topics
-
-1. Create a new `project/<topic-name>` branch
-2. Add commits in logical learning progression
+1. Create `project/<topic-name>` branch from main
+2. Add commits in logical progression (one concept per commit)
 3. Include `.claude/` configurations relevant to the topic
-4. Add example code that demonstrates the feature
-5. Update main branch README.md with new topic entry
-
-### Hook Integration Pattern
-
-Hooks use absolute paths in `settings.json`:
-```json
-{
-  "hooks": {
-    "Stop": [{
-      "matcher": "",
-      "hooks": [{
-        "type": "command",
-        "command": "/absolute/path/to/script.py"
-      }]
-    }]
-  }
-}
-```
-
-**Note:** Hooks require absolute paths, which may need adjustment when cloning the repository.
+4. Add example code demonstrating the feature
+5. Update main branch README.md topic table
+6. Open PR with learning story description
 
 ### Creating Custom Commands
 
-1. Create a markdown file in `.claude/commands/`
-2. Write the prompt with `$arguments` placeholder
-3. Invoke with `/command-name arguments`
+1. Create `.claude/commands/<command-name>.md`
+2. Write prompt template with `$arguments` placeholder
+3. Test with `/command-name test arguments`
 
 Example:
-```bash
-cat > .claude/commands/commit-code.md << EOF
-# Commit Code
+```markdown
+# Command Title
 
-Review the files that have changed, and create a commit with a commit message
-summarizing the changes made. Always try to give short and concise messages
-that convey the business logic.
+Your detailed instructions here.
 
-Use user hints to be the message main subject $arguments
-EOF
+User input: $arguments
+
+Expected output format...
 ```
 
 ### Creating Custom Skills
 
-1. Create a directory in `.claude/skills/<skill-name>/`
-2. Create `SKILL.md` with YAML frontmatter
-3. Specify allowed-tools if needed
-4. Write detailed instructions
+1. Create `.claude/skills/<skill-name>/SKILL.md`
+2. Add YAML frontmatter with `allowed-tools` and `description`
+3. Write detailed instructions
+4. Test invocation
 
-Example:
-```bash
-mkdir -p .claude/skills/git-commit
-cat > .claude/skills/git-commit/SKILL.md << EOF
+Example frontmatter:
+```yaml
 ---
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*)
+allowed-tools: Bash(git add:*), Bash(git commit:*)
 description: Create a git commit
 ---
-
-## Context
-
-- Current git status:
-- Current git diff (staged and unstaged changes):
-- Current branch:
-- Recent commits:
-
-## Your task
-
-Based on the above changes, create a single git commit.
-EOF
 ```
 
-## Contributing
+### Working with Hooks (see project/hooks-notifications branch)
 
-When adding new content:
-1. Fork the repository
-2. Create a new `project/*` branch
-3. Make commits that tell a learning story (each commit = one concept)
-4. Open PR against main branch
-5. Update README.md topic table
+1. Create hook script (bash/python)
+2. Add to `.claude/settings.json`:
+```json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Write|Edit",
+      "hooks": [{"type": "command", "command": "/absolute/path/to/script.sh"}]
+    }]
+  }
+}
+```
+3. Restart Claude Code
+4. Test hook triggers
+
+**Note:** Hooks require absolute paths and need adjustment when cloning the repository.
+
+## Testing Approach
+
+When making changes:
+1. **Next.js apps**: Run `npm run lint` before committing
+2. **Python code**: Test with example inputs/outputs
+3. **Commands/Skills**: Test invocation with various arguments
+4. **MCP servers**: Verify with test tool calls
+5. **Documentation**: Check markdown formatting and links
 
 ## Useful Slash Commands
 
@@ -678,7 +344,6 @@ When adding new content:
 /cost           # Check API usage costs
 /config         # View configuration
 /agents         # List available agents
-/ide            # IDE integration commands
 /mcp            # View MCP server status
 /hooks          # Manage hooks
 /skills         # List available skills
@@ -687,21 +352,18 @@ When adding new content:
 /model          # Switch between Claude models
 ```
 
-## Video Resources
+## Contributing
 
-The `resources/` directory contains video tutorials on Context Engineering (not tracked in git due to file size):
-
-1. **Context Engineering: The Key to Building and Using Successful AI Agents**
-2. **Context Engineering: From Principles to Practice with Claude Code**
-3. **Context Engineering: System Prompt**
-
-These videos provide in-depth explanations of context engineering concepts that complement the hands-on examples in this repository.
-
-**Note:** Video files (*.mp4) are excluded from git via `.gitignore` to keep the repository size manageable.
+When adding content:
+1. Fork the repository
+2. Create `project/*` branch for new topics
+3. Use descriptive commit messages (one concept per commit)
+4. Open PR against main branch
+5. Update README.md with new topic entry
 
 ## Resources
 
-- [Claude Code Official Documentation](https://code.claude.com/docs/)
+- [Claude Code Documentation](https://code.claude.com/docs/)
 - [Course GitHub Repository](https://github.com/christseng89/claude-code-crash-course)
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/docs)
 - [Cursor MCP Documentation](https://cursor.com/docs)

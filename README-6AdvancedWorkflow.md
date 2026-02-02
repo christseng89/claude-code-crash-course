@@ -11,4 +11,25 @@ I want you to help me come up with a spec for a NEW web application that I'm goi
 
 I want you to think harder and I don't want to display it in a carousel but I want to display lots of cards in the homepage. And you missed lots of hook can be after generation for example.
 
+Review HooksMarketplaceSpecV2.0 for me.
+
+```
+
+```bash
+claude
+/clear
+/init
+
+```
+
+## Hands on HooksMarketplaceSpecV2.1.md
+
+```bash
+cd hookhub
+npm run dev
+```
+
+```bash
+claude
+Refer to ./HooksMarketplaceSpecV2.1.md build the project for me. 
 ```
