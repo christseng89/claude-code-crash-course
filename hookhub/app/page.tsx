@@ -1,36 +1,46 @@
 import HookGrid from "./components/HookGrid";
+import ThemeToggle from "./components/ThemeToggle";
 import hooksData from "./data/hooks.json";
 import { Hook } from "@/types/hook";
+import { Webhook } from "lucide-react";
 
 export default function Home() {
   const hooks = hooksData.hooks as Hook[];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-950 dark:via-blue-950 dark:to-purple-950">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              HookHub
-            </h1>
-            <p className="text-lg text-gray-600">
-              Discover and browse open-source Claude Code hooks from the community
-            </p>
+      <header className="border-b border-gray-200/50 bg-white/80 backdrop-blur-lg dark:border-gray-800/50 dark:bg-gray-900/80">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 p-2.5">
+                <Webhook className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent dark:from-white dark:to-gray-400">
+                  HookHub
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Discover Claude Code hooks
+                </p>
+              </div>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <HookGrid hooks={hooks} />
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white mt-16">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-600">
-            Built with ❤️ for the Claude Code community
+      <footer className="border-t border-gray-200/50 bg-white/50 backdrop-blur-sm dark:border-gray-800/50 dark:bg-gray-900/50 mt-16">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            Built for the Claude Code community
           </p>
         </div>
       </footer>

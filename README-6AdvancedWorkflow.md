@@ -33,4 +33,5 @@ npm run dev
 ```bash
 claude
 Refer to ./HooksMarketplaceSpecV2.1.md update the project hookhub for me.
+Make the project hookhub more modern, cleaner, simpler and beautiful.
 ```

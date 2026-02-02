@@ -31,7 +31,9 @@
       "Bash(xargs:*)",
       "Bash(git rm:*)",
       "Bash(tree:*)",
-      "mcp__sequential-thinking__sequentialthinking"
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(npm run dev:*)",
+      "Bash(timeout /t 5)"
     ]
   },
   "enableAllProjectMcpServers": true,

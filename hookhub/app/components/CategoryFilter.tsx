@@ -15,10 +15,10 @@ export default function CategoryFilter({
         <button
           key={category}
           onClick={() => onSelectCategory(category)}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+          className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${
             selectedCategory === category
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/30 dark:shadow-blue-500/20"
+              : "bg-white/80 text-gray-700 ring-1 ring-gray-200/50 backdrop-blur-sm hover:bg-gray-50 hover:ring-gray-300/50 dark:bg-gray-900/80 dark:text-gray-300 dark:ring-gray-800/50 dark:hover:bg-gray-800/80 dark:hover:ring-gray-700/50"
           }`}
         >
           {category}
