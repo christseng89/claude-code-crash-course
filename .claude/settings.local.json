@@ -28,7 +28,10 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
       "Bash(claude:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(git rm:*)",
+      "Bash(tree:*)",
+      "mcp__sequential-thinking__sequentialthinking"
     ]
   },
   "enableAllProjectMcpServers": true,

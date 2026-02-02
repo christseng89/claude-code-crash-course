@@ -5,198 +5,1236 @@
       "name": "format-typescript",
       "category": "PostToolUse",
       "description": "Automatically formats TypeScript/TSX files using Prettier after Write/Edit operations",
+      "fullDescription": "A production-ready hook that integrates Prettier into your Claude Code workflow. Automatically formats TypeScript and TSX files immediately after any Write or Edit operation, ensuring consistent code style across your entire project. Supports custom Prettier configurations and provides detailed success/failure feedback.",
       "repoUrl": "https://github.com/disler/claude-code-hooks-mastery",
       "repoOwner": "disler",
-      "repoName": "claude-code-hooks-mastery"
+      "repoName": "claude-code-hooks-mastery",
+      "github": {
+        "stars": 487,
+        "forks": 92,
+        "issues": 12,
+        "lastSync": "2026-02-01T18:30:00Z"
+      },
+      "metadata": {
+        "version": "2.1.0",
+        "hookTypes": ["PostToolUse"],
+        "matchers": ["Write", "Edit", "MultiEdit"],
+        "tags": ["formatting", "typescript", "prettier", "code-quality", "automation"],
+        "license": "MIT",
+        "keywords": ["format", "prettier", "typescript", "tsx", "auto-format"]
+      },
+      "stats": {
+        "installs": 1547,
+        "dailyActive": 892,
+        "rating": 4.8,
+        "reviews": 127,
+        "views": 8934
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "prettier",
+            "version": "^3.0.0",
+            "required": true,
+            "installCommand": "npm install -D prettier"
+          },
+          {
+            "name": "jq",
+            "version": "1.6+",
+            "required": false,
+            "installCommand": "brew install jq (macOS) or apt-get install jq (Linux)"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": true,
+        "documentationScore": 95
+      },
+      "author": {
+        "username": "disler",
+        "name": "David Disler",
+        "avatarUrl": "https://github.com/disler.png",
+        "isVerified": true,
+        "reputation": 2847
+      },
+      "createdAt": "2025-11-15T10:00:00Z",
+      "updatedAt": "2026-01-28T14:22:00Z",
+      "publishedAt": "2025-11-16T09:00:00Z"
     },
     {
       "id": "2",
       "name": "activity-logger",
       "category": "PreToolUse",
       "description": "Logs all tool usage to daily log files with JSON parsing and fallback handling",
+      "fullDescription": "Comprehensive activity tracking for Claude Code. Captures every tool invocation with detailed metadata including tool name, file paths, timestamps, and project context. Organizes logs by date with automatic rotation. Perfect for auditing, debugging, and understanding your development patterns.",
       "repoUrl": "https://github.com/ChrisWiles/claude-code-showcase",
       "repoOwner": "ChrisWiles",
-      "repoName": "claude-code-showcase"
+      "repoName": "claude-code-showcase",
+      "github": {
+        "stars": 234,
+        "forks": 45,
+        "issues": 8,
+        "lastSync": "2026-02-01T16:45:00Z"
+      },
+      "metadata": {
+        "version": "1.5.2",
+        "hookTypes": ["PreToolUse"],
+        "matchers": ["*"],
+        "tags": ["logging", "auditing", "debugging", "monitoring", "security"],
+        "license": "MIT",
+        "keywords": ["activity", "log", "audit", "tracking", "monitor"]
+      },
+      "stats": {
+        "installs": 892,
+        "dailyActive": 456,
+        "rating": 4.6,
+        "reviews": 78,
+        "views": 5621
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "jq",
+            "version": "1.6+",
+            "required": true,
+            "installCommand": "brew install jq (macOS) or apt-get install jq (Linux) or choco install jq (Windows)"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": true,
+        "documentationScore": 88
+      },
+      "author": {
+        "username": "ChrisWiles",
+        "name": "Chris Wiles",
+        "avatarUrl": "https://github.com/ChrisWiles.png",
+        "isVerified": true,
+        "reputation": 1523
+      },
+      "createdAt": "2025-10-20T14:30:00Z",
+      "updatedAt": "2026-01-25T11:15:00Z",
+      "publishedAt": "2025-10-21T10:00:00Z"
     },
     {
       "id": "3",
       "name": "git-auto-stage",
       "category": "PostToolUse",
       "description": "Automatically stages files in git after formatting completes successfully",
+      "fullDescription": "Streamlines your git workflow by automatically staging modified files after successful formatting operations. Works seamlessly with format-typescript and other formatting hooks. Includes safety checks to prevent staging unwanted files and provides clear feedback on what was staged.",
       "repoUrl": "https://github.com/decider/claude-hooks",
       "repoOwner": "decider",
-      "repoName": "claude-hooks"
+      "repoName": "claude-hooks",
+      "github": {
+        "stars": 156,
+        "forks": 28,
+        "issues": 5,
+        "lastSync": "2026-02-01T20:10:00Z"
+      },
+      "metadata": {
+        "version": "1.2.1",
+        "hookTypes": ["PostToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["git", "automation", "workflow", "version-control"],
+        "license": "MIT",
+        "keywords": ["git", "stage", "auto-stage", "workflow"]
+      },
+      "stats": {
+        "installs": 678,
+        "dailyActive": 389,
+        "rating": 4.7,
+        "reviews": 54,
+        "views": 3421
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "git",
+            "version": "2.0+",
+            "required": true,
+            "installCommand": "Usually pre-installed"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 82
+      },
+      "author": {
+        "username": "decider",
+        "name": "John Decider",
+        "avatarUrl": "https://github.com/decider.png",
+        "isVerified": true,
+        "reputation": 987
+      },
+      "createdAt": "2025-12-03T09:20:00Z",
+      "updatedAt": "2026-01-30T08:45:00Z",
+      "publishedAt": "2025-12-04T11:00:00Z"
     },
     {
       "id": "4",
       "name": "session-logger",
       "category": "SessionStart",
       "description": "Logs session start time and project context for tracking development sessions",
+      "fullDescription": "Captures valuable session metadata when you start Claude Code. Records project name, working directory, git branch, timestamp, and environment details. Perfect for time tracking, understanding your development patterns, and generating productivity reports.",
       "repoUrl": "https://github.com/disler/claude-code-hooks-mastery",
       "repoOwner": "disler",
-      "repoName": "claude-code-hooks-mastery"
+      "repoName": "claude-code-hooks-mastery",
+      "github": {
+        "stars": 487,
+        "forks": 92,
+        "issues": 12,
+        "lastSync": "2026-02-01T18:30:00Z"
+      },
+      "metadata": {
+        "version": "1.3.0",
+        "hookTypes": ["SessionStart"],
+        "matchers": [],
+        "tags": ["logging", "session", "tracking", "productivity"],
+        "license": "MIT",
+        "keywords": ["session", "start", "log", "tracking"]
+      },
+      "stats": {
+        "installs": 445,
+        "dailyActive": 278,
+        "rating": 4.4,
+        "reviews": 42,
+        "views": 2156
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 76
+      },
+      "author": {
+        "username": "disler",
+        "name": "David Disler",
+        "avatarUrl": "https://github.com/disler.png",
+        "isVerified": true,
+        "reputation": 2847
+      },
+      "createdAt": "2025-11-22T13:40:00Z",
+      "updatedAt": "2026-01-18T15:30:00Z",
+      "publishedAt": "2025-11-23T10:00:00Z"
     },
     {
       "id": "5",
       "name": "cleanup-temp-files",
       "category": "SessionEnd",
       "description": "Automatically removes temporary files and cleanup artifacts when session ends",
+      "fullDescription": "Keeps your workspace clean by automatically removing temporary files, build artifacts, and cache files when your Claude Code session ends. Configurable patterns for what to clean, with safety checks to prevent accidental deletion of important files.",
       "repoUrl": "https://github.com/ChrisWiles/claude-code-showcase",
       "repoOwner": "ChrisWiles",
-      "repoName": "claude-code-showcase"
+      "repoName": "claude-code-showcase",
+      "github": {
+        "stars": 234,
+        "forks": 45,
+        "issues": 8,
+        "lastSync": "2026-02-01T16:45:00Z"
+      },
+      "metadata": {
+        "version": "1.1.4",
+        "hookTypes": ["SessionEnd"],
+        "matchers": [],
+        "tags": ["cleanup", "maintenance", "organization", "automation"],
+        "license": "MIT",
+        "keywords": ["cleanup", "temp", "session", "maintenance"]
+      },
+      "stats": {
+        "installs": 523,
+        "dailyActive": 312,
+        "rating": 4.5,
+        "reviews": 47,
+        "views": 2789
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 80
+      },
+      "author": {
+        "username": "ChrisWiles",
+        "name": "Chris Wiles",
+        "avatarUrl": "https://github.com/ChrisWiles.png",
+        "isVerified": true,
+        "reputation": 1523
+      },
+      "createdAt": "2025-11-05T11:15:00Z",
+      "updatedAt": "2026-01-22T09:20:00Z",
+      "publishedAt": "2025-11-06T14:00:00Z"
     },
     {
       "id": "6",
       "name": "sound-notification",
       "category": "Stop",
       "description": "Plays a sound notification when Claude Code session stops using pygame",
+      "fullDescription": "Get audio feedback when your Claude Code session ends. Uses pygame to play customizable sound files. Great for knowing when long-running operations complete, especially if you're working in another window. Supports various audio formats and custom sound files.",
       "repoUrl": "https://github.com/hesreallyhim/awesome-claude-code",
       "repoOwner": "hesreallyhim",
-      "repoName": "awesome-claude-code"
+      "repoName": "awesome-claude-code",
+      "github": {
+        "stars": 321,
+        "forks": 67,
+        "issues": 14,
+        "lastSync": "2026-02-01T19:20:00Z"
+      },
+      "metadata": {
+        "version": "1.0.5",
+        "hookTypes": ["Stop"],
+        "matchers": [],
+        "tags": ["notification", "sound", "audio", "productivity"],
+        "license": "MIT",
+        "keywords": ["sound", "notification", "alert", "pygame"]
+      },
+      "stats": {
+        "installs": 289,
+        "dailyActive": 145,
+        "rating": 4.2,
+        "reviews": 31,
+        "views": 1834
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "pygame",
+            "version": "2.0+",
+            "required": true,
+            "installCommand": "pip install pygame"
+          },
+          {
+            "name": "python",
+            "version": "3.7+",
+            "required": true,
+            "installCommand": "Usually pre-installed"
+          }
+        ]
+      },
+      "quality": {
+        "verified": false,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 68
+      },
+      "author": {
+        "username": "hesreallyhim",
+        "name": "Alex Thompson",
+        "avatarUrl": "https://github.com/hesreallyhim.png",
+        "isVerified": false,
+        "reputation": 543
+      },
+      "createdAt": "2025-12-10T16:30:00Z",
+      "updatedAt": "2026-01-15T12:40:00Z",
+      "publishedAt": "2025-12-11T10:00:00Z"
     },
     {
       "id": "7",
       "name": "eslint-validator",
       "category": "PostToolUse",
       "description": "Runs ESLint validation after code changes and reports warnings/errors",
+      "fullDescription": "Maintains code quality by running ESLint automatically after Write and Edit operations. Provides immediate feedback on code quality issues, potential bugs, and style violations. Respects your existing ESLint configuration and supports all ESLint plugins.",
       "repoUrl": "https://github.com/decider/claude-hooks",
       "repoOwner": "decider",
-      "repoName": "claude-hooks"
+      "repoName": "claude-hooks",
+      "github": {
+        "stars": 156,
+        "forks": 28,
+        "issues": 5,
+        "lastSync": "2026-02-01T20:10:00Z"
+      },
+      "metadata": {
+        "version": "2.0.3",
+        "hookTypes": ["PostToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["linting", "eslint", "code-quality", "javascript", "typescript"],
+        "license": "MIT",
+        "keywords": ["eslint", "lint", "validation", "quality"]
+      },
+      "stats": {
+        "installs": 1234,
+        "dailyActive": 687,
+        "rating": 4.7,
+        "reviews": 102,
+        "views": 6723
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "eslint",
+            "version": "^8.0.0 || ^9.0.0",
+            "required": true,
+            "installCommand": "npm install -D eslint"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": false,
+        "documentationScore": 90
+      },
+      "author": {
+        "username": "decider",
+        "name": "John Decider",
+        "avatarUrl": "https://github.com/decider.png",
+        "isVerified": true,
+        "reputation": 987
+      },
+      "createdAt": "2025-10-28T10:50:00Z",
+      "updatedAt": "2026-01-29T16:10:00Z",
+      "publishedAt": "2025-10-29T09:00:00Z"
     },
     {
       "id": "8",
       "name": "backup-before-change",
       "category": "PreToolUse",
       "description": "Creates backup copies of files before Write/Edit operations for safety",
+      "fullDescription": "Safety-first hook that creates timestamped backups of files before any Write or Edit operation. Automatically manages backup retention with configurable limits. Provides peace of mind and easy rollback if something goes wrong. Backups are stored in a `.claude-backups` directory with clear naming.",
       "repoUrl": "https://github.com/affaan-m/everything-claude-code",
       "repoOwner": "affaan-m",
-      "repoName": "everything-claude-code"
+      "repoName": "everything-claude-code",
+      "github": {
+        "stars": 198,
+        "forks": 34,
+        "issues": 6,
+        "lastSync": "2026-02-01T17:55:00Z"
+      },
+      "metadata": {
+        "version": "1.4.0",
+        "hookTypes": ["PreToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["backup", "safety", "recovery", "file-management"],
+        "license": "MIT",
+        "keywords": ["backup", "safety", "restore", "recovery"]
+      },
+      "stats": {
+        "installs": 567,
+        "dailyActive": 334,
+        "rating": 4.6,
+        "reviews": 63,
+        "views": 3567
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": true,
+        "documentationScore": 85
+      },
+      "author": {
+        "username": "affaan-m",
+        "name": "Affaan Mahmood",
+        "avatarUrl": "https://github.com/affaan-m.png",
+        "isVerified": true,
+        "reputation": 1245
+      },
+      "createdAt": "2025-11-18T08:30:00Z",
+      "updatedAt": "2026-01-27T14:20:00Z",
+      "publishedAt": "2025-11-19T11:00:00Z"
     },
     {
       "id": "9",
       "name": "typescript-type-check",
       "category": "Workflow",
       "description": "Complete workflow: format → type check → lint → stage changes automatically",
+      "fullDescription": "The ultimate TypeScript development workflow hook. Chains together formatting with Prettier, type checking with tsc, linting with ESLint, and git staging - all in one automated sequence. Provides detailed feedback at each step and stops on errors. Perfect for maintaining high code quality standards.",
       "repoUrl": "https://github.com/johnlindquist/claude-hooks",
       "repoOwner": "johnlindquist",
-      "repoName": "claude-hooks"
+      "repoName": "claude-hooks",
+      "github": {
+        "stars": 412,
+        "forks": 78,
+        "issues": 9,
+        "lastSync": "2026-02-01T21:15:00Z"
+      },
+      "metadata": {
+        "version": "2.3.1",
+        "hookTypes": ["PostToolUse", "Workflow"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["typescript", "workflow", "automation", "code-quality", "formatting"],
+        "license": "MIT",
+        "keywords": ["typescript", "tsc", "workflow", "automation", "type-check"]
+      },
+      "stats": {
+        "installs": 1089,
+        "dailyActive": 623,
+        "rating": 4.9,
+        "reviews": 94,
+        "views": 7234
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "typescript",
+            "version": "^5.0.0",
+            "required": true,
+            "installCommand": "npm install -D typescript"
+          },
+          {
+            "name": "prettier",
+            "version": "^3.0.0",
+            "required": true,
+            "installCommand": "npm install -D prettier"
+          },
+          {
+            "name": "eslint",
+            "version": "^8.0.0 || ^9.0.0",
+            "required": true,
+            "installCommand": "npm install -D eslint"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": true,
+        "documentationScore": 97
+      },
+      "author": {
+        "username": "johnlindquist",
+        "name": "John Lindquist",
+        "avatarUrl": "https://github.com/johnlindquist.png",
+        "isVerified": true,
+        "reputation": 3421
+      },
+      "createdAt": "2025-09-14T12:20:00Z",
+      "updatedAt": "2026-01-31T10:45:00Z",
+      "publishedAt": "2025-09-15T09:00:00Z"
     },
     {
       "id": "10",
       "name": "memory-bank-updater",
       "category": "SubagentStop",
       "description": "Updates memory bank with learnings when subagent completes its task",
+      "fullDescription": "Captures knowledge from subagent executions and stores it in a structured memory bank. Automatically extracts key insights, decisions, and patterns from subagent runs. Builds an organizational knowledge base over time. Supports custom memory categories and tagging.",
       "repoUrl": "https://github.com/centminmod/my-claude-code-setup",
       "repoOwner": "centminmod",
-      "repoName": "my-claude-code-setup"
+      "repoName": "my-claude-code-setup",
+      "github": {
+        "stars": 143,
+        "forks": 22,
+        "issues": 4,
+        "lastSync": "2026-02-01T15:30:00Z"
+      },
+      "metadata": {
+        "version": "1.2.0",
+        "hookTypes": ["SubagentStop"],
+        "matchers": [],
+        "tags": ["memory", "knowledge", "learning", "subagent", "ai"],
+        "license": "Apache-2.0",
+        "keywords": ["memory", "knowledge-base", "learning", "subagent"]
+      },
+      "stats": {
+        "installs": 234,
+        "dailyActive": 112,
+        "rating": 4.3,
+        "reviews": 28,
+        "views": 1456
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": false,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 72
+      },
+      "author": {
+        "username": "centminmod",
+        "name": "George Liu",
+        "avatarUrl": "https://github.com/centminmod.png",
+        "isVerified": true,
+        "reputation": 876
+      },
+      "createdAt": "2025-12-15T09:40:00Z",
+      "updatedAt": "2026-01-20T13:25:00Z",
+      "publishedAt": "2025-12-16T11:00:00Z"
     },
     {
       "id": "11",
       "name": "context-compactor",
       "category": "PreCompact",
       "description": "Optimizes context before compaction to preserve important information",
+      "fullDescription": "Intelligently manages context window before Claude Code's automatic compaction. Identifies and preserves critical information like recent decisions, open issues, and important file references. Uses smart summarization to maintain context continuity while reducing token usage.",
       "repoUrl": "https://github.com/disler/claude-code-hooks-mastery",
       "repoOwner": "disler",
-      "repoName": "claude-code-hooks-mastery"
+      "repoName": "claude-code-hooks-mastery",
+      "github": {
+        "stars": 487,
+        "forks": 92,
+        "issues": 12,
+        "lastSync": "2026-02-01T18:30:00Z"
+      },
+      "metadata": {
+        "version": "1.0.8",
+        "hookTypes": ["PreCompact"],
+        "matchers": [],
+        "tags": ["context", "memory", "optimization", "ai"],
+        "license": "MIT",
+        "keywords": ["context", "compact", "memory", "optimization"]
+      },
+      "stats": {
+        "installs": 178,
+        "dailyActive": 89,
+        "rating": 4.1,
+        "reviews": 19,
+        "views": 1123
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 70
+      },
+      "author": {
+        "username": "disler",
+        "name": "David Disler",
+        "avatarUrl": "https://github.com/disler.png",
+        "isVerified": true,
+        "reputation": 2847
+      },
+      "createdAt": "2026-01-05T14:10:00Z",
+      "updatedAt": "2026-01-28T11:35:00Z",
+      "publishedAt": "2026-01-06T10:00:00Z"
     },
     {
       "id": "12",
       "name": "prompt-validator",
       "category": "UserPromptSubmit",
       "description": "Validates user prompts for security issues before processing",
+      "fullDescription": "Security-focused hook that analyzes prompts before submission. Detects potential injection attempts, sensitive data leaks, and unsafe patterns. Configurable rules for different security levels. Provides warnings and optional blocking for high-risk patterns. Essential for enterprise environments.",
       "repoUrl": "https://github.com/ChrisWiles/claude-code-showcase",
       "repoOwner": "ChrisWiles",
-      "repoName": "claude-code-showcase"
+      "repoName": "claude-code-showcase",
+      "github": {
+        "stars": 234,
+        "forks": 45,
+        "issues": 8,
+        "lastSync": "2026-02-01T16:45:00Z"
+      },
+      "metadata": {
+        "version": "1.3.2",
+        "hookTypes": ["UserPromptSubmit"],
+        "matchers": [],
+        "tags": ["security", "validation", "safety", "enterprise"],
+        "license": "MIT",
+        "keywords": ["security", "validation", "prompt", "safety"]
+      },
+      "stats": {
+        "installs": 356,
+        "dailyActive": 189,
+        "rating": 4.4,
+        "reviews": 37,
+        "views": 2234
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": true,
+        "documentationScore": 86
+      },
+      "author": {
+        "username": "ChrisWiles",
+        "name": "Chris Wiles",
+        "avatarUrl": "https://github.com/ChrisWiles.png",
+        "isVerified": true,
+        "reputation": 1523
+      },
+      "createdAt": "2025-11-28T10:20:00Z",
+      "updatedAt": "2026-01-24T15:50:00Z",
+      "publishedAt": "2025-11-29T09:00:00Z"
     },
     {
       "id": "13",
       "name": "permission-auditor",
       "category": "PermissionRequest",
       "description": "Logs all permission requests for security auditing and compliance",
+      "fullDescription": "Comprehensive permission tracking for compliance and security auditing. Records every permission request with full context including command, tool, timestamp, and approval status. Generates audit reports and alerts on suspicious patterns. Perfect for regulated industries and security-conscious teams.",
       "repoUrl": "https://github.com/affaan-m/everything-claude-code",
       "repoOwner": "affaan-m",
-      "repoName": "everything-claude-code"
+      "repoName": "everything-claude-code",
+      "github": {
+        "stars": 198,
+        "forks": 34,
+        "issues": 6,
+        "lastSync": "2026-02-01T17:55:00Z"
+      },
+      "metadata": {
+        "version": "2.1.0",
+        "hookTypes": ["PermissionRequest"],
+        "matchers": [],
+        "tags": ["security", "auditing", "compliance", "permissions", "enterprise"],
+        "license": "MIT",
+        "keywords": ["permission", "audit", "security", "compliance"]
+      },
+      "stats": {
+        "installs": 412,
+        "dailyActive": 223,
+        "rating": 4.5,
+        "reviews": 45,
+        "views": 2678
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": true,
+        "documentationScore": 91
+      },
+      "author": {
+        "username": "affaan-m",
+        "name": "Affaan Mahmood",
+        "avatarUrl": "https://github.com/affaan-m.png",
+        "isVerified": true,
+        "reputation": 1245
+      },
+      "createdAt": "2025-10-12T11:30:00Z",
+      "updatedAt": "2026-01-26T09:40:00Z",
+      "publishedAt": "2025-10-13T10:00:00Z"
     },
     {
       "id": "14",
       "name": "desktop-notification",
       "category": "Notification",
       "description": "Sends desktop notifications for important events during development",
+      "fullDescription": "Get native desktop notifications for key Claude Code events. Supports macOS, Windows, and Linux notification systems. Customizable notification triggers, sounds, and priority levels. Perfect for staying informed when working across multiple windows or during long-running operations.",
       "repoUrl": "https://github.com/carlrannaberg/claudekit",
       "repoOwner": "carlrannaberg",
-      "repoName": "claudekit"
+      "repoName": "claudekit",
+      "github": {
+        "stars": 267,
+        "forks": 51,
+        "issues": 7,
+        "lastSync": "2026-02-01T19:50:00Z"
+      },
+      "metadata": {
+        "version": "1.5.0",
+        "hookTypes": ["Notification"],
+        "matchers": [],
+        "tags": ["notification", "desktop", "alerts", "productivity"],
+        "license": "MIT",
+        "keywords": ["notification", "alert", "desktop", "notify"]
+      },
+      "stats": {
+        "installs": 623,
+        "dailyActive": 367,
+        "rating": 4.6,
+        "reviews": 71,
+        "views": 4123
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "node-notifier",
+            "version": "^10.0.0",
+            "required": true,
+            "installCommand": "npm install node-notifier"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 84
+      },
+      "author": {
+        "username": "carlrannaberg",
+        "name": "Carl Rannaberg",
+        "avatarUrl": "https://github.com/carlrannaberg.png",
+        "isVerified": true,
+        "reputation": 1678
+      },
+      "createdAt": "2025-11-01T13:45:00Z",
+      "updatedAt": "2026-01-23T16:20:00Z",
+      "publishedAt": "2025-11-02T10:00:00Z"
     },
     {
       "id": "15",
       "name": "test-runner",
       "category": "PostToolUse",
       "description": "Automatically runs relevant tests after code changes are written",
+      "fullDescription": "Intelligent test runner that automatically executes relevant tests after code modifications. Detects changed files and runs only affected test suites for fast feedback. Supports Jest, Vitest, Pytest, and other popular testing frameworks. Provides clear pass/fail feedback and detailed error reports.",
       "repoUrl": "https://github.com/decider/claude-hooks",
       "repoOwner": "decider",
-      "repoName": "claude-hooks"
+      "repoName": "claude-hooks",
+      "github": {
+        "stars": 156,
+        "forks": 28,
+        "issues": 5,
+        "lastSync": "2026-02-01T20:10:00Z"
+      },
+      "metadata": {
+        "version": "2.2.0",
+        "hookTypes": ["PostToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["testing", "automation", "tdd", "quality-assurance"],
+        "license": "MIT",
+        "keywords": ["test", "testing", "jest", "vitest", "pytest"]
+      },
+      "stats": {
+        "installs": 987,
+        "dailyActive": 534,
+        "rating": 4.8,
+        "reviews": 89,
+        "views": 5934
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "jest",
+            "version": "^29.0.0",
+            "required": false,
+            "installCommand": "npm install -D jest"
+          },
+          {
+            "name": "vitest",
+            "version": "^1.0.0",
+            "required": false,
+            "installCommand": "npm install -D vitest"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": false,
+        "documentationScore": 92
+      },
+      "author": {
+        "username": "decider",
+        "name": "John Decider",
+        "avatarUrl": "https://github.com/decider.png",
+        "isVerified": true,
+        "reputation": 987
+      },
+      "createdAt": "2025-10-05T09:15:00Z",
+      "updatedAt": "2026-01-30T14:55:00Z",
+      "publishedAt": "2025-10-06T10:00:00Z"
     },
     {
       "id": "16",
       "name": "dependency-checker",
       "category": "Utility",
       "description": "Checks and validates project dependencies for security vulnerabilities",
+      "fullDescription": "Comprehensive dependency security scanner. Automatically checks npm, pip, cargo, and other package managers for known vulnerabilities. Integrates with CVE databases and provides actionable upgrade recommendations. Runs on session start and can be triggered manually. Essential for maintaining secure codebases.",
       "repoUrl": "https://github.com/carlrannaberg/claudekit",
       "repoOwner": "carlrannaberg",
-      "repoName": "claudekit"
+      "repoName": "claudekit",
+      "github": {
+        "stars": 267,
+        "forks": 51,
+        "issues": 7,
+        "lastSync": "2026-02-01T19:50:00Z"
+      },
+      "metadata": {
+        "version": "1.4.3",
+        "hookTypes": ["Utility", "SessionStart"],
+        "matchers": [],
+        "tags": ["security", "dependencies", "vulnerability", "scanning", "npm"],
+        "license": "MIT",
+        "keywords": ["dependency", "security", "vulnerability", "npm", "audit"]
+      },
+      "stats": {
+        "installs": 734,
+        "dailyActive": 423,
+        "rating": 4.7,
+        "reviews": 82,
+        "views": 4789
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "npm",
+            "version": "8.0+",
+            "required": false,
+            "installCommand": "Usually installed with Node.js"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": true,
+        "documentationScore": 89
+      },
+      "author": {
+        "username": "carlrannaberg",
+        "name": "Carl Rannaberg",
+        "avatarUrl": "https://github.com/carlrannaberg.png",
+        "isVerified": true,
+        "reputation": 1678
+      },
+      "createdAt": "2025-11-12T10:25:00Z",
+      "updatedAt": "2026-01-29T13:10:00Z",
+      "publishedAt": "2025-11-13T09:00:00Z"
     },
     {
       "id": "17",
       "name": "code-complexity-analyzer",
       "category": "Utility",
       "description": "Analyzes code complexity metrics and suggests refactoring opportunities",
+      "fullDescription": "Advanced static analysis tool that calculates cyclomatic complexity, cognitive complexity, and maintainability index for your code. Provides actionable refactoring suggestions when complexity thresholds are exceeded. Supports JavaScript, TypeScript, Python, and other languages. Helps maintain clean, maintainable codebases.",
       "repoUrl": "https://github.com/johnlindquist/claude-hooks",
       "repoOwner": "johnlindquist",
-      "repoName": "claude-hooks"
+      "repoName": "claude-hooks",
+      "github": {
+        "stars": 412,
+        "forks": 78,
+        "issues": 9,
+        "lastSync": "2026-02-01T21:15:00Z"
+      },
+      "metadata": {
+        "version": "1.6.1",
+        "hookTypes": ["Utility", "PostToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["code-quality", "refactoring", "analysis", "metrics", "complexity"],
+        "license": "MIT",
+        "keywords": ["complexity", "analysis", "refactoring", "metrics", "quality"]
+      },
+      "stats": {
+        "installs": 445,
+        "dailyActive": 267,
+        "rating": 4.5,
+        "reviews": 53,
+        "views": 3012
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "eslint",
+            "version": "^8.0.0 || ^9.0.0",
+            "required": false,
+            "installCommand": "npm install -D eslint"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 87
+      },
+      "author": {
+        "username": "johnlindquist",
+        "name": "John Lindquist",
+        "avatarUrl": "https://github.com/johnlindquist.png",
+        "isVerified": true,
+        "reputation": 3421
+      },
+      "createdAt": "2025-10-18T14:50:00Z",
+      "updatedAt": "2026-01-27T11:30:00Z",
+      "publishedAt": "2025-10-19T10:00:00Z"
     },
     {
       "id": "18",
       "name": "documentation-generator",
       "category": "PostToolUse",
       "description": "Automatically generates or updates documentation after code changes",
+      "fullDescription": "Keeps your documentation in sync with your code automatically. Generates JSDoc/TSDoc comments, updates README files, and maintains API documentation. Uses AI to create meaningful documentation that explains the 'why' not just the 'what'. Supports multiple documentation formats and can be customized per project.",
       "repoUrl": "https://github.com/centminmod/my-claude-code-setup",
       "repoOwner": "centminmod",
-      "repoName": "my-claude-code-setup"
+      "repoName": "my-claude-code-setup",
+      "github": {
+        "stars": 143,
+        "forks": 22,
+        "issues": 4,
+        "lastSync": "2026-02-01T15:30:00Z"
+      },
+      "metadata": {
+        "version": "1.7.2",
+        "hookTypes": ["PostToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["documentation", "jsdoc", "automation", "ai", "readme"],
+        "license": "Apache-2.0",
+        "keywords": ["documentation", "jsdoc", "readme", "auto-doc"]
+      },
+      "stats": {
+        "installs": 556,
+        "dailyActive": 312,
+        "rating": 4.4,
+        "reviews": 61,
+        "views": 3456
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": false,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 81
+      },
+      "author": {
+        "username": "centminmod",
+        "name": "George Liu",
+        "avatarUrl": "https://github.com/centminmod.png",
+        "isVerified": true,
+        "reputation": 876
+      },
+      "createdAt": "2025-11-25T09:35:00Z",
+      "updatedAt": "2026-01-21T15:45:00Z",
+      "publishedAt": "2025-11-26T10:00:00Z"
     },
     {
       "id": "19",
       "name": "git-commit-workflow",
       "category": "Workflow",
       "description": "Complete git workflow: stage → validate → generate message → commit → push",
+      "fullDescription": "End-to-end git workflow automation. Stages changed files, runs validation checks, generates meaningful commit messages using AI, creates the commit, and optionally pushes to remote. Supports conventional commits, branch protection rules, and custom validation hooks. Makes git workflows effortless.",
       "repoUrl": "https://github.com/hesreallyhim/awesome-claude-code",
       "repoOwner": "hesreallyhim",
-      "repoName": "awesome-claude-code"
+      "repoName": "awesome-claude-code",
+      "github": {
+        "stars": 321,
+        "forks": 67,
+        "issues": 14,
+        "lastSync": "2026-02-01T19:20:00Z"
+      },
+      "metadata": {
+        "version": "2.0.5",
+        "hookTypes": ["Workflow"],
+        "matchers": [],
+        "tags": ["git", "workflow", "automation", "commit", "version-control"],
+        "license": "MIT",
+        "keywords": ["git", "commit", "workflow", "automation", "push"]
+      },
+      "stats": {
+        "installs": 823,
+        "dailyActive": 478,
+        "rating": 4.7,
+        "reviews": 96,
+        "views": 5678
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "git",
+            "version": "2.0+",
+            "required": true,
+            "installCommand": "Usually pre-installed"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": false,
+        "documentationScore": 93
+      },
+      "author": {
+        "username": "hesreallyhim",
+        "name": "Alex Thompson",
+        "avatarUrl": "https://github.com/hesreallyhim.png",
+        "isVerified": false,
+        "reputation": 543
+      },
+      "createdAt": "2025-09-28T11:20:00Z",
+      "updatedAt": "2026-01-28T17:35:00Z",
+      "publishedAt": "2025-09-29T09:00:00Z"
     },
     {
       "id": "20",
       "name": "project-initializer",
       "category": "SessionStart",
       "description": "Sets up development environment and loads project-specific configurations",
+      "fullDescription": "Comprehensive project environment setup on session start. Loads environment variables, starts required services (databases, caches), activates virtual environments, and runs initialization scripts. Supports project-specific configuration files. Perfect for complex development setups with multiple dependencies.",
       "repoUrl": "https://github.com/affaan-m/everything-claude-code",
       "repoOwner": "affaan-m",
-      "repoName": "everything-claude-code"
+      "repoName": "everything-claude-code",
+      "github": {
+        "stars": 198,
+        "forks": 34,
+        "issues": 6,
+        "lastSync": "2026-02-01T17:55:00Z"
+      },
+      "metadata": {
+        "version": "1.8.0",
+        "hookTypes": ["SessionStart"],
+        "matchers": [],
+        "tags": ["initialization", "setup", "environment", "configuration", "automation"],
+        "license": "MIT",
+        "keywords": ["init", "setup", "environment", "config", "startup"]
+      },
+      "stats": {
+        "installs": 512,
+        "dailyActive": 289,
+        "rating": 4.6,
+        "reviews": 58,
+        "views": 3289
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 85
+      },
+      "author": {
+        "username": "affaan-m",
+        "name": "Affaan Mahmood",
+        "avatarUrl": "https://github.com/affaan-m.png",
+        "isVerified": true,
+        "reputation": 1245
+      },
+      "createdAt": "2025-10-22T13:15:00Z",
+      "updatedAt": "2026-01-25T10:20:00Z",
+      "publishedAt": "2025-10-23T09:00:00Z"
     },
     {
       "id": "21",
       "name": "ai-code-review",
       "category": "Workflow",
       "description": "Triggers automated AI-powered code review workflow with detailed feedback",
+      "fullDescription": "Comprehensive AI-powered code review system. Analyzes code changes for bugs, security issues, performance problems, and best practice violations. Provides detailed feedback with specific line references and suggested improvements. Integrates with GitHub PR workflows. Customizable review criteria and severity levels.",
       "repoUrl": "https://github.com/johnlindquist/claude-hooks",
       "repoOwner": "johnlindquist",
-      "repoName": "claude-hooks"
+      "repoName": "claude-hooks",
+      "github": {
+        "stars": 412,
+        "forks": 78,
+        "issues": 9,
+        "lastSync": "2026-02-01T21:15:00Z"
+      },
+      "metadata": {
+        "version": "2.4.0",
+        "hookTypes": ["Workflow", "PostToolUse"],
+        "matchers": ["Write", "Edit"],
+        "tags": ["code-review", "ai", "quality-assurance", "automation", "security"],
+        "license": "MIT",
+        "keywords": ["review", "ai", "code-review", "quality", "feedback"]
+      },
+      "stats": {
+        "installs": 1123,
+        "dailyActive": 645,
+        "rating": 4.9,
+        "reviews": 108,
+        "views": 7456
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": []
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": true,
+        "securityAudited": true,
+        "documentationScore": 96
+      },
+      "author": {
+        "username": "johnlindquist",
+        "name": "John Lindquist",
+        "avatarUrl": "https://github.com/johnlindquist.png",
+        "isVerified": true,
+        "reputation": 3421
+      },
+      "createdAt": "2025-09-08T10:30:00Z",
+      "updatedAt": "2026-02-01T09:15:00Z",
+      "publishedAt": "2025-09-09T09:00:00Z"
     },
     {
       "id": "22",
       "name": "changelog-updater",
       "category": "PostToolUse",
       "description": "Updates CHANGELOG.md automatically based on commits and code changes",
+      "fullDescription": "Maintains your CHANGELOG.md automatically following Keep a Changelog format. Parses commit messages (supports Conventional Commits), categorizes changes (Added, Changed, Fixed, etc.), and updates the changelog with proper versioning. Integrates with semantic versioning and can trigger on git commits or manual invocation.",
       "repoUrl": "https://github.com/carlrannaberg/claudekit",
       "repoOwner": "carlrannaberg",
-      "repoName": "claudekit"
+      "repoName": "claudekit",
+      "github": {
+        "stars": 267,
+        "forks": 51,
+        "issues": 7,
+        "lastSync": "2026-02-01T19:50:00Z"
+      },
+      "metadata": {
+        "version": "1.9.1",
+        "hookTypes": ["PostToolUse"],
+        "matchers": [],
+        "tags": ["changelog", "documentation", "versioning", "automation", "git"],
+        "license": "MIT",
+        "keywords": ["changelog", "version", "semver", "documentation"]
+      },
+      "stats": {
+        "installs": 389,
+        "dailyActive": 201,
+        "rating": 4.3,
+        "reviews": 44,
+        "views": 2567
+      },
+      "compatibility": {
+        "platforms": ["All"],
+        "dependencies": [
+          {
+            "name": "git",
+            "version": "2.0+",
+            "required": true,
+            "installCommand": "Usually pre-installed"
+          }
+        ]
+      },
+      "quality": {
+        "verified": true,
+        "communityChoice": false,
+        "securityAudited": false,
+        "documentationScore": 83
+      },
+      "author": {
+        "username": "carlrannaberg",
+        "name": "Carl Rannaberg",
+        "avatarUrl": "https://github.com/carlrannaberg.png",
+        "isVerified": true,
+        "reputation": 1678
+      },
+      "createdAt": "2025-11-30T15:25:00Z",
+      "updatedAt": "2026-01-26T12:40:00Z",
+      "publishedAt": "2025-12-01T10:00:00Z"
     }
   ]
 }

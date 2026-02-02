@@ -26,10 +26,11 @@ claude
 
 ```bash
 cd hookhub
+npm install
 npm run dev
 ```
 
 ```bash
 claude
-Refer to ./HooksMarketplaceSpecV2.1.md build the project for me. 
+Refer to ./HooksMarketplaceSpecV2.1.md update the project hookhub for me.
 ```
