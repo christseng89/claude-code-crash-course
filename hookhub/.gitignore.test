@@ -1,0 +1,7 @@
+# Testing
+/coverage
+/.nyc_output
+*.lcov
+
+# Jest
+jest.config.js.bak
