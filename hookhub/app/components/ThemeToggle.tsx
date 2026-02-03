@@ -9,19 +9,17 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   // Use useLayoutEffect to synchronously update before paint
-  // This eliminates the extra render cycle and FOUC
+  // This prevents hydration mismatch by ensuring mounted state is set before browser paint
+  // This is a necessary pattern for theme toggles that need to wait for client-side hydration
   useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
+  // Return null during SSR to prevent hydration mismatch
+  // The component will render on the client after useLayoutEffect runs
   if (!mounted) {
-    return (
-      <div className="flex items-center gap-1 rounded-full bg-gray-200 p-1 dark:bg-gray-800">
-        <button className="rounded-full p-2">
-          <Monitor className="h-4 w-4" />
-        </button>
-      </div>
-    );
+    return null;
   }
 
   return (
