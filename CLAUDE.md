@@ -10,6 +10,17 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 - **Main branch**: Landing page, documentation, and two working Next.js applications (hookhub + my-app)
 - **Project branches** (`project/*`): Each teaches a specific Claude Code feature through commit-based progression
 - **Context engineering examples**: Demonstrates MCP integration and fine-grained configuration
+- **Learning documentation**: Root-level `README-*.md` files provide topical guides
+
+**Learning Documentation Files:**
+- `README.md` - Course overview and getting started
+- `README-1GistOfClaudeCode.md` - Introduction to Claude Code fundamentals
+- `README-2ClaudeSlashCommands.md` - Slash commands reference
+- `README-2Skills.md` - Skills system and custom skills
+- `README-3Mcp.md` - Model Context Protocol basics
+- `README-4ContextEngineering.md` - Advanced context management
+- `README-5PluginsAndCloudfareCodeMode.md` - Extensions and cloud integration
+- `README-6AdvancedWorkflow.md` - Plan mode and complex workflows
 
 ## Getting Started
 
@@ -18,17 +29,23 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 git clone https://github.com/christseng89/claude-code-crash-course.git crash-course
 cd crash-course
 
-# Start Claude Code (with GitHub MCP server)
-.\start-claude.ps1
+# Start Claude Code (with GitHub MCP server - Windows PowerShell)
+.\start-claude.ps1      # Loads .env and starts Claude Code
 
-# Or without MCP
+# Or without MCP / on other platforms
 claude
 
 # Initialize context
 /init
 ```
 
-**GitHub MCP Setup:** To use the GitHub MCP server, copy `.env.example` to `.env` and add your GitHub Personal Access Token. See [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md).
+**GitHub MCP Setup:**
+1. Copy `.env.example` to `.env`
+2. Add your GitHub Personal Access Token to `.env`
+3. Use `start-claude.ps1` (Windows) to automatically load environment variables
+4. See [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md) for detailed instructions
+
+**Note:** `start-claude.ps1` is Windows-specific. On Linux/Mac, manually export environment variables or use `source .env` before running `claude`.
 
 ## Development Commands
 
@@ -70,10 +87,15 @@ python text_processor.py test.txt --reformat-only
 **Context Engineering MCP** (`context-engineering-mcp/`):
 ```bash
 cd context-engineering-mcp
-uv sync                    # Install dependencies
-uv run python main.py      # Run main script
-uv run python verbose_mcp_server.py  # Verbose MCP server
+uv sync                          # Install dependencies (requires uv package manager)
+uv run python main.py            # Run main script
+uv run python verbose_mcp_server.py  # Start verbose MCP server on http://127.0.0.1:8000/mcp
+
+# With fine-grained MCP config
+claude --mcp-config .mcp.json.verbose  # Use specific MCP configuration
 ```
+
+**Note:** Requires Python >=3.11 and `uv` package manager. Install `uv` with `pip install uv` if needed.
 
 ### Git Branch Navigation
 
@@ -137,16 +159,19 @@ Each `project/*` branch contains:
 - Example code demonstrating the feature
 - Optional `CLAUDE.md` with branch-specific instructions
 
-**Available Topics:**
+**Available Topics (Project Branches):**
 - `project/custom-commands` - Custom slash commands with `$arguments`
 - `project/mcp` - Context7 MCP server integration
 - `project/context-engineering-mcp` - Fine-grained MCP config with `--mcp-config`
 - `project/subagents` - Specialized AI agents (Code Comedy Carl, Mermaid generator)
 - `project/hooks-notifications` - Workflow automation with hooks and sound
-- `project/hookhub` - Advanced hook management systems
-- `project/hookhub2` - Alternative hook implementation
+- `project/hookhub` - Advanced hook management systems (Phase 1)
+- `project/hookhub2` - Alternative hook implementation (Phase 2)
 - `project/skills` - Custom skills and extensions
 - `project/output-styles` - Output formatting customization
+
+**Branch Navigation Pattern:**
+Each branch is self-contained with chronological commits. Use `git log --oneline --reverse` to see the learning progression, then `git checkout <commit-hash>` to step through each concept.
 
 ## Custom Commands vs Skills
 
@@ -169,16 +194,20 @@ Each `project/*` branch contains:
 
 ## MCP Server Configuration
 
-**Enabled Servers** (see `.mcp.json` and `settings.local.json`):
-- **weather** - Weather forecasts and alerts
-- **puppeteer-mcp-server** - Browser automation and screenshots
-- **sequential-thinking** - Step-by-step reasoning for complex problems
+**Enabled Servers** (see `.mcp.json`):
 - **github** - GitHub API integration (requires `.env` with `GITHUB_PERSONAL_ACCESS_TOKEN`)
-- **playwright** - Microsoft Playwright browser automation
+- **playwright** - Microsoft Playwright browser automation and screenshots
+- **context7** - Context7 MCP server for documentation queries (`https://mcp.context7.com/mcp`)
+- **verbose-server** (development) - HTTP-based verbose MCP server for debugging (`http://127.0.0.1:8000/mcp`)
+
+**Other Available Servers** (via `settings.local.json`):
+- **weather** - Weather forecasts and alerts
+- **puppeteer-mcp-server** - Browser automation (alternative to playwright)
+- **sequential-thinking** - Step-by-step reasoning for complex problems
 
 **Adding New MCP Servers:**
 1. Edit `.mcp.json` to add server configuration
-2. Update `enabledMcpjsonServers` array in `settings.local.json`
+2. Update `enabledMcpjsonServers` array in `settings.local.json` if needed
 3. Restart Claude Code
 4. Test with relevant MCP tool calls
 
@@ -351,6 +380,37 @@ When making changes:
 /rewind         # Rewind code changes and conversation
 /model          # Switch between Claude models
 ```
+
+## Plan Mode (Advanced Workflow)
+
+Plan mode is activated with `Alt + M` (or `Meta + M`) and allows Claude Code to think through complex problems before implementing:
+
+```bash
+# Example: HookHub specification development
+claude
+# Press Alt + M to enter plan mode
+⏸ plan mode on (meta+m to cycle)
+
+# Give high-level instructions - Claude will think and plan
+I want you to help me come up with a spec for a NEW web application...
+a marketplace displaying all of the hooks that are available...
+
+# Claude will create a comprehensive spec
+# Review the spec, then exit plan mode and implement
+
+# Start fresh implementation session
+/clear
+/init
+Refer to ./HooksMarketplaceSpecV2.1.md update the project hookhub for me.
+```
+
+**Use Plan Mode For:**
+- Architecture planning for new features
+- Specification creation before implementation
+- Complex refactoring strategies
+- Multi-step workflow design
+
+See [README-6AdvancedWorkflow.md](README-6AdvancedWorkflow.md) for the complete HookHub case study.
 
 ## Contributing
 
