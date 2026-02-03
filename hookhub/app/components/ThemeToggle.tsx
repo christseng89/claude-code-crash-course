@@ -2,13 +2,15 @@
 
 import { useTheme } from "next-themes";
 import { Sun, Moon, Monitor } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  // Use useLayoutEffect to synchronously update before paint
+  // This eliminates the extra render cycle and FOUC
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 

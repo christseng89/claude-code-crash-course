@@ -52,13 +52,13 @@ describe('HookCard Component', () => {
   });
 
   it('applies correct category color class for PostToolUse', () => {
-    const { container } = render(<HookCard hook={mockHook} />);
+    render(<HookCard hook={mockHook} />);
     const categoryBadge = screen.getByText('PostToolUse');
     expect(categoryBadge).toHaveClass('text-green-700');
   });
 
   it('applies correct category color class for PreToolUse', () => {
-    const { container } = render(<HookCard hook={mockHook2} />);
+    render(<HookCard hook={mockHook2} />);
     const categoryBadge = screen.getByText('PreToolUse');
     expect(categoryBadge).toHaveClass('text-blue-700');
   });

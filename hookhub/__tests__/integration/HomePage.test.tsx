@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Home from '@/app/page';
 
@@ -109,7 +109,10 @@ describe('Home Page Integration Tests', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'format');
 
-    expect(screen.getByText('1 hook found')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('1 hook found')).toBeInTheDocument();
+    }, { timeout: 500 });
+
     expect(screen.getByText('format-typescript')).toBeInTheDocument();
     expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
   });
@@ -130,7 +133,10 @@ describe('Home Page Integration Tests', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'nonexistent');
 
-    expect(screen.getByText('No hooks found')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('No hooks found')).toBeInTheDocument();
+    }, { timeout: 500 });
+
     expect(screen.getByText(/Try adjusting your search or filter criteria/i)).toBeInTheDocument();
   });
 

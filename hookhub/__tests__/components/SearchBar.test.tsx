@@ -18,21 +18,26 @@ describe('SearchBar Component', () => {
     expect(input.value).toBe('test query');
   });
 
-  it('calls onSearchChange when typing', async () => {
-    const user = userEvent.setup();
+  it('calls onSearchChange when typing (with debounce)', async () => {
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     const mockOnChange = jest.fn();
     render(<SearchBar searchQuery="" onSearchChange={mockOnChange} />);
 
     const input = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(input, 'test');
 
-    // user-event v16+ sends individual character events
-    expect(mockOnChange).toHaveBeenCalled();
-    expect(mockOnChange).toHaveBeenCalledTimes(4);
-    expect(mockOnChange).toHaveBeenNthCalledWith(1, 't');
-    expect(mockOnChange).toHaveBeenNthCalledWith(2, 'e');
-    expect(mockOnChange).toHaveBeenNthCalledWith(3, 's');
-    expect(mockOnChange).toHaveBeenNthCalledWith(4, 't');
+    // Before debounce delay, onChange should not be called
+    expect(mockOnChange).not.toHaveBeenCalled();
+
+    // Fast-forward time by 300ms (debounce delay)
+    jest.advanceTimersByTime(300);
+
+    // After debounce, should be called once with final value
+    expect(mockOnChange).toHaveBeenCalledTimes(1);
+    expect(mockOnChange).toHaveBeenCalledWith('test');
+
+    jest.useRealTimers();
   });
 
   it('renders search icon', () => {
@@ -64,15 +69,36 @@ describe('SearchBar Component', () => {
     expect(input.value).toBe('');
   });
 
-  it('handles rapid typing correctly', async () => {
-    const user = userEvent.setup();
+  it('handles rapid typing correctly with debouncing', async () => {
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     const mockOnChange = jest.fn();
     render(<SearchBar searchQuery="" onSearchChange={mockOnChange} />);
 
     const input = screen.getByPlaceholderText(/Search hooks/i);
-    await user.type(input, 'rapid', { delay: 1 }); // Very fast typing
 
-    expect(mockOnChange).toHaveBeenCalledTimes(5);
+    // Type 'rapid' character by character with short delays
+    await user.type(input, 'r');
+    jest.advanceTimersByTime(50);
+    await user.type(input, 'a');
+    jest.advanceTimersByTime(50);
+    await user.type(input, 'p');
+    jest.advanceTimersByTime(50);
+    await user.type(input, 'i');
+    jest.advanceTimersByTime(50);
+    await user.type(input, 'd');
+
+    // Debouncing prevents multiple calls during typing
+    expect(mockOnChange).not.toHaveBeenCalled();
+
+    // After final debounce delay
+    jest.advanceTimersByTime(300);
+
+    // Should only be called once with the final value (debounced)
+    expect(mockOnChange).toHaveBeenCalledTimes(1);
+    expect(mockOnChange).toHaveBeenCalledWith('rapid');
+
+    jest.useRealTimers();
   });
 
   it('maintains focus after typing', async () => {

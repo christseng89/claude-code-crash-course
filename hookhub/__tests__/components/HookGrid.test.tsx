@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HookGrid from '@/app/components/HookGrid';
 import { mockHooks } from '../utils/mockData.mock';
@@ -55,8 +55,11 @@ describe('HookGrid Component', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'format');
 
-    expect(screen.getByText('format-typescript')).toBeInTheDocument();
-    expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('format-typescript')).toBeInTheDocument();
+      expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
+    }, { timeout: 500 });
+
     expect(screen.queryByText('git-commit-lint')).not.toBeInTheDocument();
   });
 
@@ -67,8 +70,11 @@ describe('HookGrid Component', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'validates');
 
-    expect(screen.getByText('git-commit-lint')).toBeInTheDocument();
-    expect(screen.queryByText('format-typescript')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('git-commit-lint')).toBeInTheDocument();
+      expect(screen.queryByText('format-typescript')).not.toBeInTheDocument();
+    }, { timeout: 500 });
+
     expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
   });
 
@@ -79,8 +85,10 @@ describe('HookGrid Component', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'disler');
 
-    expect(screen.getByText('format-typescript')).toBeInTheDocument();
-    expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('format-typescript')).toBeInTheDocument();
+      expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
+    }, { timeout: 500 });
   });
 
   it('combines category and search filters', async () => {
@@ -97,7 +105,10 @@ describe('HookGrid Component', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'activity');
 
-    expect(screen.getByText('activity-logger')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('activity-logger')).toBeInTheDocument();
+    }, { timeout: 500 });
+
     expect(screen.queryByText('format-typescript')).not.toBeInTheDocument();
     expect(screen.queryByText('git-commit-lint')).not.toBeInTheDocument();
     expect(screen.getByText('1 hook found')).toBeInTheDocument();
@@ -110,7 +121,10 @@ describe('HookGrid Component', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'nonexistent-hook');
 
-    expect(screen.getByText('No hooks found')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('No hooks found')).toBeInTheDocument();
+    }, { timeout: 500 });
+
     expect(screen.getByText(/Try adjusting your search or filter criteria/i)).toBeInTheDocument();
   });
 
@@ -141,11 +155,17 @@ describe('HookGrid Component', () => {
 
     // Type search query
     await user.type(searchInput, 'format');
-    expect(screen.getByText('1 hook found')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText('1 hook found')).toBeInTheDocument();
+    }, { timeout: 500 });
 
     // Clear search
     await user.clear(searchInput);
-    expect(screen.getByText('3 hooks found')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText('3 hooks found')).toBeInTheDocument();
+    }, { timeout: 500 });
   });
 
   it('renders SearchBar component', () => {

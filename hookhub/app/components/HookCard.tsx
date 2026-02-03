@@ -5,23 +5,26 @@ interface HookCardProps {
   hook: Hook;
 }
 
+// Move colors to module level to prevent recreation on every render
+// This eliminates ~286 object allocations per render (13 categories × 22 cards)
+const CATEGORY_COLORS: Record<HookCategory, string> = {
+  [HookCategory.PreToolUse]: "bg-blue-500/10 text-blue-700 ring-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:ring-blue-500/30",
+  [HookCategory.PostToolUse]: "bg-green-500/10 text-green-700 ring-green-500/20 dark:bg-green-500/20 dark:text-green-400 dark:ring-green-500/30",
+  [HookCategory.SessionStart]: "bg-purple-500/10 text-purple-700 ring-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400 dark:ring-purple-500/30",
+  [HookCategory.SessionEnd]: "bg-purple-500/10 text-purple-700 ring-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400 dark:ring-purple-500/30",
+  [HookCategory.UserPromptSubmit]: "bg-indigo-500/10 text-indigo-700 ring-indigo-500/20 dark:bg-indigo-500/20 dark:text-indigo-400 dark:ring-indigo-500/30",
+  [HookCategory.PermissionRequest]: "bg-yellow-500/10 text-yellow-700 ring-yellow-500/20 dark:bg-yellow-500/20 dark:text-yellow-400 dark:ring-yellow-500/30",
+  [HookCategory.SubagentStop]: "bg-pink-500/10 text-pink-700 ring-pink-500/20 dark:bg-pink-500/20 dark:text-pink-400 dark:ring-pink-500/30",
+  [HookCategory.PreCompact]: "bg-cyan-500/10 text-cyan-700 ring-cyan-500/20 dark:bg-cyan-500/20 dark:text-cyan-400 dark:ring-cyan-500/30",
+  [HookCategory.Stop]: "bg-red-500/10 text-red-700 ring-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:ring-red-500/30",
+  [HookCategory.Notification]: "bg-amber-500/10 text-amber-700 ring-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:ring-amber-500/30",
+  [HookCategory.Utility]: "bg-gray-500/10 text-gray-700 ring-gray-500/20 dark:bg-gray-500/20 dark:text-gray-400 dark:ring-gray-500/30",
+  [HookCategory.Workflow]: "bg-orange-500/10 text-orange-700 ring-orange-500/20 dark:bg-orange-500/20 dark:text-orange-400 dark:ring-orange-500/30",
+  [HookCategory.Other]: "bg-slate-500/10 text-slate-700 ring-slate-500/20 dark:bg-slate-500/20 dark:text-slate-400 dark:ring-slate-500/30",
+};
+
 const getCategoryColor = (category: HookCategory): string => {
-  const colors: Record<HookCategory, string> = {
-    [HookCategory.PreToolUse]: "bg-blue-500/10 text-blue-700 ring-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:ring-blue-500/30",
-    [HookCategory.PostToolUse]: "bg-green-500/10 text-green-700 ring-green-500/20 dark:bg-green-500/20 dark:text-green-400 dark:ring-green-500/30",
-    [HookCategory.SessionStart]: "bg-purple-500/10 text-purple-700 ring-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400 dark:ring-purple-500/30",
-    [HookCategory.SessionEnd]: "bg-purple-500/10 text-purple-700 ring-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400 dark:ring-purple-500/30",
-    [HookCategory.UserPromptSubmit]: "bg-indigo-500/10 text-indigo-700 ring-indigo-500/20 dark:bg-indigo-500/20 dark:text-indigo-400 dark:ring-indigo-500/30",
-    [HookCategory.PermissionRequest]: "bg-yellow-500/10 text-yellow-700 ring-yellow-500/20 dark:bg-yellow-500/20 dark:text-yellow-400 dark:ring-yellow-500/30",
-    [HookCategory.SubagentStop]: "bg-pink-500/10 text-pink-700 ring-pink-500/20 dark:bg-pink-500/20 dark:text-pink-400 dark:ring-pink-500/30",
-    [HookCategory.PreCompact]: "bg-cyan-500/10 text-cyan-700 ring-cyan-500/20 dark:bg-cyan-500/20 dark:text-cyan-400 dark:ring-cyan-500/30",
-    [HookCategory.Stop]: "bg-red-500/10 text-red-700 ring-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:ring-red-500/30",
-    [HookCategory.Notification]: "bg-amber-500/10 text-amber-700 ring-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:ring-amber-500/30",
-    [HookCategory.Utility]: "bg-gray-500/10 text-gray-700 ring-gray-500/20 dark:bg-gray-500/20 dark:text-gray-400 dark:ring-gray-500/30",
-    [HookCategory.Workflow]: "bg-orange-500/10 text-orange-700 ring-orange-500/20 dark:bg-orange-500/20 dark:text-orange-400 dark:ring-orange-500/30",
-    [HookCategory.Other]: "bg-slate-500/10 text-slate-700 ring-slate-500/20 dark:bg-slate-500/20 dark:text-slate-400 dark:ring-slate-500/30",
-  };
-  return colors[category];
+  return CATEGORY_COLORS[category];
 };
 
 export default function HookCard({ hook }: HookCardProps) {

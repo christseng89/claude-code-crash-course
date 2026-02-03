@@ -41,7 +41,12 @@
       "Bash(exit 0)",
       "Bash(npm --version:*)",
       "Bash(npm test:*)",
-      "Bash(npm run test:coverage:*)"
+      "Bash(npm run test:coverage:*)",
+      "Bash(npm run lint)",
+      "Bash(npx tsc:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(npm uninstall:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

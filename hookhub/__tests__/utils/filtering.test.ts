@@ -1,5 +1,5 @@
 import { HookCategory } from '@/types/hook';
-import { mockHooks, mockHook, mockHook2, mockHook3 } from './mockData.mock';
+import { mockHooks, mockHook2 } from './mockData.mock';
 
 describe('Filtering Logic Tests', () => {
   describe('Category Filtering', () => {
