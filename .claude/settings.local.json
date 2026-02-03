@@ -33,7 +33,9 @@
       "Bash(tree:*)",
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(npm run dev:*)",
-      "Bash(timeout /t 5)"
+      "Bash(timeout /t 5)",
+      "Bash(timeout:*)",
+      "Bash(taskkill:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -34,4 +34,11 @@ npm run dev
 claude
 Refer to ./HooksMarketplaceSpecV2.1.md update the project hookhub for me.
 Make the project hookhub more modern, cleaner, simpler and beautiful.
+
+In the hookhub project, the theme should be working as follows:                                                  
+                                                                                                                   
+The defaulted theme will based on System;                                                                        
+When Click light button, all theme MUST be changed to LIGHT mode;                                                
+When Click dark button, all theme MUST be changed to DARK mode;                                                  
+When Click system button, all theme MUST be changed to SYSTEM mode. 
 ```
