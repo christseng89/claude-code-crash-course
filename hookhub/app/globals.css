@@ -5,6 +5,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
