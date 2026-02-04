@@ -362,5 +362,5 @@ help me write a mermaid diagram agent which is going to recieve my input and cre
 │ ❯ 1. Sonnet ✔             Balanced performance - best for most agents
  ❯   Cyan 
 
-create me a mermaid diagram of a RAG flow
+create a mermaid diagram of a RAG
 ```
