@@ -258,7 +258,7 @@ create 2 funny review @fibonacci.py
 /auto-commit
 ```
 
-## Cloud Code Agent
+## Cloud Code Flow
 
 ```mermaid
 flowchart LR
@@ -344,3 +344,23 @@ flowchart LR
 
 ## Deep Dive into Subagents
 
+```bash
+claude
+/agents
+
+❯ Create new agent
+❯ 1. Project (.claude/agents/)
+❯ 1. Generate with Claude (recommended)
+
+help me write a mermaid diagram agent which is going to recieve my input and create a mermaid diagram out of it
+
+│   ☒ Read-only tools                                                                                             │
+│   ☒ Edit tools                                                                                                  │
+│ ❯ ☒ Execution tools
+
+❯ [ Continue ]
+│ ❯ 1. Sonnet ✔             Balanced performance - best for most agents
+ ❯   Cyan 
+
+create me a mermaid diagram of a RAG flow
+```
