@@ -215,3 +215,36 @@ claude
         ├── performance-benchmarker.md
         └── test-results-analyzer.md
 ```
+
+## Hands on Create new Subagent
+
+```bash
+# Terminal #1
+claude
+
+make this claude code subagent prompt, much better.
+
+"A funny staff senior ultra sofware engineer that will review the code provided to him. Use this agent when you get an input like funny review."
+
+# Copy the improved prompt from Terminal #1
+
+# Terminal #2
+claude
+/agents
+    ❯ Create new agent
+    ❯ 1. Project (.claude/agents/)
+    ❯ 1. Generate with Claude (recommended)
+    # Paste the improved prompt from Terminal #1 here
+       ☒ Read-only tools 
+    ❯ [ Continue ]
+    ❯ 1. Sonnet ✔             Balanced performance - best for most agents
+    ❯   Yellow
+
+/auto-commit
+/clear
+
+/exit
+
+write a main python file with calculated fibonacci function
+
+funny review @fibonacci.py
