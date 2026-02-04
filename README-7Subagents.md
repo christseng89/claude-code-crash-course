@@ -245,6 +245,102 @@ claude
 
 /exit
 
+claude
+/agents
+
 write a main python file with calculated fibonacci function
 
 funny review @fibonacci.py
+create 2 funny review @fibonacci.py
+# Running sequentially multiple times to see different funny reviews
+
+/clear
+/auto-commit
+```
+
+## Cloud Code Agent
+
+```mermaid
+flowchart LR
+  U[User BA Dev] --> SSO[SSO and MFA]
+  SSO --> UI[Agent Portal or CLI]
+
+  UI --> PE[Policy Engine OPA]
+  UI --> PF[Prompt Firewall and DLP]
+
+  PE --> ORCH[Agent Orchestrator]
+  ORCH --> PLAN[Planner and Todo Service]
+  ORCH --> TG[Tool Gateway MCP Router]
+
+  TG --> RUN[Ephemeral Runner Sandbox]
+  RUN --> SCM[Source Control Git]
+  RUN --> CI[CI Pipeline]
+  RUN --> DEP[Dependency Mirror]
+  RUN --> ART[Artifact Repository]
+  RUN --> SEC[Security Scanning]
+  RUN --> K8S[Test Kubernetes Namespace]
+
+  ORCH --> LLM[Private Model Serving]
+  LLM --> RAG[Approved Knowledge Base]
+
+  TG --> AUD[Audit Log]
+  AUD --> OS[OpenSearch]
+  AUD --> WZ[Wazuh]
+  OS --> SIEM[SIEM SOC]
+  WZ --> SIEM
+
+```
+
+```mermaid
+flowchart LR
+  U[使用者 需求人員 開發人員] --> SSO[單一登入 與 多因子驗證]
+  SSO --> UI[代理入口 平台 或 指令介面]
+
+  UI --> PE[政策引擎 權限控管]
+  UI --> PF[提示防火牆 與 資料外洩防護]
+
+  PE --> ORCH[代理調度控制中心]
+  ORCH --> PLAN[任務規劃 與 待辦狀態管理]
+  ORCH --> TG[工具閘道 與 存取控制]
+
+  TG --> RUN[隔離執行環境 沙箱]
+  RUN --> SCM[程式碼倉庫]
+  RUN --> CI[持續整合流程]
+  RUN --> DEP[套件與依賴鏡像庫]
+  RUN --> ART[制品儲存庫]
+  RUN --> SEC[資安掃描系統]
+  RUN --> K8S[測試用 Kubernetes 環境]
+
+  ORCH --> LLM[私有化 AI 模型服務]
+  LLM --> RAG[內部核准**知識庫**]
+
+  TG --> AUD[稽核事件紀錄]
+  AUD --> OS[日誌與搜尋平台]
+  AUD --> WZ[主機與安全監控]
+  OS --> SIEM[資安監控中心]
+  WZ --> SIEM
+```
+
+## Subagent Context flow
+
+```mermaid
+flowchart LR
+  subgraph MAIN[Main Agent Context]
+    MA[Main Agent]
+    CT[Limited **200k** Token Memory]
+  end
+
+  subgraph SUB[Subagent Context]
+    SA[Subagent]
+    FC[Fresh Context Each Run]
+  end
+
+  MA -->|Create prompt| SA
+  SA -->|Independent work loop| SA
+  SA -->|Single Condensed output| MA
+
+
+```
+
+## Deep Dive into Subagents
+
