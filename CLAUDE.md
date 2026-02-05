@@ -21,6 +21,9 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 - `README-4ContextEngineering.md` - Advanced context management
 - `README-5PluginsAndCloudfareCodeMode.md` - Extensions and cloud integration
 - `README-6AdvancedWorkflow.md` - Plan mode and complex workflows
+- `README-7Subagents.md` - Creating and using specialized subagents
+- `RAG-architecture.md` - RAG pipeline architecture diagrams
+- `RAG-Flow-Diagram.md` - Detailed RAG flow with decision points
 
 ## Getting Started
 
@@ -70,6 +73,15 @@ npm run lint
 ```
 
 ### Python Projects
+
+**Fibonacci Calculator** (root level):
+```bash
+# Run with different implementations
+python fibonacci.py
+
+# Demonstrates recursive, iterative, and memoized approaches
+# Output shows performance comparison
+```
 
 **Text Processor** (root level):
 ```bash
@@ -146,7 +158,10 @@ crash-course/
 ├── README.md                  # Course landing page
 ├── README-*.md                # Learning documentation
 ├── HooksMarketplaceSpecV2.1.md  # Detailed marketplace spec
+├── fibonacci.py               # Fibonacci implementations demo
 ├── text_processor.py          # Text processing utility
+├── RAG-architecture.md        # RAG pipeline diagrams
+├── RAG-Flow-Diagram.md        # Detailed RAG flow
 ├── .mcp.json                  # MCP server configurations
 └── start-claude.ps1           # PowerShell launcher with env
 ```
@@ -191,6 +206,7 @@ Each branch is self-contained with chronological commits. Use `git log --oneline
 **Available on Main Branch:**
 - Commands: `commit-code`, `dad-joke`
 - Skills: `explain-code`, `git-commit`
+- Agents: `code-reviewer`, `code-roast-reviewer`, `debugger`, `mermaid-diagram-generator`, `performance-optimizer`, `test-runner`
 
 ## MCP Server Configuration
 
@@ -265,6 +281,24 @@ clean_invalid_chars(input_file, output_file)
 reformat_text(input_file, output_file)
 ```
 
+### Example Projects
+
+**fibonacci.py** - Demonstrates multiple algorithm implementations:
+- **Recursive approach**: Simple but exponential time complexity O(2^n)
+- **Iterative approach**: Linear time O(n), constant space O(1)
+- **Memoized approach**: Linear time O(n) with caching
+- **Sequence generation**: Creates list of Fibonacci numbers
+- **Performance comparison**: Shows practical differences
+
+**Key Learning Points:**
+- Type hints throughout (Python 3.8+)
+- Comprehensive docstrings
+- Error handling with custom exceptions
+- Performance benchmarking
+- Multiple algorithmic approaches to same problem
+
+**Use Case:** Demonstrates code quality patterns and serves as test input for code review agents (`funny review @fibonacci.py`).
+
 ## Permission Management
 
 **Configured Permissions** (in `settings.local.json`):
@@ -337,6 +371,37 @@ description: Create a git commit
 ---
 ```
 
+### Creating Custom Agents
+
+1. Use `/agents` command and select "Create new agent"
+2. Choose project or user scope
+3. Generate with Claude (recommended) or write manually
+4. Configure tool permissions and model selection
+5. Test agent invocation
+
+**Agent Creation Flow:**
+```bash
+/agents
+❯ Create new agent
+❯ 1. Project (.claude/agents/)
+❯ 1. Generate with Claude (recommended)
+# Provide agent prompt description
+# Select read-only, edit, and/or execution tools
+# Choose model (Sonnet recommended for balanced performance)
+# Select color for visual identification
+```
+
+**Agent Frontmatter Example:**
+```yaml
+---
+name: mermaid-diagram-generator
+description: Converts textual descriptions into Mermaid diagrams
+tools: Glob, Grep, Read, WebFetch, WebSearch, Edit, Write, Bash
+model: sonnet
+color: cyan
+---
+```
+
 ### Working with Hooks (see project/hooks-notifications branch)
 
 1. Create hook script (bash/python)
@@ -355,6 +420,43 @@ description: Create a git commit
 4. Test hook triggers
 
 **Note:** Hooks require absolute paths and need adjustment when cloning the repository.
+
+## Subagent Architecture
+
+### Available Agents
+
+**Code Quality Agents:**
+- **code-reviewer** - Proactive code review for quality, security, and maintainability
+- **code-roast-reviewer** - Humorous code review with constructive feedback (use when user asks for "roast" or "funny review")
+- **debugger** - Handles errors, test failures, and anomalous behavior
+- **performance-optimizer** - Analyzes and improves code performance
+- **test-runner** - Automated test execution and failure fixing
+
+**Specialized Agents:**
+- **mermaid-diagram-generator** - Converts textual descriptions into Mermaid diagrams (architecture, flowcharts, sequence diagrams, etc.)
+
+### When to Use Subagents
+
+Subagents provide **independent context windows** (separate from main 200k token limit) for specialized tasks:
+
+```bash
+# Invoke by name
+create a mermaid diagram of a RAG architecture
+
+# Coordinate multiple agents
+Use code-reviewer, then performance-optimizer, then debugger for refactoring hookhub
+
+# Funny code review (triggers code-roast-reviewer)
+funny review @fibonacci.py
+```
+
+**Key Benefits:**
+- Fresh context for each run (not limited by main conversation history)
+- Task-specific tool access and permissions
+- Specialized system prompts and expertise
+- Return condensed results to main agent
+
+See [README-7Subagents.md](README-7Subagents.md) for agent orchestration patterns and hierarchy examples.
 
 ## Testing Approach
 
@@ -411,6 +513,51 @@ Refer to ./HooksMarketplaceSpecV2.1.md update the project hookhub for me.
 - Multi-step workflow design
 
 See [README-6AdvancedWorkflow.md](README-6AdvancedWorkflow.md) for the complete HookHub case study.
+
+## Working with Project Branches
+
+This repository uses a unique branch-based learning structure. Each `project/*` branch teaches a specific concept through chronological commits:
+
+**Navigation Pattern:**
+```bash
+# List all learning topics
+git branch -r | grep project/
+
+# Checkout a topic branch
+git checkout project/custom-commands
+
+# View learning progression
+git log --oneline --reverse
+
+# Step through commits one by one
+git checkout <commit-hash>
+
+# Move forward/backward
+git checkout HEAD~1  # Go back one commit
+git checkout <next-commit-hash>  # Go forward
+
+# Return to latest
+git checkout project/custom-commands
+```
+
+**Branch-Specific Context:**
+- Each branch may have its own `.claude/` configurations
+- Branch-specific `CLAUDE.md` files may exist
+- Commit messages describe learning objectives
+- Each commit builds on previous concepts
+
+**Example Learning Flow:**
+```bash
+# Start with MCP integration
+git checkout project/mcp
+git log --oneline --reverse
+# Follow commits to learn Context7 integration
+
+# Then explore subagents
+git checkout project/subagents
+git log --oneline --reverse
+# Step through agent creation examples
+```
 
 ## Contributing
 
