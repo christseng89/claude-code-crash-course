@@ -371,6 +371,28 @@ create a mermaid diagram of a RAG
 <https://excalidraw.com/> # Mermaid diagram drawing tool
 
 ```bash
+claude
+
+can you please take the implementation from page.tsx in project hookhub. And we have there a hero implementation. So I want to create a new hero component of it in the heros directory under components, just to organize the code a little bit.  @hookhub/app/page.tsx @hookhub/app/components\
+
+Can you please review the hero.typescript file and create from it a spec file describing what this component should do, what its goals are, and specific guidelines, because I'm going to implement different variations of this component.  Can you put the spec file under the specs directory?
+
+```
+
+```bash
+/auto-commit
+/clear
+
+Can you create a test component for the hero component as part of the test suite in hookhub project?  @hookhub/app/components/heros/hero.tsx and then test all test cases.
+
+/auto-commit
+/clear
+
+```
+
+### Create the infinite agentic loop command file
+
+```bash
 # Create the infinite agentic loop command
 cat > .claude/commands/infinite.md << 'EOF'
 **INFINITE AGENTIC LOOP COMMAND**
@@ -555,18 +577,5 @@ EOF
 
 mkdir -p hookhub/specs
 
-```
-
-```bash
-claude
-
-can you please take the implementation from page.tsx in project hookhub. And we have there a hero implementation. So I want to create a new hero component of it in the heros directory under components, just to organize the code a little bit.  @hookhub/app/page.tsx @hookhub/app/components\
-
-Can you please review the hero.typescript file and create from it a spec file describing what this component should do, what its goals are, and specific guidelines, because I'm going to implement different variations of this component.  Can you put the spec file under the specs directory?
-
-/auto-commit
-/clear
-
-Can you create a test component for the hero component as part of the test suite in hookhub project?  @hookhub/app/components/heros/hero.tsx and then test all test cases.
-
+/exit
 ```
