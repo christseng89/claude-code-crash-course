@@ -590,5 +590,86 @@ mkdir -p hookhub/specs
 ```bash
 claude
 
-/infinite @hookhub/specs/hero-component-spec.md @hookhub/app/components/heros\ 3
+/infinit @hookhub/specs/hero-component-spec.md @hookhub/app/components/heros\ 3
+/clear
+
+So can you please take all the implementation of the heroes and I want you to show me them in the main landing page one after another, then I can choose which one do I like best
+/clear
+
+Do not like those new heros in the landing page, please remove it from the landing pages and retain the @hookhub/app/components/heros/Hero.tsx ONLY.      
+
+/clear
+
 ```
+
+## [Hands On] Infinite Subagent: Meta Prompting
+
+<https://github.com/disler/infinite-agentic-loop/blob/main/.claude/commands/infinite.md>
+
+### 🔹 提示策略設計工程師 (Prompt Strategy Design Engineer)
+
+**定義（中文）**
+負責設計、構建和優化一組提示策略，使 AI 代理在具體任務流程中能夠穩健、有效地生成內容。
+
+**具體例子（依據 `infinite.md` 指令流程）**
+
+1. **設計任務分配提示策略**
+   如將生成任務分配給多個 Sub-Agent 時，提示中負責定義每位代理的 *角色、任務與創新方向*。
+
+   * 例：
+     「**你是 Sub Agent，請生成 iteration 3，重點探索創新維度 X，並確保內容與 spec 條件一致。**」
+     這種提示策略決定了 *代理的輸入指令的結構與行為*，而非單一 prompt。
+
+2. **規劃並配置並行生成策略**
+   制定提示型態來指導如何啟動多個代理、批次運行、重試失敗等行為。
+
+   * 例：
+     「**若 count > 20，請將代理分批啟動，每批 5 位，並在失敗時重新分配 iteration 編號。**」
+
+📌 *關鍵在於：提示策略設計工程師關注的是 “如何結構化與組織提示以優化整體流程”。*
+
+---
+
+### 🔹 提示元設計工程師 (Meta Design Prompt Engineer)
+
+**定義（中文）**
+專注於更高層次的 *元層提示設計* — 即用提示來「生成、修改、評估或優化其他提示」，並利用模型自身能力創造更優提示。這超越了寫單一句 prompt，而是將提示作為工程產物進行迭代與進化。 **具體例子（依據 Infinite Agentic Loop 與元提示概念）**
+
+1. **設計元提示來自動生成子提示（Meta-Prompting）**
+   不是直接寫子代理的指令，而是寫 *產生這些子提示的提示（Meta Prompt）*。
+
+   * 例：
+     「**為每個 Sub Agent 自動生成符合 spec 的任務提示，要求保持創新與獨特性；如果生成的提示無效，請修正並嘗試第二版本。**」
+     這種“提示生成提示”的技巧就是元提示技術核心。
+
+2. **利用 AI 模型評估並優化其它提示**
+   讓模型接收一條提示並產生改進版本，例如：
+
+   * 例：
+     「**分析此提示是否含糊、缺乏必要上下文。如果是，請修改以提高代理完成任務的精準度。**」
+     這是典型的“讓模型自己改進提示”的 meta 層行為。
+
+📌 *重點是：提示元設計工程師是在設計“促使 AI 系統自己構造或優化更好提示”的方法與技巧，而非直接寫每一句 prompt。*
+
+---
+
+## 🧠 簡單比較（中文）
+
+| 角色        | 焦點層級       | 典型任務                 | 技能要求            |
+| --------- | ---------- | -------------------- | --------------- |
+| 提示策略設計工程師 | 提示 *流程/架構* | 設計提示框架、分配策略、代理協同提示流程 | 任務分解、框架規劃、生成策略  |
+| 提示元設計工程師  | 提示 *生成/優化* | 設計能讓模型 *創建或改進提示* 的提示 | 抽象思維、元提示設計、迭代優化 |
+
+---
+
+## 📌 中文簡短定義
+
+* **提示策略設計工程師（Prompt Strategy Design Engineer）**
+  負責規劃與組織如何使用提示來驅動多代理流程和任務配置。
+  *即設計提示的“策略、流程和結構”。*
+
+* **提示元設計工程師（Meta Design Prompt Engineer）**
+  負責設計高層次提示，使模型能自動 *生成、評估和優化提示本身*，形成自我改進循環。
+  *即用提示去“創造或改進其他提示”。*
+
+---
