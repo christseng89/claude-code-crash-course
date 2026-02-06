@@ -1,5 +1,5 @@
 import HookGrid from "./components/HookGrid";
-import Hero from "./components/heros/Hero";
+import HeroComparison from "./components/HeroComparison";
 import hooksData from "./data/hooks.json";
 import { Hook } from "@/types/hook";
 
@@ -8,10 +8,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-950 dark:via-blue-950 dark:to-purple-950">
-      <Hero />
+      {/* Hero Comparison Section */}
+      <HeroComparison />
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <main id="hooks" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Available Hooks
+        </h2>
         <HookGrid hooks={hooks} />
       </main>
 

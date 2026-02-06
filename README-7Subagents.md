@@ -579,3 +579,19 @@ mkdir -p hookhub/specs
 
 /exit
 ```
+
+## [Hands On] Infinite Subagents
+
+<https://github.com/disler/infinite-agentic-loop/tree/main?tab=readme-ov-file>
+<https://github.com/disler/infinite-agentic-loop/tree/main?tab=readme-ov-file#usage>
+
+/project:infinite <spec_file> <output_dir> <count>
+
+```bash
+claude
+
+/infinite @hookhub/specs/hero-component-spec.md @hookhub/app/components/heros\ 3
+/clear
+
+So can you please take all the implementation of the heroes and I want you to show me them in the main landing page one after another, then I can choose which one do I like best
+```
