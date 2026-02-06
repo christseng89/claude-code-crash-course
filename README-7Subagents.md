@@ -591,7 +591,4 @@ mkdir -p hookhub/specs
 claude
 
 /infinite @hookhub/specs/hero-component-spec.md @hookhub/app/components/heros\ 3
-/clear
-
-So can you please take all the implementation of the heroes and I want you to show me them in the main landing page one after another, then I can choose which one do I like best
 ```
