@@ -46,15 +46,16 @@
       "Bash(npx tsc:*)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "WebFetch(domain:json.schemastore.org)",
+      "WebFetch(domain:www.schemastore.org)"
     ]
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "weather",
-    "puppeteer-mcp-server",
-    "sequential-thinking",
     "github",
-    "playwright"
+    "playwright",
+    "context7",
+    "verbose-server"
   ]
 }
