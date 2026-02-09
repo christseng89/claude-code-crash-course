@@ -1,25 +1,64 @@
-# 把 Java EE（原本用 JMS/MQ）改成 Kafka 後，如何保證交易一致性
+# 把 Java EE（原本用 JMS/MQ）改成 Kafka ，保證交易一致性
 
 **如何在「假同步 + 非同步處理」下仍然保證交易一致性（transactional consistency）**
 
 Kafka 的模型跟傳統 MQ/JMS 差很多，所以要特別注意幾個點與設計模式。
 
-> 💡 **文檔目的**：本文檔專為從傳統 JMS/MQ 架構遷移到 Kafka 的團隊設計，特別關注金融交易系統（如 Trade Finance）中的一致性保證。重點涵蓋實戰中最常見的坑與解決方案。
+> 💡 **文檔目的**：本文檔專為從傳統 JMS/MQ 架構遷移到 Kafka 的團隊設計，特別關注金融交易系統（如 Trade Finance）中的一致性保證。重點涵蓋實戰中最常見的坑與可落地的標準解法。
+
+---
 
 ## 目錄
 
+- [零、先把「一致性期待」講清楚](#零先把一致性期待講清楚)
 - [一、從 JMS → Kafka 最大的差異](#一從-jms--kafka-最大的差異先抓住)
 - [二、交易一致性要注意的關鍵事項](#二交易一致性要注意的關鍵事項)
 - [三、推薦可遵循的設計模式](#三推薦可遵循的設計模式最常用也最穩)
 - [四、常見安全做法](#四常見安全做法)
-- [五、針對 Trade Finance / 扣帳 EARMARK 類場景的建議](#五針對你們-trade-finance--扣帳-earmark-類場景的建議)
+- [五、針對 Trade Finance / 扣帳 EARMARK 類場景的建議](#五針對-trade-finance--扣帳-earmark-類場景的建議)
 - [六、最小可落地的「必做清單」](#六最小可落地的必做清單)
 - [七、監控與可觀測性](#七監控與可觀測性production-ready-必備)
 - [八、測試策略](#八測試策略從-jms-遷移到-kafka-必須改變測試思維)
 - [九、從 JMS 遷移到 Kafka 的實戰路線圖](#九從-jms-遷移到-kafka-的實戰路線圖)
 - [十、快速參考指南](#十快速參考指南quick-reference)
-- [十一、事件驅動交易一致性設計的核心難題區](#事件驅動交易一致性設計的核心難題區)
-- [十二、Kafka Saga 交易引擎標準藍圖](#把你們現有-jms--同步扣帳流程升級成可控-kafka-saga-交易引擎的標準藍圖)
+- [十一、事件驅動交易一致性設計的核心難題區](#十一事件驅動交易一致性設計的核心難題區)
+- [十二、Kafka Saga 交易引擎標準藍圖](#十二kafka-saga-交易引擎標準藍圖)
+- [十三、Timeout / 卡單治理](#十三timeout--卡單治理必備)
+- [十四、對帳與稽核 Reconciliation](#十四對帳與稽核-reconciliation金融必備)
+- [十五、DLQ 分類與處置策略](#十五dlq-分類與處置策略避免把-dlq-當垃圾桶)
+
+---
+
+## 零、先把「一致性期待」講清楚
+
+Kafka 遷移最大的踩坑不是技術，而是「期待錯誤」。
+
+### 0.1 Consistency Guarantee Model（建議寫進架構規範）
+
+| Layer        | Guarantee                | 說明                                            |
+| ------------ | ------------------------ | ----------------------------------------------- |
+| Kafka broker | At-least-once            | 重複/重播一定會發生                             |
+| Application  | Exactly-once effect      | 靠冪等 + 去重 + Inbox/Outbox 達成「效果上一次」 |
+| Business     | Eventual consistency     | 允許延遲，需可追溯、可補償                      |
+| Financial    | Zero double/missing debit| 不能重複扣款、不能漏扣，必要時人工介入          |
+
+> ✅ **結論**：Kafka 不是 XA；金融一致性來自「設計 + 稽核 + 對帳」，不是 broker 魔法。
+
+### 0.2 Event Immutability（強制規範，避免 replay 爆帳）
+
+Once published, an event is **immutable**.
+
+❌ 禁止：
+
+- 修改既有事件語意（同 eventType 卻換業務含義）
+- 回補歷史事件 payload
+- 用「重送舊事件」當修正手段
+
+✅ 正確方式：
+
+- 發送 **新事件**（新的 eventType / 新 schema version）
+- 用 **補償事件** 修正結果
+- 如需修正資料：走「新版本交易」或「補正事件」
 
 ---
 
@@ -42,6 +81,8 @@ Kafka 的模型跟傳統 MQ/JMS 差很多，所以要特別注意幾個點與設
 同一筆交易相關事件一定要落在同一 partition（靠 key），不然順序會亂。
 
 > ⚡ **效能考量**：合理的 partition key 設計不僅保證順序，也影響吞吐量。建議使用業務主鍵（mainRef）而非隨機值，但要避免熱點 partition（某些 key 過度集中）。
+
+✅ **規範**：Partition key **必須**使用 `mainRef/dealNo`（禁止 random UUID）。
 
 ### 4. 消費語意通常是 at-least-once
 
@@ -205,6 +246,20 @@ Kafka 事件一旦發出去會被重播、留存很久：
 - event schema 要有 `version`
 - 盡量 backward compatible（加欄位可以，改語意要小心）
 - 建議搭配 Schema Registry（Avro/Protobuf/JSON Schema）
+
+---
+
+### 2.6 Version Gatekeeper（強制：集中化，不可散落各服務）
+
+在 consumer 寫 DB 前必須做版本守門，且應該做成共用框架/攔截器，避免漏做。
+
+**規則：**
+
+```text
+if event.version < current.version → ignore（或轉補償/記錄）
+if event.version > current.version → error（表示資料不同步/缺事件）
+if event.version == current.version → process
+```
 
 ---
 
@@ -394,7 +449,7 @@ Outbox 解決「發送端一致性」，Inbox 解決「消費端一致性」。
 
 ---
 
-## 五、針對你們 Trade Finance / 扣帳 EARMARK 類場景的建議
+## 五、針對 Trade Finance / 扣帳 EARMARK 類場景的建議
 
 如果你場景是：
 
@@ -416,7 +471,7 @@ Outbox 解決「發送端一致性」，Inbox 解決「消費端一致性」。
 
 ## 六、最小可落地的「必做清單」
 
-如果只能做最小集合，我會選這 6 個：
+如果只能做最小集合，我會選這 8 個：
 
 1. **Outbox Pattern**（發送端一致性）
 2. **Consumer 冪等 + 去重表**（消費端一致性）
@@ -424,6 +479,8 @@ Outbox 解決「發送端一致性」，Inbox 解決「消費端一致性」。
 4. **清楚的 offset commit 策略**（成功後才 commit）
 5. **correlationId + trace**（可審計、可追查）
 6. **錯誤重試 + DLQ**（可控失敗）
+7. **Event immutability 規範**（強制）
+8. **Version Gatekeeper**（集中化，強制）
 
 ---
 
@@ -1233,13 +1290,9 @@ Schema 會演進？
 - 記錄文檔（未來的你會感謝現在的你）
 - 團隊協作（一個人走得快，一群人走得遠）
 
-**文檔版本**: v2.0
-**最後更新**: 2026-02-09
-**適用對象**: Java EE → Kafka 遷移團隊、金融交易系統架構師、事件驅動架構初學者
-
 ---
 
-## 事件驅動交易一致性設計的核心難題區
+## 十一、事件驅動交易一致性設計的核心難題區
 
 在 Trade Finance / 額度凍結 + DDA 扣帳這種「一半同步一半非同步」場景裡是**一定會踩到的坑**。我先給你結論，再拆設計方式。
 
@@ -1469,7 +1522,7 @@ A123     v2       DRAFT / PENDING
 
 否則必然財務錯亂。
 
-### 🏗 建議你的最佳實務架構
+### 🏗 建議的最佳實務架構
 
 #### 發送端
 
@@ -1485,7 +1538,7 @@ A123     v2       DRAFT / PENDING
 
 ✔ Saga orchestration
 
-### 📐 我幫你畫一個簡化事件流（概念）
+### 📐 簡化事件流（概念）
 
 ```text
 User Submit v1
@@ -1500,7 +1553,7 @@ User Modify → create v2
 
 兩條流程永不互相污染。
 
-### ✅ 直接回答你的問題（重點）
+### ✅ 直接回答核心問題（重點）
 
 > 用戶在等待 EARMARK + DDA 時修改資料怎麼處理？
 
@@ -1522,12 +1575,12 @@ User Modify → create v2
 
 ---
 
-## 把現有 JMS + 同步扣帳流程，升級成「 Kafka Saga 交易引擎」的標準藍圖
+## 十二、Kafka Saga 交易引擎標準藍圖
 
 ### 📊 一、完整 EARMARK + DDA Saga 流程（Mermaid）
 
 ```mermaid
-flowchart TD  
+flowchart TD
   U[User Submit Transaction vN]
 
   U --> A[EARMARK_REQUESTED]
@@ -1542,7 +1595,7 @@ flowchart TD
   DP -->|FAIL| DF[DDA_FAIL]
 
   %% Compensation paths
-  DF --> C1[**EC EARMARK**]
+  DF --> C1[COMPENSATE: EARMARK_RELEASE]
   EF --> END1[FAILED]
 
   C1 --> END2[FAILED]
@@ -1566,6 +1619,7 @@ flowchart TD
 {
   "eventId": "uuid",
   "correlationId": "uuid",
+  "causationId": "uuid-prev",
   "mainRef": "TX123456",
   "version": 3,
 
@@ -1581,21 +1635,33 @@ flowchart TD
   "status": "SUCCESS",
   "timestamp": "2026-02-09T10:15:30Z",
 
-  "source": "credit-service"
+  "schemaVersion": "3.0.0",
+  "producerVersion": "1.5.3",
+  "traceId": "a1b2c3d4",
+  "spanId": "e5f6g7h8",
+
+  "source": "credit-service",
+  "metadata": {
+    "channel": "web",
+    "clientIp": "10.0.1.5"
+  }
 }
 ```
 
 #### 必備欄位意義
 
-| 欄位          | 用途               |
-| ------------- | ------------------ |
-| eventId       | 防重處理           |
-| correlationId | 一整條 Saga trace  |
-| mainRef       | 交易主鍵           |
-| version       | 版本隔離           |
-| eventType     | 狀態推進           |
-| step          | 業務語意           |
-| status        | OK / FAIL          |
+| 欄位          | 用途                      |
+| ------------- | ------------------------- |
+| eventId       | 防重處理                  |
+| correlationId | 一整條 Saga trace         |
+| causationId   | 前一個事件 ID（形成鏈）   |
+| mainRef       | 交易主鍵                  |
+| version       | 版本隔離                  |
+| eventType     | 狀態推進                  |
+| step          | 業務語意                  |
+| status        | OK / FAIL                 |
+| schemaVersion | Schema 版本               |
+| traceId       | 分散式追蹤                |
 
 #### 💡 Schema 演進最佳實踐
 
@@ -1662,7 +1728,7 @@ props.put("value.deserializer", "io.confluent.kafka.serializers.KafkaAvroDeseria
 props.put("specific.avro.reader", "true");  // 使用 specific record
 ```
 
-##### **4. 處理 Schema 演進的實作**
+##### 4. 處理 Schema 演進的實作
 
 ```java
 public void processEvent(GenericRecord event) {
@@ -1689,30 +1755,6 @@ public void processEvent(GenericRecord event) {
 }
 ```
 
-##### 5. 實用輔助欄位建議
-
-除了核心欄位，建議加入：
-
-```json
-{
-  // 核心欄位...
-
-  "schemaVersion": "2.1.0",           // Schema 版本（便於追蹤）
-  "producerVersion": "1.5.3",         // 發送端應用版本
-  "traceId": "a1b2c3d4",              // 分散式追蹤 ID（Jaeger/Zipkin）
-  "spanId": "e5f6g7h8",               // Span ID
-  "userId": "user123",                // 觸發者（審計用）
-  "retryCount": 0,                    // 重試次數
-  "previousEventId": "uuid-prev",     // 前一個事件 ID（形成事件鏈）
-
-  "metadata": {                       // 擴展欄位（避免頻繁 schema 變更）
-    "clientIp": "10.0.1.5",
-    "channel": "mobile-app",
-    "locale": "zh_TW"
-  }
-}
-```
-
 ⚠️ **Schema Registry 的坑**：
 
 1. **相容性模式選擇**：預設是 BACKWARD，金融系統建議用 FULL（前後相容）
@@ -1724,17 +1766,22 @@ public void processEvent(GenericRecord event) {
 #### ✅ Outbox（發送端）
 
 ```sql
-OUTBOX_EVENT
-------------
-id (PK)
-event_id (unique)
-aggregate_id (mainRef)
-version
-event_type
-payload (JSON)
-status (NEW, SENT, FAILED)
-created_at
-sent_at
+CREATE TABLE outbox_event (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  event_id VARCHAR(50) UNIQUE NOT NULL,
+  aggregate_id VARCHAR(50) NOT NULL,
+  version INT NOT NULL,
+  event_type VARCHAR(50) NOT NULL,
+  payload JSON NOT NULL,
+  topic VARCHAR(100) NOT NULL,
+  partition_key VARCHAR(100) NOT NULL,
+  status VARCHAR(20) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  sent_at TIMESTAMP NULL,
+  retry_count INT DEFAULT 0,
+  INDEX idx_status_created (status, created_at),
+  INDEX idx_aggregate (aggregate_id)
+);
 ```
 
 👉 與業務交易同一 DB transaction commit
@@ -1742,15 +1789,16 @@ sent_at
 #### ✅ Inbox（消費端）
 
 ```sql
-INBOX_EVENT
------------
-event_id (PK)
-aggregate_id
-version
-event_type
-received_at
-processed_at
-status (PROCESSED, FAILED)
+CREATE TABLE inbox_event (
+  event_id VARCHAR(50) PRIMARY KEY,
+  aggregate_id VARCHAR(50) NOT NULL,
+  version INT NOT NULL,
+  event_type VARCHAR(50) NOT NULL,
+  received_at TIMESTAMP DEFAULT NOW(),
+  processed_at TIMESTAMP NULL,
+  status VARCHAR(20) NOT NULL,
+  INDEX idx_aggregate (aggregate_id, event_type)
+);
 ```
 
 👉 unique(event_id) 防重
@@ -1778,16 +1826,16 @@ if event.version == current.version → process
 
 👉 永遠不會亂更新
 
-### 🎯 為什麼這套能完美解你原本問題？
+### 🎯 為什麼這套能完美解原本問題？
 
-| 問題          | 解法            |
-| ------------- | --------------- |
-| 使用者修改中  | 新版本流程      |
-| Kafka 重播    | 冪等處理        |
-| 同步+非同步混合 | Saga            |
-| 狀態錯亂      | State machine   |
-| DB/事件不一致 | Outbox          |
-| 重複消費      | Inbox           |
+| 問題              | 解法            |
+| ----------------- | --------------- |
+| 使用者修改中      | 新版本流程      |
+| Kafka 重播        | 冪等處理        |
+| 同步+非同步混合   | Saga            |
+| 狀態錯亂          | State machine   |
+| DB/事件不一致     | Outbox          |
+| 重複消費          | Inbox           |
 
 ### 🏁 超精簡結論（工程真理）
 
@@ -1796,3 +1844,177 @@ if event.version == current.version → process
 👉 一致性來自設計，不是 broker
 
 ---
+
+## 十三、Timeout / 卡單治理（必備）
+
+在金融場景，最常見不是「失敗」，而是「沒回來」。
+
+### 13.1 每個 step 必須定義 timeout 策略
+
+- **SLA**：例如 30s / 2min / 5min
+- **Timeout 行為**：retry / compensate / manual intervention
+- **卡單狀態**：必須可查（dashboard + API）
+
+### 13.2 建議加一個 watchdog job
+
+- 掃描 `PROCESSING` 超過 SLA 的交易
+- 觸發：補償 / 升級告警 / 轉人工處理隊列
+
+**實作範例**：
+
+```java
+@Scheduled(cron = "0 */5 * * * *")  // 每 5 分鐘執行一次
+public void detectStuckTransactions() {
+    LocalDateTime timeout = LocalDateTime.now().minusMinutes(10);
+
+    List<Transaction> stuckTxs = txRepo.findByStateAndUpdatedAtBefore(
+        "PROCESSING", timeout
+    );
+
+    for (Transaction tx : stuckTxs) {
+        log.warn("Stuck transaction detected: {}", tx.getMainRef());
+
+        // 觸發補償或人工介入
+        if (tx.getRetryCount() < MAX_RETRY) {
+            retryService.retryTransaction(tx);
+        } else {
+            escalationService.createManualInterventionTask(tx);
+            alertService.sendAlert("Stuck transaction", tx);
+        }
+    }
+}
+```
+
+---
+
+## 十四、對帳與稽核 Reconciliation（金融必備）
+
+Kafka 不是 System of Record。
+**權威來源仍然是：交易 DB + 核心帳/總帳（ledger）。**
+
+### 14.1 每日/日終對帳至少做三件事
+
+1. **DB 交易狀態 vs 事件歷史**（缺事件/多事件）
+2. **扣帳/入帳 totals vs ledger**（不能有差異）
+3. **Saga 完成/失敗/補償比例趨勢**（異常需解釋）
+
+**實作範例**：
+
+```java
+@Scheduled(cron = "0 0 2 * * *")  // 每天凌晨 2 點執行
+public void dailyReconciliation() {
+    LocalDate yesterday = LocalDate.now().minusDays(1);
+
+    // 1. 統計交易狀態
+    Map<String, Long> txStatsByDb = txRepo.countByStateAndDate(yesterday);
+    Map<String, Long> txStatsByEvents = eventRepo.countByTypeAndDate(yesterday);
+
+    // 2. 比對金額
+    BigDecimal totalDebitDb = txRepo.sumAmountByStatusAndDate("COMPLETED", yesterday);
+    BigDecimal totalDebitLedger = ledgerService.sumDebits(yesterday);
+
+    if (!totalDebitDb.equals(totalDebitLedger)) {
+        alertService.sendCriticalAlert(
+            "Reconciliation mismatch",
+            String.format("DB: %s, Ledger: %s, Diff: %s",
+                         totalDebitDb, totalDebitLedger,
+                         totalDebitDb.subtract(totalDebitLedger))
+        );
+        // 生成對帳工單
+        ticketService.createReconciliationTicket(yesterday, totalDebitDb, totalDebitLedger);
+    }
+
+    // 3. Saga 補償率分析
+    long totalSagas = txRepo.countByDate(yesterday);
+    long compensatedSagas = txRepo.countByStateAndDate("FAILED", yesterday);
+    double compensationRate = (double) compensatedSagas / totalSagas * 100;
+
+    if (compensationRate > THRESHOLD) {
+        alertService.sendAlert(
+            "High compensation rate",
+            String.format("Rate: %.2f%%, Threshold: %.2f%%",
+                         compensationRate, THRESHOLD)
+        );
+    }
+}
+```
+
+### 14.2 對帳差異處理
+
+- 差異一律生成「稽核工單」
+- 不允許用「改舊事件」修正
+- 用補正事件 / 新版本交易 / 人工沖正流程處理
+
+---
+
+## 十五、DLQ 分類與處置策略（避免把 DLQ 當垃圾桶）
+
+| 類型              | 例子                    | 是否自動重試 | 是否需要人工          |
+| ----------------- | ----------------------- | ------------ | --------------------- |
+| Transient         | 網路抖動、下游暫時不可用| ✅           | 否                    |
+| Business rule     | 餘額不足、授信拒絕      | ❌           | ✅（業務判斷/客戶通知）|
+| Schema/Contract   | 欄位缺失、版本不相容    | ❌           | ✅（回滾/升級 consumer）|
+| Poison message    | 無法反序列化、超大 payload | ❌        | ✅（隔離+修正來源）   |
+
+> ✅ DLQ 必須配套：告警、工單、Runbook、重放策略（re-drive）與審計記錄。
+
+**實作範例**：
+
+```java
+@KafkaListener(topics = "earmark-events")
+public void consume(ConsumerRecord<String, Event> record, Acknowledgment ack) {
+    try {
+        processEvent(record.value());
+        ack.acknowledge();
+    } catch (TransientException e) {
+        // 暫時性錯誤，不 ack，等待重試
+        log.warn("Transient error, will retry", e);
+        // 可選：延遲後重試
+        Thread.sleep(RETRY_DELAY_MS);
+    } catch (BusinessRuleException e) {
+        // 業務規則錯誤，送 DLQ + 通知客戶
+        sendToDlq(record, "BUSINESS_RULE_VIOLATION", e);
+        notifyCustomer(record.value());
+        ack.acknowledge();
+    } catch (SchemaException e) {
+        // Schema 錯誤，送 DLQ + 告警開發
+        sendToDlq(record, "SCHEMA_ERROR", e);
+        alertDevelopers("Schema incompatibility detected", e);
+        ack.acknowledge();
+    } catch (Exception e) {
+        // 未預期錯誤，送 DLQ + 人工介入
+        sendToDlq(record, "UNKNOWN_ERROR", e);
+        createIncidentTicket(record, e);
+        ack.acknowledge();
+    }
+}
+
+private void sendToDlq(ConsumerRecord<String, Event> record,
+                       String errorType, Exception e) {
+    DlqEvent dlqEvent = DlqEvent.builder()
+        .originalTopic(record.topic())
+        .originalPartition(record.partition())
+        .originalOffset(record.offset())
+        .originalKey(record.key())
+        .originalValue(record.value())
+        .errorType(errorType)
+        .errorMessage(e.getMessage())
+        .stackTrace(getStackTrace(e))
+        .timestamp(Instant.now())
+        .build();
+
+    kafkaTemplate.send("dlq-earmark-events", dlqEvent);
+
+    // 記錄 DLQ metrics
+    meterRegistry.counter("dlq.messages",
+                         "topic", record.topic(),
+                         "error_type", errorType)
+                 .increment();
+}
+```
+
+---
+
+**文檔版本**: v3.0
+**最後更新**: 2026-02-09
+**適用對象**: Java EE → Kafka 遷移團隊、金融交易系統架構師、事件驅動架構實作者
