@@ -48,7 +48,8 @@
       "Bash(findstr:*)",
       "Bash(npm uninstall:*)",
       "WebFetch(domain:json.schemastore.org)",
-      "WebFetch(domain:www.schemastore.org)"
+      "WebFetch(domain:www.schemastore.org)",
+      "Bash(grep:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

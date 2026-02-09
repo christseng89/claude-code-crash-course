@@ -11,6 +11,9 @@ Kafka 的模型跟傳統 MQ/JMS 差很多，所以要特別注意幾個點與設
 ## 目錄
 
 - [零、先把「一致性期待」講清楚](#零先把一致性期待講清楚)
+  - [0.1 Consistency Guarantee Model](#01-consistency-guarantee-model建議寫進架構規範)
+  - [0.2 一致性責任模型](#02-一致性責任模型consistency-responsibility-model)
+  - [0.3 Event Immutability](#03-event-immutability強制規範避免-replay-爆帳)
 - [一、從 JMS → Kafka 最大的差異](#一從-jms--kafka-最大的差異先抓住)
 - [二、交易一致性要注意的關鍵事項](#二交易一致性要注意的關鍵事項)
 - [三、推薦可遵循的設計模式](#三推薦可遵循的設計模式最常用也最穩)
@@ -26,6 +29,8 @@ Kafka 的模型跟傳統 MQ/JMS 差很多，所以要特別注意幾個點與設
 - [十三、Timeout / 卡單治理](#十三timeout--卡單治理必備)
 - [十四、對帳與稽核 Reconciliation](#十四對帳與稽核-reconciliation金融必備)
 - [十五、DLQ 分類與處置策略](#十五dlq-分類與處置策略避免把-dlq-當垃圾桶)
+- [十六、Kafka 交易一致性控制矩陣](#十六kafka-交易一致性控制矩陣企業架構標準級)
+- [結語](#結語)
 
 ---
 
@@ -44,21 +49,38 @@ Kafka 遷移最大的踩坑不是技術，而是「期待錯誤」。
 
 > ✅ **結論**：Kafka 不是 XA；金融一致性來自「設計 + 稽核 + 對帳」，不是 broker 魔法。
 
-### 0.2 Event Immutability（強制規範，避免 replay 爆帳）
+### 0.2 一致性責任模型（Consistency Responsibility Model）
+
+明確定義各層的責任邊界，避免混淆：
+
+| 層級          | 責任範圍                                   | 實現機制                          |
+| ------------- | ------------------------------------------ | --------------------------------- |
+| **Kafka**     | 訊息傳遞可靠性（at-least-once）            | Broker replication + Consumer offset |
+| **Application** | 冪等處理 + 狀態機正確性                   | Inbox Pattern + State machine     |
+| **Business**  | 補償邏輯 + 流程一致性                      | Saga Pattern + Compensation events |
+| **Audit**     | 可追溯性 + 事件不可變                      | Event immutability + Reconciliation |
+
+> 💡 **關鍵理解**：每一層負責自己的範圍，不要期待 Kafka broker 解決應用層的一致性問題。
+
+### 0.3 Event Immutability（強制規範，避免 replay 爆帳）
 
 Once published, an event is **immutable**.
 
-❌ 禁止：
+❌ **禁止操作**：
 
 - 修改既有事件語意（同 eventType 卻換業務含義）
-- 回補歷史事件 payload
+- 回補或修改歷史事件 payload
 - 用「重送舊事件」當修正手段
+- 刪除或覆蓋已發送的事件
 
-✅ 正確方式：
+✅ **正確方式**：
 
 - 發送 **新事件**（新的 eventType / 新 schema version）
-- 用 **補償事件** 修正結果
+- 用 **補償事件**（Compensation Event）修正結果
 - 如需修正資料：走「新版本交易」或「補正事件」
+- 保留完整事件歷史以供審計和重播
+
+> ⚠️ **金融稽核要求**：事件不可變是金融系統稽核的基本要求，所有歷史狀態必須可重現，不得篡改軌跡。
 
 ---
 
@@ -2015,6 +2037,144 @@ private void sendToDlq(ConsumerRecord<String, Event> record,
 
 ---
 
-**文檔版本**: v3.0
+## 十六、Kafka 交易一致性控制矩陣（企業架構標準級）
+
+以下矩陣總結本文檔涵蓋的所有風險控制點與對應機制，可用於架構審查（Architecture Review Board）：
+
+### Kafka Transaction Consistency Control Matrix
+
+| 風險類別           | 具體風險描述                | 控制機制                      | 文檔章節     | 優先級 |
+| ------------------ | --------------------------- | ----------------------------- | ------------ | ------ |
+| **重複消費風險**   | 同一事件被處理多次導致重複扣款 | Inbox Pattern + Idempotency   | 2.1, 3.3     | 🔴 P0  |
+| **DB/事件不同步**  | 資料庫更新成功但事件未發送   | Outbox Pattern                | 2.3, 3.1     | 🔴 P0  |
+| **順序錯亂**       | 事件處理順序與業務邏輯不符   | Partition Key 設計（mainRef） | 2.2, 1.3     | 🔴 P0  |
+| **事件遺失**       | 事件消費失敗後未重新處理     | Manual Commit After Processing| 2.4          | 🔴 P0  |
+| **並發修改污染**   | 使用者修改導致異步流程錯亂   | 版本化交易模型                | 11           | 🔴 P0  |
+| **卡單/超時**      | 異步流程永遠未完成           | Timeout Governance + Watchdog | 13           | 🟡 P1  |
+| **帳務不平**       | 交易金額與帳務系統不一致     | Reconciliation（對帳機制）    | 14           | 🔴 P0  |
+| **事件篡改**       | 歷史事件被修改或刪除         | Event Immutability 原則       | 0.3          | 🔴 P0  |
+| **Schema 演進**    | 新舊版本事件無法相容         | Schema Registry + Versioning  | 2.5, 12.2    | 🟡 P1  |
+| **跨服務一致性**   | 多服務協作時狀態不一致       | Saga Pattern (Orchestration)  | 3.2, 12      | 🔴 P0  |
+| **毒藥訊息**       | 無法處理的訊息阻塞消費       | DLQ 分類處理 + 告警           | 15           | 🟡 P1  |
+| **Consumer Lag**   | 消費速度跟不上生產速度       | 監控 + 擴容策略               | 7            | 🟢 P2  |
+
+**優先級說明**：
+- 🔴 **P0（Critical）**：直接影響交易一致性和財務準確性，必須實施
+- 🟡 **P1（High）**：影響系統可用性和可維護性，強烈建議實施
+- 🟢 **P2（Medium）**：影響效能和運維效率，視情況實施
+
+### 實施檢查清單（Go-Live Checklist）
+
+在正式上線前，確保以下所有 P0 和 P1 控制機制已落實：
+
+#### P0 核心機制（必須實施）
+
+- [ ] **Outbox Pattern**：發送端一致性保證
+- [ ] **Inbox Pattern + 冪等**：消費端防重處理
+- [ ] **Partition Key = mainRef**：業務順序保證
+- [ ] **Manual Commit After Processing**：事件不遺失
+- [ ] **版本化交易模型**：處理並發修改
+- [ ] **Saga Pattern**：跨服務流程一致性
+- [ ] **Event Immutability 規範**：禁止篡改歷史事件
+- [ ] **Reconciliation**：日終對帳機制
+
+#### P1 重要機制（強烈建議）
+
+- [ ] **Timeout Governance**：卡單自動處理
+- [ ] **Schema Registry**：Schema 版本管理
+- [ ] **DLQ 分類策略**：錯誤訊息處理
+- [ ] **監控告警**：Consumer lag, Error rate, DLQ
+- [ ] **分散式追蹤**：correlationId + traceId
+- [ ] **漸進式遷移**：Shadow → Canary → Full
+- [ ] **回滾計畫**：緊急情況應對
+
+#### P2 優化機制（視情況實施）
+
+- [ ] **CDC (Change Data Capture)**：替代 Polling Outbox Publisher
+- [ ] **Event Sourcing**：完整事件歷史
+- [ ] **CQRS**：讀寫分離
+- [ ] **Kafka Streams**：實時流處理
+
+### 架構審查要點（Architecture Review Board）
+
+當進行架構審查時，重點檢視以下問題：
+
+1. **一致性保證**：
+   - ✅ 是否實施 Outbox/Inbox Pattern？
+   - ✅ 冪等設計是否覆蓋所有消費端？
+   - ✅ 版本隔離是否正確實施？
+
+2. **風險控管**：
+   - ✅ 是否有對帳機制？
+   - ✅ 是否有超時處理？
+   - ✅ DLQ 是否有分類和告警？
+
+3. **可維護性**：
+   - ✅ 是否有完整監控？
+   - ✅ 是否有回滾計畫？
+   - ✅ 是否有 Runbook（故障手冊）？
+
+4. **合規性**：
+   - ✅ 事件是否不可變？
+   - ✅ 是否可追溯審計軌跡？
+   - ✅ 是否符合金融監管要求？
+
+### 技術成熟度評估
+
+根據實施程度，評估團隊的 Kafka 技術成熟度：
+
+| 成熟度等級   | 實施標準                                                         | 適用場景            |
+| ------------ | ---------------------------------------------------------------- | ------------------- |
+| **Level 1**  | 基礎 Kafka（無冪等、無 Outbox、無版本管理）                      | ❌ 不適合金融系統   |
+| **Level 2**  | 實施冪等 + Outbox，但無版本化和 Saga                             | ⚠️ 僅適合非核心系統 |
+| **Level 3**  | 實施 P0 機制（Outbox + Inbox + 版本化 + Saga）                   | ✅ 可用於金融核心   |
+| **Level 4**  | P0 + P1 機制 + 完整監控 + 對帳 + 測試覆蓋                        | ✅ 生產級標準       |
+| **Level 5**  | Level 4 + Event Sourcing + CQRS + 自動化治理                     | 🏆 企業架構卓越     |
+
+> 🎯 **目標**：金融核心系統應至少達到 **Level 4** 才可上線。
+
+---
+
+## 結語
+
+### 文檔總結
+
+本文檔從 JMS 遷移到 Kafka 的完整實戰指南，涵蓋：
+
+✅ **技術基礎**：Kafka 與 JMS 的本質差異
+✅ **設計模式**：Outbox, Inbox, Saga, 版本化狀態機
+✅ **工程實踐**：監控、測試、遷移策略
+✅ **風險控管**：對帳、超時治理、DLQ 處理
+✅ **合規要求**：事件不可變、可追溯、可審計
+
+### 核心原則（記住這三句話）
+
+1. **Kafka 不是 XA**：一致性來自設計，不是 broker 魔法
+2. **交易即狀態機**：版本化事件流，而非單筆可變資料
+3. **設計 + 稽核 + 對帳**：金融一致性的三位一體
+
+### 最後建議
+
+- **從小處著手**：先遷移非核心流程，累積經驗
+- **保持簡單**：KISS 原則，避免過度設計
+- **持續監控**：You can't improve what you don't measure
+- **記錄文檔**：未來的你會感謝現在的你
+- **團隊協作**：一個人走得快，一群人走得遠
+
+> 💡 **Pro Tip**：這份文檔不只是技術指南，更是架構決策和風險控管的參考標準。建議定期回顧和更新，隨著團隊經驗增長持續優化。
+
+### 延伸閱讀建議
+
+- **Kafka 官方文檔**：深入理解 Kafka 內部機制
+- **Saga Pattern**：微服務架構下的分散式交易模式
+- **Event Sourcing**：事件溯源架構模式
+- **Domain-Driven Design**：領域驅動設計與事件模型
+- **Site Reliability Engineering**：Google SRE 實踐（監控與可觀測性）
+
+---
+
+**文檔版本**: v4.0
 **最後更新**: 2026-02-09
-**適用對象**: Java EE → Kafka 遷移團隊、金融交易系統架構師、事件驅動架構實作者
+**文檔狀態**: ✅ 生產就緒（Production Ready）
+**適用對象**: Java EE → Kafka 遷移團隊、金融交易系統架構師、事件驅動架構實作者、IT 審計與風險管理團隊
+**文檔級別**: 🏦 銀行級架構設計標準
