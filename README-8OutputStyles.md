@@ -90,3 +90,41 @@ What are output styles available in this project?
 /output-style
   ❯ 1. Default ✔         Claude completes coding tasks efficiently and provides concise responses
 ```
+
+## Statusline
+
+```bash
+claude
+
+/statusline i want you to create a statusline that displays the current used output-style.
+you should implement it in python and run it through uv
+
+/exit
+```
+
+```bash
+cat ~/.claude/statusline.py
+cat ~/.claude/settings.json
+echo $PS1
+
+  \[\](claude-code-crash-course) \[\]\[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]`__git_ps1`\[\033[0m\]\n$ \[\]\[\]
+  (claude-code-crash-course) 
+```
+
+```json
+{
+  "model": "sonnet",
+  "statusLine": {
+    "type": "command",
+    "command": "uv run python ~/.claude/statusline.py"
+  }
+}
+```
+
+```bash
+claude
+/statusline
+/output-style
+
+can you make the style green and in bold text?
+```

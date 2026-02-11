@@ -22,8 +22,15 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 - `README-5PluginsAndCloudfareCodeMode.md` - Extensions and cloud integration
 - `README-6AdvancedWorkflow.md` - Plan mode and complex workflows
 - `README-7Subagents.md` - Creating and using specialized subagents
+- `README-8OutputStyles.md` - Output formatting and statusline customization
 - `RAG-architecture.md` - RAG pipeline architecture diagrams
 - `RAG-Flow-Diagram.md` - Detailed RAG flow with decision points
+
+**Enterprise/Banking Documentation:**
+- `ComplianceCheckGuidance.md` - Banking compliance check procedures
+- `README-EE MS Baseline.md` - Enterprise architecture baseline by region
+- `README-JmsToKafka.md` - JMS to Kafka migration guide for trade finance
+- `README-KafkaInboxAndDlq.md` - Kafka inbox and DLQ architecture patterns
 
 ## Getting Started
 
