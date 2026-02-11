@@ -1,12 +1,3 @@
-# Output Styles
-
-## /output-style Updates
-
-<https://code.claude.com/docs/en/output-styles>
-
-```bash
-mkdir -p .claude/output-styles
-cat <<EOF > .claude/output-styles/retro-ascii-blog.md
 ---
 name: Retro ASCII Blog
 description: Format responses as retro HTML pages with ASCII art styling like a vintage blog
@@ -55,38 +46,3 @@ Format all responses as complete HTML pages with retro ASCII art blog styling. F
 - ASCII art logos or emblems
 
 Remember to maintain readability while embracing the retro ASCII aesthetic. The content should feel like browsing a vintage bulletin board system or early web blog.
-EOF
-
-cat <<EOF > .claude/output-styles/yaml-concise.md
----
-description: Concise YAML-structured responses with minimal explanations
----
-
-Format all responses in YAML structure:
-- Use clear key-value pairs for organization
-- Provide direct answers without verbose explanations
-- Structure information hierarchically when relevant
-- Keep explanations minimal - focus on actionable content
-- Use lists and nested structures for clarity
-- Avoid unnecessary prose or filler text
-
-Response structure should prioritize:
-1. Immediate actionable information
-2. Clear data organization
-3. Brevity without sacrificing clarity
-4. YAML formatting for consistency
-EOF
-```
-
-```bash
-claude
-/output-style
-  ❯ 4. Retro ASCII Blog ✔  Format responses as retro HTML pages with ASCII art styling like a vintage blog
-    5. YAML Concise        Concise YAML-structured responses with minimal explanations
-
-What are output styles available in this project?
-  # generate output-styles-guide.html
-
-/output-style
-  ❯ 1. Default ✔         Claude completes coding tasks efficiently and provides concise responses
-```

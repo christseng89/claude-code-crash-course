@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Output Styles Guide - Claude Code Crash Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Monaco, Consolas, monospace;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            border: 3px double #00ff00;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            background-color: #0a0a0a;
+        }
+
+        .ascii-art {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            font-size: 14px;
+            white-space: pre;
+            line-height: 1.2;
+        }
+
+        h1 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            margin: 20px 0;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: #ffff00;
+            margin: 25px 0 15px 0;
+            font-size: 20px;
+            border-bottom: 2px solid #ffff00;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            color: #00ffff;
+            margin: 20px 0 10px 0;
+            font-size: 18px;
+        }
+
+        .divider {
+            color: #00ff00;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .style-card {
+            border: 2px solid #00ff00;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #0d0d0d;
+            border-radius: 5px;
+        }
+
+        .style-card.active {
+            border-color: #ffff00;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #ffff00;
+            color: #000;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        ul, ol {
+            margin: 10px 0 10px 30px;
+            color: #00ff00;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        code {
+            background-color: #0a0a0a;
+            padding: 2px 6px;
+            border: 1px solid #00ff00;
+            border-radius: 3px;
+            color: #00ffff;
+        }
+
+        .command-box {
+            background-color: #0a0a0a;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .command-box pre {
+            color: #00ffff;
+            margin: 5px 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 10px 0;
+        }
+
+        .feature-list li:before {
+            content: "▸ ";
+            color: #ffff00;
+            font-weight: bold;
+        }
+
+        footer {
+            border-top: 2px solid #00ff00;
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            color: #00ff00;
+        }
+
+        .info-box {
+            background-color: #0a0a0a;
+            border-left: 4px solid #ffff00;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        a {
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            text-shadow: 0 0 5px #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="ascii-art">
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   ╔═╗╦ ╦╔╦╗╔═╗╦ ╦╔╦╗  ╔═╗╔╦╗╦ ╦╦  ╔═╗╔═╗  ╔═╗╦ ╦╦╔╦╗╔═╗          ║
+║   ║ ║║ ║ ║ ╠═╝║ ║ ║   ╚═╗ ║ ╚╦╝║  ║╣ ╚═╗  ║ ╦║ ║║ ║║║╣           ║
+║   ╚═╝╚═╝ ╩ ╩  ╚═╝ ╩   ╚═╝ ╩  ╩ ╩═╝╚═╝╚═╝  ╚═╝╚═╝╩═╩╝╚═╝          ║
+║                                                                   ║
+║              Claude Code Crash Course - Output Styles             ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>═══ What Are Output Styles? ═══</h2>
+            <p>
+                Output styles in Claude Code allow you to customize how Claude formats its responses.
+                Instead of plain text, Claude can format responses as HTML pages, YAML structures,
+                or any custom format you define.
+            </p>
+
+            <div class="info-box">
+                <strong>📍 Location:</strong> <code>.claude/output-styles/*.md</code><br>
+                <strong>🔧 Activation:</strong> Use <code>/output-style</code> command<br>
+                <strong>📚 Documentation:</strong> <a href="https://code.claude.com/docs/en/output-styles" target="_blank">Official Docs</a>
+            </div>
+        </section>
+
+        <div class="divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+        <section>
+            <h2>═══ Available Output Styles (2) ═══</h2>
+
+            <!-- Style 1: Retro ASCII Blog -->
+            <div class="style-card active">
+                <h3>1. Retro ASCII Blog <span class="badge">ACTIVE ✓</span></h3>
+
+                <p><strong>Description:</strong> Format responses as retro HTML pages with ASCII art styling like a vintage blog</p>
+
+                <p><strong>File:</strong> <code>.claude/output-styles/retro-ascii-blog.md</code></p>
+
+                <h4>Key Features:</h4>
+                <ul class="feature-list">
+                    <li>Complete HTML5 documents with DOCTYPE and semantic elements</li>
+                    <li>ASCII art headers, dividers, and decorative elements</li>
+                    <li>Monospace fonts throughout (Courier New, Monaco, Consolas)</li>
+                    <li>Dark retro color schemes (green on black, amber on black)</li>
+                    <li>Glow effects and text shadows for terminal feel</li>
+                    <li>Automatic file saving and browser opening</li>
+                </ul>
+
+                <h4>ASCII Characters Used:</h4>
+                <div class="command-box">
+                    <pre>═  ║  ╔  ╗  ╚  ╝  -  |  +  *  #</pre>
+                </div>
+
+                <h4>Best For:</h4>
+                <ul class="feature-list">
+                    <li>Documentation and guides that benefit from structure</li>
+                    <li>Presentations and reports with visual appeal</li>
+                    <li>Nostalgic, retro-themed content</li>
+                    <li>Content that needs to be saved and shared as HTML</li>
+                </ul>
+
+                <h4>Example Output:</h4>
+                <div class="command-box">
+                    <pre>╔════════════════════════╗
+║  ASCII Art Header      ║
+╚════════════════════════╝
+
+Content with retro styling...
+
+━━━━━━━━━━━━━━━━━━━━━━━━</pre>
+                </div>
+            </div>
+
+            <!-- Style 2: YAML Concise -->
+            <div class="style-card">
+                <h3>2. YAML Concise</h3>
+
+                <p><strong>Description:</strong> Concise YAML-structured responses with minimal explanations</p>
+
+                <p><strong>File:</strong> <code>.claude/output-styles/yaml-concise.md</code></p>
+
+                <h4>Key Features:</h4>
+                <ul class="feature-list">
+                    <li>Clear key-value pairs for organization</li>
+                    <li>Direct answers without verbose explanations</li>
+                    <li>Hierarchical structure for complex information</li>
+                    <li>Minimal prose - focus on actionable content</li>
+                    <li>Lists and nested structures for clarity</li>
+                    <li>No unnecessary filler text</li>
+                </ul>
+
+                <h4>Response Priorities:</h4>
+                <ol>
+                    <li>Immediate actionable information</li>
+                    <li>Clear data organization</li>
+                    <li>Brevity without sacrificing clarity</li>
+                    <li>YAML formatting consistency</li>
+                </ol>
+
+                <h4>Best For:</h4>
+                <ul class="feature-list">
+                    <li>Quick reference information</li>
+                    <li>Configuration and settings data</li>
+                    <li>API responses and structured data</li>
+                    <li>When you need parseable, machine-readable output</li>
+                    <li>Minimalist workflows where brevity matters</li>
+                </ul>
+
+                <h4>Example Output:</h4>
+                <div class="command-box">
+                    <pre>command: git commit
+description: Create a git commit
+options:
+  - name: message
+    flag: -m
+    required: true
+  - name: all
+    flag: -a
+    required: false
+example: git commit -m "Initial commit"</pre>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+        <section>
+            <h2>═══ How to Use Output Styles ═══</h2>
+
+            <h3>▸ Activating a Style</h3>
+            <div class="command-box">
+                <pre>claude
+/output-style</pre>
+            </div>
+            <p>This opens an interactive menu where you can select from available styles.</p>
+
+            <h3>▸ Creating Custom Styles</h3>
+            <ol>
+                <li>Create a new <code>.md</code> file in <code>.claude/output-styles/</code></li>
+                <li>Add YAML frontmatter with <code>name</code> and <code>description</code></li>
+                <li>Write formatting instructions in the body</li>
+                <li>Restart Claude Code or use <code>/output-style</code> to refresh</li>
+            </ol>
+
+            <h3>▸ File Structure</h3>
+            <div class="command-box">
+                <pre>.claude/
+└── output-styles/
+    ├── retro-ascii-blog.md
+    ├── yaml-concise.md
+    └── your-custom-style.md</pre>
+            </div>
+
+            <h3>▸ Example Custom Style Template</h3>
+            <div class="command-box">
+                <pre>---
+name: My Custom Style
+description: Brief description of what this style does
+---
+
+Format all responses following these rules:
+- Rule 1
+- Rule 2
+- Rule 3</pre>
+            </div>
+        </section>
+
+        <div class="divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+        <section>
+            <h2>═══ Related Resources ═══</h2>
+
+            <ul>
+                <li><strong>Documentation:</strong> <code>README-8OutputStyles.md</code></li>
+                <li><strong>Project Branch:</strong> <code>project/output-styles</code></li>
+                <li><strong>Official Docs:</strong> <a href="https://code.claude.com/docs/en/output-styles" target="_blank">code.claude.com/docs/en/output-styles</a></li>
+            </ul>
+
+            <div class="info-box">
+                <strong>💡 Pro Tip:</strong> You can switch between output styles at any time using <code>/output-style</code>.
+                Each style persists across sessions until you change it.
+            </div>
+        </section>
+
+        <section>
+            <h2>═══ Comparison Table ═══</h2>
+
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <thead style="border-bottom: 2px solid #00ff00;">
+                    <tr>
+                        <th style="padding: 10px; text-align: left; color: #ffff00;">Feature</th>
+                        <th style="padding: 10px; text-align: left; color: #ffff00;">Retro ASCII Blog</th>
+                        <th style="padding: 10px; text-align: left; color: #ffff00;">YAML Concise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #333;">
+                        <td style="padding: 10px;">Format</td>
+                        <td style="padding: 10px;">HTML + ASCII Art</td>
+                        <td style="padding: 10px;">YAML</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #333;">
+                        <td style="padding: 10px;">Verbosity</td>
+                        <td style="padding: 10px;">Detailed & Visual</td>
+                        <td style="padding: 10px;">Minimal & Concise</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #333;">
+                        <td style="padding: 10px;">Best Use</td>
+                        <td style="padding: 10px;">Documentation, Guides</td>
+                        <td style="padding: 10px;">Quick Reference, Data</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #333;">
+                        <td style="padding: 10px;">File Output</td>
+                        <td style="padding: 10px;">HTML (auto-opened)</td>
+                        <td style="padding: 10px;">Text/Console</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #333;">
+                        <td style="padding: 10px;">Visual Style</td>
+                        <td style="padding: 10px;">Retro Terminal</td>
+                        <td style="padding: 10px;">Plain Structured</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">Machine Readable</td>
+                        <td style="padding: 10px;">No</td>
+                        <td style="padding: 10px;">Yes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <div class="ascii-art">
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        </div>
+        <p>Claude Code Crash Course | Output Styles Guide</p>
+        <p>Generated: 2026-02-10 | Current Style: Retro ASCII Blog ✓</p>
+        <div class="ascii-art">
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        </div>
+    </footer>
+</body>
+</html>

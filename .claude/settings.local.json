@@ -58,5 +58,6 @@
     "playwright",
     "context7",
     "verbose-server"
-  ]
+  ],
+  "outputStyle": "default"
 }
