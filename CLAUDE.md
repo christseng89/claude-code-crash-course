@@ -25,12 +25,7 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 - `README-8OutputStyles.md` - Output formatting and statusline customization
 - `RAG-architecture.md` - RAG pipeline architecture diagrams
 - `RAG-Flow-Diagram.md` - Detailed RAG flow with decision points
-
-**Enterprise/Banking Documentation:**
 - `ComplianceCheckGuidance.md` - Banking compliance check procedures
-- `README-EE MS Baseline.md` - Enterprise architecture baseline by region
-- `README-JmsToKafka.md` - JMS to Kafka migration guide for trade finance
-- `README-KafkaInboxAndDlq.md` - Kafka inbox and DLQ architecture patterns
 
 ## Getting Started
 
@@ -39,10 +34,7 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 git clone https://github.com/christseng89/claude-code-crash-course.git crash-course
 cd crash-course
 
-# Start Claude Code (with GitHub MCP server - Windows PowerShell)
-.\start-claude.ps1      # Loads .env and starts Claude Code
-
-# Or without MCP / on other platforms
+# Start Claude Code
 claude
 
 # Initialize context
@@ -52,10 +44,17 @@ claude
 **GitHub MCP Setup:**
 1. Copy `.env.example` to `.env`
 2. Add your GitHub Personal Access Token to `.env`
-3. Use `start-claude.ps1` (Windows) to automatically load environment variables
-4. See [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md) for detailed instructions
-
-**Note:** `start-claude.ps1` is Windows-specific. On Linux/Mac, manually export environment variables or use `source .env` before running `claude`.
+3. On Windows PowerShell, set environment variables:
+   ```powershell
+   $env:GITHUB_PERSONAL_ACCESS_TOKEN = "your_token_here"
+   claude
+   ```
+4. On Linux/Mac, export environment variables:
+   ```bash
+   export GITHUB_PERSONAL_ACCESS_TOKEN="your_token_here"
+   claude
+   ```
+5. See [GITHUB-MCP-SETUP.md](GITHUB-MCP-SETUP.md) for detailed instructions
 
 ## Development Commands
 

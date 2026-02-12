@@ -50,7 +50,9 @@
       "WebFetch(domain:json.schemastore.org)",
       "WebFetch(domain:www.schemastore.org)",
       "Bash(grep:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(echo:*)",
+      "Bash(chmod:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
@@ -60,5 +62,9 @@
     "context7",
     "verbose-server"
   ],
-  "outputStyle": "default"
+  "outputStyle": "default",
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/scripts/statusline.sh"
+  }
 }
