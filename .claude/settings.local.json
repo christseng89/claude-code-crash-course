@@ -64,9 +64,5 @@
     "context7",
     "verbose-server"
   ],
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/scripts/statusline.sh"
-  },
   "outputStyle": "default"
 }

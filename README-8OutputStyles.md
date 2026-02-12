@@ -98,8 +98,9 @@ What are output styles available in this project?
 ```bash
 claude
 
-/statusline show model name for user scope
-/exit
+/statusline show model name
+
+/statusline show model name, git branch, and subdirectory such as '🤖 Sonnet | 📁 crash-course | 🌿 main' then update ~/.claude/scripts/statusline.sh to do it.   
 ```
 
 ```json
@@ -117,3 +118,25 @@ claude
 /clear
 
 ```
+
+### Claude Code shows below
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ push it
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+🤖 Sonnet | 📁 crash-course | 🌿 main
+
+## The Future of AI Coding: A Team of Specialized Agents
+
+```bash
+# Terminal #1
+/output-style
+  ❯ 4. Retro ASCII Blog ✔  Format responses as retro HTML pages with ASCII art styling like a vintage blog
+    5. YAML Concise        Concise YAML-structured responses with minimal explanations
+
+# Terminal #2
+/output-style
+  ❯ 5. YAML Concise ✔  Concise YAML-structured responses with minimal explanations
+```
+
+Using the same folder, you can have one output style for all terminals. You need to use different folder for different output styles.
