@@ -53,7 +53,8 @@
       "Bash(find:*)",
       "Bash(echo:*)",
       "Bash(chmod:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(bash:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

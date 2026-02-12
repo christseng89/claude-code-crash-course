@@ -98,16 +98,8 @@ What are output styles available in this project?
 ```bash
 claude
 
-/statusline show model name and context percentage with a progress bar
+/statusline show model name for user scope
 /exit
-```
-
-```bash
-cat ~/.claude/settings.json
-echo $PS1
-
-  \[\](claude-code-crash-course) \[\]\[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]`__git_ps1`\[\033[0m\]\n$ \[\]\[\]
-  (claude-code-crash-course) 
 ```
 
 ```json
@@ -123,10 +115,5 @@ echo $PS1
 ```bash
 claude
 /clear
-
-echo $PS1
-
-/statusline
-/output-style
 
 ```
