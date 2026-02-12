@@ -93,17 +93,16 @@ What are output styles available in this project?
 
 ## Statusline
 
+<https://code.claude.com/docs/en/statusline>
+
 ```bash
 claude
 
-/statusline i want you to create a statusline that displays the current used output-style.
-you should implement it in python and run it through uv
-
+/statusline show model name and context percentage with a progress bar
 /exit
 ```
 
 ```bash
-cat ~/.claude/statusline.py
 cat ~/.claude/settings.json
 echo $PS1
 
@@ -116,15 +115,18 @@ echo $PS1
   "model": "sonnet",
   "statusLine": {
     "type": "command",
-    "command": "uv run python ~/.claude/statusline.py"
-  }
+    "command": "~/.claude/scripts/statusline.sh"
+  },
 }
 ```
 
 ```bash
 claude
+/clear
+
+echo $PS1
+
 /statusline
 /output-style
 
-can you make the style green and in bold text?
 ```

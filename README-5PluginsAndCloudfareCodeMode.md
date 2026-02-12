@@ -22,6 +22,8 @@ Plugin marketplaces (similar to Google Gemini Extension) allow developers to sha
 
 ```bash
 claude
+
+/plugin marketplace add anthropics/claude-code
 /plugin
 
 ◯ feature-dev · claude-plugins-official · 63.3K installs

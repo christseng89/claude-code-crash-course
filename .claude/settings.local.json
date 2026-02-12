@@ -52,7 +52,8 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(echo:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(test:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
@@ -62,9 +63,9 @@
     "context7",
     "verbose-server"
   ],
-  "outputStyle": "default",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/statusline.sh"
-  }
+  },
+  "outputStyle": "default"
 }
