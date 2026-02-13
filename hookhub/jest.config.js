@@ -11,6 +11,7 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    '^next/font/google$': '<rootDir>/__mocks__/next-font-google.js',
   },
   collectCoverageFrom: [
     'app/**/*.{js,jsx,ts,tsx}',

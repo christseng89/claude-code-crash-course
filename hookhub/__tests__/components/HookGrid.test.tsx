@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HookGrid from '@/app/components/HookGrid';
 import { mockHooks } from '../utils/mockData.mock';
@@ -49,50 +49,73 @@ describe('HookGrid Component', () => {
   });
 
   it('filters hooks by search query in name', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'format');
 
+    // Advance timers to trigger debounce (wrapped in act)
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
     await waitFor(() => {
       expect(screen.getByText('format-typescript')).toBeInTheDocument();
       expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
-    }, { timeout: 500 });
+    });
 
     expect(screen.queryByText('git-commit-lint')).not.toBeInTheDocument();
+    jest.useRealTimers();
   });
 
   it('filters hooks by search query in description', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'validates');
 
+    // Advance timers to trigger debounce (wrapped in act)
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
     await waitFor(() => {
       expect(screen.getByText('git-commit-lint')).toBeInTheDocument();
       expect(screen.queryByText('format-typescript')).not.toBeInTheDocument();
-    }, { timeout: 500 });
+    });
 
     expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
+    jest.useRealTimers();
   });
 
   it('filters hooks by repo owner', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'disler');
 
+    // Advance timers to trigger debounce (wrapped in act)
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
     await waitFor(() => {
       expect(screen.getByText('format-typescript')).toBeInTheDocument();
       expect(screen.queryByText('activity-logger')).not.toBeInTheDocument();
-    }, { timeout: 500 });
+    });
+
+    jest.useRealTimers();
   });
 
   it('combines category and search filters', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     // Select PreToolUse category
@@ -105,27 +128,40 @@ describe('HookGrid Component', () => {
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'activity');
 
+    // Advance timers to trigger debounce (wrapped in act)
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
     await waitFor(() => {
       expect(screen.getByText('activity-logger')).toBeInTheDocument();
-    }, { timeout: 500 });
+    });
 
     expect(screen.queryByText('format-typescript')).not.toBeInTheDocument();
     expect(screen.queryByText('git-commit-lint')).not.toBeInTheDocument();
     expect(screen.getByText('1 hook found')).toBeInTheDocument();
+    jest.useRealTimers();
   });
 
   it('shows "No hooks found" message when no results', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'nonexistent-hook');
 
+    // Advance timers to trigger debounce (wrapped in act)
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
     await waitFor(() => {
       expect(screen.getByText('No hooks found')).toBeInTheDocument();
-    }, { timeout: 500 });
+    });
 
     expect(screen.getByText(/Try adjusting your search or filter criteria/i)).toBeInTheDocument();
+    jest.useRealTimers();
   });
 
   it('resets to all hooks when "All" category is selected', async () => {
@@ -148,24 +184,33 @@ describe('HookGrid Component', () => {
   });
 
   it('clears search results when search input is cleared', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
 
     // Type search query
     await user.type(searchInput, 'format');
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('1 hook found')).toBeInTheDocument();
-    }, { timeout: 500 });
+    });
 
     // Clear search
     await user.clear(searchInput);
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('3 hooks found')).toBeInTheDocument();
-    }, { timeout: 500 });
+    });
+
+    jest.useRealTimers();
   });
 
   it('renders SearchBar component', () => {
@@ -190,12 +235,22 @@ describe('HookGrid Component', () => {
   });
 
   it('search is case-insensitive', async () => {
-    const user = userEvent.setup();
+    jest.useFakeTimers();
+    const user = userEvent.setup({ delay: null });
     render(<HookGrid hooks={mockHooks} />);
 
     const searchInput = screen.getByPlaceholderText(/Search hooks/i);
     await user.type(searchInput, 'FORMAT');
 
-    expect(screen.getByText('format-typescript')).toBeInTheDocument();
+    // Advance timers to trigger debounce (wrapped in act)
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('format-typescript')).toBeInTheDocument();
+    });
+
+    jest.useRealTimers();
   });
 });

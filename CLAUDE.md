@@ -567,7 +567,10 @@ See [README-7Subagents.md](README-7Subagents.md) for agent orchestration pattern
 
 When making changes:
 1. **Next.js apps**: Run `npm run lint` before committing, optionally run test suite with `npm test`
-   - **HookHub**: Has comprehensive Jest test suite - run `npm test` or `npm run test:coverage`
+   - **HookHub**: Has comprehensive Jest test suite - **REQUIRED WORKFLOW:**
+     - Run `npm test` after every file change
+     - Run `npm run test:coverage` to verify coverage meets 90% threshold
+     - Do not commit if coverage drops below 90%
    - **my-app**: Linting only (no tests configured)
 2. **Python code**: Test with example inputs/outputs
 3. **Commands/Skills**: Test invocation with various arguments

@@ -40,4 +40,12 @@ What skills are available?
 claude
 
 which skills are available?
+
+can u make sure that the logo is according to anthropic branding styles for project hookhub in hookhub directory?
+
+    ...
+    ● Skill(brand-guidelines)
+    ⎿  Successfully loaded skill
+    ...
+
 ```

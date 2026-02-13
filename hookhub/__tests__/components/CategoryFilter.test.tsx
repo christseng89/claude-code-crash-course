@@ -20,7 +20,7 @@ describe('CategoryFilter Component', () => {
     });
   });
 
-  it('highlights selected category with gradient', () => {
+  it('highlights selected category with Anthropic orange', () => {
     const mockOnSelect = jest.fn();
     render(
       <CategoryFilter
@@ -31,9 +31,8 @@ describe('CategoryFilter Component', () => {
     );
 
     const selectedButton = screen.getByText('PreToolUse');
-    expect(selectedButton).toHaveClass('bg-gradient-to-r');
-    expect(selectedButton).toHaveClass('from-blue-600');
-    expect(selectedButton).toHaveClass('to-purple-600');
+    expect(selectedButton).toHaveClass('bg-[#d97757]');
+    expect(selectedButton).toHaveClass('text-[#faf9f5]');
   });
 
   it('calls onSelectCategory when a category is clicked', async () => {
@@ -67,10 +66,10 @@ describe('CategoryFilter Component', () => {
     const selectedButton = screen.getByText('PreToolUse');
     const unselectedButton = screen.getByText('PostToolUse');
 
-    expect(selectedButton).toHaveClass('bg-gradient-to-r');
-    expect(selectedButton).toHaveClass('text-white');
+    expect(selectedButton).toHaveClass('bg-[#d97757]');
+    expect(selectedButton).toHaveClass('text-[#faf9f5]');
     expect(unselectedButton).toHaveClass('bg-white/80');
-    expect(unselectedButton).toHaveClass('text-gray-700');
+    expect(unselectedButton).toHaveClass('text-[#141413]');
   });
 
   it('renders buttons in correct order', () => {
@@ -162,11 +161,11 @@ describe('CategoryFilter Component', () => {
     );
 
     const button = screen.getByText('PostToolUse');
-    expect(button).toHaveClass('hover:bg-gray-50');
-    expect(button).toHaveClass('hover:ring-gray-300/50');
+    expect(button).toHaveClass('hover:bg-[#e8e6dc]');
+    expect(button).toHaveClass('hover:ring-[#b0aea5]');
   });
 
-  it('selected button maintains gradient and shadow', () => {
+  it('selected button maintains Anthropic orange and shadow', () => {
     const mockOnSelect = jest.fn();
     render(
       <CategoryFilter
@@ -177,8 +176,8 @@ describe('CategoryFilter Component', () => {
     );
 
     const selectedButton = screen.getByText('Workflow');
-    expect(selectedButton).toHaveClass('bg-gradient-to-r');
+    expect(selectedButton).toHaveClass('bg-[#d97757]');
     expect(selectedButton).toHaveClass('shadow-lg');
-    expect(selectedButton).toHaveClass('shadow-blue-500/30');
+    expect(selectedButton).toHaveClass('shadow-[#d97757]/30');
   });
 });

@@ -393,6 +393,13 @@ Current structure requires all enhanced fields:
 
 ## Testing Checklist (Before Committing)
 
+**Test Coverage (MANDATORY):**
+- Run `npm test` after **EVERY** file change in the hookhub project
+- Run `npm run test:coverage` to verify coverage meets **90% threshold**
+- Review coverage report to identify untested code paths
+- Do not commit if coverage drops below 90%
+- Add tests for new components, functions, or logic before committing
+
 **Visual:**
 - Grid displays all 22 hooks
 - Category filtering works instantly

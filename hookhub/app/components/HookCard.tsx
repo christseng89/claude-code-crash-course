@@ -29,7 +29,7 @@ const getCategoryColor = (category: HookCategory): string => {
 
 export default function HookCard({ hook }: HookCardProps) {
   return (
-    <article className="group relative flex flex-col gap-4 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/10 dark:border-gray-800/50 dark:bg-gray-900/80">
+    <article className="group relative flex flex-col gap-4 rounded-2xl border border-[#e8e6dc] bg-[#faf9f5]/80 p-6 shadow-sm backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-[#d97757]/10 dark:border-[#b0aea5]/50 dark:bg-[#141413]/80">
       <div className="flex items-start justify-between gap-2">
         <span
           className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ${getCategoryColor(
@@ -53,10 +53,10 @@ export default function HookCard({ hook }: HookCardProps) {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-xl font-semibold text-[#141413] dark:text-[#faf9f5]">
           {hook.name}
         </h3>
-        <p className="text-sm leading-relaxed text-gray-600 line-clamp-3 dark:text-gray-400">
+        <p className="text-sm leading-relaxed text-[#b0aea5] line-clamp-3 dark:text-[#b0aea5]">
           {hook.description}
         </p>
       </div>
@@ -66,7 +66,7 @@ export default function HookCard({ hook }: HookCardProps) {
           {hook.metadata.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+              className="rounded-md bg-[#e8e6dc] px-2 py-1 text-xs text-[#141413] dark:bg-[#141413] dark:text-[#b0aea5]"
             >
               {tag}
             </span>
@@ -79,7 +79,7 @@ export default function HookCard({ hook }: HookCardProps) {
           href={hook.repoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="inline-flex items-center gap-2 text-sm font-medium text-[#6a9bcc] transition-colors hover:text-[#d97757] dark:text-[#6a9bcc] dark:hover:text-[#d97757]"
         >
           View on GitHub
           <ExternalLink className="h-4 w-4" />

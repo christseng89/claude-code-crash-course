@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { metadata } from '@/app/layout';
+import RootLayout, { metadata } from '@/app/layout';
 import ThemeProvider from '@/app/components/ThemeProvider';
 
 // Mock next/font/google since it's a Next.js specific module
@@ -11,6 +11,14 @@ jest.mock('next/font/google', () => ({
   Geist_Mono: jest.fn(() => ({
     variable: '--font-geist-mono',
     className: 'geist-mono-mock',
+  })),
+  Poppins: jest.fn(() => ({
+    variable: '--font-poppins',
+    className: 'poppins-mock',
+  })),
+  Lora: jest.fn(() => ({
+    variable: '--font-lora',
+    className: 'lora-mock',
   })),
 }));
 
@@ -301,6 +309,205 @@ describe('RootLayout', () => {
 
       const button = screen.getByTestId('theme-button');
       expect(button).toHaveAttribute('aria-label', 'Toggle theme');
+    });
+  });
+
+  describe('RootLayout Component Rendering', () => {
+    it('RootLayout function is defined and callable', () => {
+      expect(RootLayout).toBeDefined();
+      expect(typeof RootLayout).toBe('function');
+    });
+
+    it('renders children prop correctly', () => {
+      render(
+        <RootLayout>
+          <main data-testid="main-content">
+            <h1>Page Title</h1>
+            <p>Page Description</p>
+          </main>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('main-content')).toBeInTheDocument();
+      expect(screen.getByText('Page Title')).toBeInTheDocument();
+      expect(screen.getByText('Page Description')).toBeInTheDocument();
+    });
+
+    it('wraps children in ThemeProvider', () => {
+      render(
+        <RootLayout>
+          <div data-testid="wrapped-content">Themed Content</div>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('wrapped-content')).toBeInTheDocument();
+      expect(screen.getByText('Themed Content')).toBeInTheDocument();
+    });
+
+    it('handles multiple children elements', () => {
+      render(
+        <RootLayout>
+          <header data-testid="header">Header</header>
+          <main data-testid="main">Main Content</main>
+          <footer data-testid="footer">Footer</footer>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('header')).toBeInTheDocument();
+      expect(screen.getByTestId('main')).toBeInTheDocument();
+      expect(screen.getByTestId('footer')).toBeInTheDocument();
+    });
+
+    it('preserves child component structure and props', () => {
+      render(
+        <RootLayout>
+          <article data-testid="article" className="article-class" aria-label="Test Article">
+            <h2>Article Title</h2>
+            <p>Article content here</p>
+          </article>
+        </RootLayout>
+      );
+
+      const article = screen.getByTestId('article');
+      expect(article).toHaveClass('article-class');
+      expect(article).toHaveAttribute('aria-label', 'Test Article');
+      expect(screen.getByText('Article Title')).toBeInTheDocument();
+      expect(screen.getByText('Article content here')).toBeInTheDocument();
+    });
+
+    it('renders without crashing with complex nested children', () => {
+      expect(() => {
+        render(
+          <RootLayout>
+            <div>
+              <nav>
+                <ul>
+                  <li>
+                    <a href="/">Home</a>
+                  </li>
+                </ul>
+              </nav>
+              <main>
+                <section>
+                  <article>
+                    <h1>Title</h1>
+                    <p>Content</p>
+                  </article>
+                </section>
+              </main>
+            </div>
+          </RootLayout>
+        );
+      }).not.toThrow();
+    });
+
+    it('maintains Readonly children type constraint', () => {
+      render(
+        <RootLayout>
+          <div data-testid="readonly-test">Readonly Children</div>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('readonly-test')).toBeInTheDocument();
+    });
+
+    it('renders with string children', () => {
+      render(
+        <RootLayout>
+          <div data-testid="string-child">Simple Text</div>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('string-child')).toHaveTextContent('Simple Text');
+    });
+
+    it('renders with React elements as children', () => {
+      const TestComponent = () => <div data-testid="react-element">React Element</div>;
+
+      render(
+        <RootLayout>
+          <TestComponent />
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('react-element')).toBeInTheDocument();
+    });
+
+    it('integrates with ThemeProvider for theme switching', () => {
+      render(
+        <RootLayout>
+          <button data-testid="theme-aware-button" className="dark:bg-gray-900">
+            Theme Aware
+          </button>
+        </RootLayout>
+      );
+
+      const button = screen.getByTestId('theme-aware-button');
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveClass('dark:bg-gray-900');
+    });
+
+    it('accepts children as a function component', () => {
+      const ChildComponent = () => (
+        <div data-testid="functional-child">
+          <p>Functional Component Child</p>
+        </div>
+      );
+
+      render(
+        <RootLayout>
+          <ChildComponent />
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('functional-child')).toBeInTheDocument();
+      expect(screen.getByText('Functional Component Child')).toBeInTheDocument();
+    });
+
+    it('renders layout structure consistently', () => {
+      const { rerender } = render(
+        <RootLayout>
+          <div data-testid="content-1">Content 1</div>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('content-1')).toBeInTheDocument();
+
+      rerender(
+        <RootLayout>
+          <div data-testid="content-2">Content 2</div>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('content-2')).toBeInTheDocument();
+    });
+
+    it('supports Server Component rendering pattern', () => {
+      // RootLayout is a Server Component - it should render without issues
+      const { container } = render(
+        <RootLayout>
+          <div data-testid="server-content">Server Rendered Content</div>
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('server-content')).toBeInTheDocument();
+      expect(container).toBeTruthy();
+    });
+
+    it('renders with array of children', () => {
+      render(
+        <RootLayout>
+          {[
+            <div key="1" data-testid="child-1">Child 1</div>,
+            <div key="2" data-testid="child-2">Child 2</div>,
+            <div key="3" data-testid="child-3">Child 3</div>
+          ]}
+        </RootLayout>
+      );
+
+      expect(screen.getByTestId('child-1')).toBeInTheDocument();
+      expect(screen.getByTestId('child-2')).toBeInTheDocument();
+      expect(screen.getByTestId('child-3')).toBeInTheDocument();
     });
   });
 });

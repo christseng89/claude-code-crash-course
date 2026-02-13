@@ -23,13 +23,13 @@ export default function ThemeToggle() {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-full bg-gray-200 p-1 dark:bg-gray-800">
+    <div className="flex items-center gap-1 rounded-full bg-[#e8e6dc] p-1 dark:bg-[#141413]">
       <button
         onClick={() => setTheme("light")}
         className={`rounded-full p-2 transition-colors ${
           theme === "light"
-            ? "bg-white text-amber-500 shadow-sm dark:bg-gray-700"
-            : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+            ? "bg-[#faf9f5] text-[#d97757] shadow-sm"
+            : "text-[#b0aea5] hover:text-[#141413] dark:hover:text-[#faf9f5]"
         }`}
         aria-label="Light mode"
       >
@@ -39,8 +39,8 @@ export default function ThemeToggle() {
         onClick={() => setTheme("dark")}
         className={`rounded-full p-2 transition-colors ${
           theme === "dark"
-            ? "bg-gray-700 text-blue-400 shadow-sm"
-            : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+            ? "bg-[#141413] text-[#6a9bcc] shadow-sm"
+            : "text-[#b0aea5] hover:text-[#141413] dark:hover:text-[#faf9f5]"
         }`}
         aria-label="Dark mode"
       >
@@ -50,8 +50,8 @@ export default function ThemeToggle() {
         onClick={() => setTheme("system")}
         className={`rounded-full p-2 transition-colors ${
           theme === "system"
-            ? "bg-white text-purple-500 shadow-sm dark:bg-gray-700"
-            : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+            ? "bg-[#faf9f5] text-[#788c5d] shadow-sm dark:bg-[#141413]"
+            : "text-[#b0aea5] hover:text-[#141413] dark:hover:text-[#faf9f5]"
         }`}
         aria-label="System theme"
       >

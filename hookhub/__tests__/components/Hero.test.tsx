@@ -99,10 +99,10 @@ describe('Hero Component', () => {
       expect(header).toHaveClass('border-b');
     });
 
-    it('has semi-transparent white background (light mode)', () => {
+    it('has semi-transparent Anthropic light background', () => {
       const { container } = render(<Hero />);
       const header = container.querySelector('header');
-      expect(header).toHaveClass('bg-white/80');
+      expect(header).toHaveClass('bg-[#faf9f5]/80');
     });
 
     it('has backdrop blur effect', () => {
@@ -111,50 +111,49 @@ describe('Hero Component', () => {
       expect(header).toHaveClass('backdrop-blur-lg');
     });
 
-    it('has border color with opacity', () => {
+    it('has Anthropic border color', () => {
       const { container } = render(<Hero />);
       const header = container.querySelector('header');
-      expect(header).toHaveClass('border-gray-200/50');
+      expect(header).toHaveClass('border-[#e8e6dc]');
     });
 
     it('has dark mode background class', () => {
       const { container } = render(<Hero />);
       const header = container.querySelector('header');
-      expect(header).toHaveClass('dark:bg-gray-900/80');
+      expect(header).toHaveClass('dark:bg-[#141413]/80');
     });
 
     it('has dark mode border class', () => {
       const { container } = render(<Hero />);
       const header = container.querySelector('header');
-      expect(header).toHaveClass('dark:border-gray-800/50');
+      expect(header).toHaveClass('dark:border-[#b0aea5]/50');
     });
   });
 
   describe('Styling - Icon Container', () => {
     it('has rounded corners', () => {
       const { container } = render(<Hero />);
-      const iconContainer = container.querySelector('.rounded-xl.bg-gradient-to-br');
+      const iconContainer = container.querySelector('.rounded-xl.bg-\\[\\#d97757\\]');
       expect(iconContainer).toBeInTheDocument();
       expect(iconContainer).toHaveClass('rounded-xl');
     });
 
-    it('has gradient background from blue to purple', () => {
+    it('has Anthropic orange background', () => {
       const { container } = render(<Hero />);
-      const iconContainer = container.querySelector('.bg-gradient-to-br');
-      expect(iconContainer).toHaveClass('from-blue-500');
-      expect(iconContainer).toHaveClass('to-purple-600');
+      const iconContainer = container.querySelector('.bg-\\[\\#d97757\\]');
+      expect(iconContainer).toHaveClass('bg-[#d97757]');
     });
 
     it('has padding', () => {
       const { container } = render(<Hero />);
-      const iconContainer = container.querySelector('.bg-gradient-to-br');
+      const iconContainer = container.querySelector('.bg-\\[\\#d97757\\]');
       expect(iconContainer).toHaveClass('p-2.5');
     });
 
-    it('icon has white text color', () => {
+    it('icon has Anthropic light color', () => {
       const { container } = render(<Hero />);
       const svg = container.querySelector('svg');
-      expect(svg).toHaveClass('text-white');
+      expect(svg).toHaveClass('text-[#faf9f5]');
     });
 
     it('icon has correct size', () => {
@@ -184,26 +183,16 @@ describe('Hero Component', () => {
       expect(title).toHaveClass('tracking-tight');
     });
 
-    it('title has gradient background clip', () => {
+    it('title has Anthropic dark color (light mode)', () => {
       render(<Hero />);
       const title = screen.getByText('HookHub');
-      expect(title).toHaveClass('bg-gradient-to-r');
-      expect(title).toHaveClass('bg-clip-text');
-      expect(title).toHaveClass('text-transparent');
+      expect(title).toHaveClass('text-[#141413]');
     });
 
-    it('title has correct gradient colors (light mode)', () => {
+    it('title has Anthropic light color (dark mode)', () => {
       render(<Hero />);
       const title = screen.getByText('HookHub');
-      expect(title).toHaveClass('from-gray-900');
-      expect(title).toHaveClass('to-gray-600');
-    });
-
-    it('title has dark mode gradient colors', () => {
-      render(<Hero />);
-      const title = screen.getByText('HookHub');
-      expect(title).toHaveClass('dark:from-white');
-      expect(title).toHaveClass('dark:to-gray-400');
+      expect(title).toHaveClass('dark:text-[#faf9f5]');
     });
 
     it('tagline has small font size', () => {
@@ -212,16 +201,16 @@ describe('Hero Component', () => {
       expect(tagline).toHaveClass('text-sm');
     });
 
-    it('tagline has gray color (light mode)', () => {
+    it('tagline has Anthropic mid-gray color', () => {
       render(<Hero />);
       const tagline = screen.getByText('Discover Claude Code hooks');
-      expect(tagline).toHaveClass('text-gray-600');
+      expect(tagline).toHaveClass('text-[#b0aea5]');
     });
 
-    it('tagline has dark mode color', () => {
+    it('tagline has same color in dark mode', () => {
       render(<Hero />);
       const tagline = screen.getByText('Discover Claude Code hooks');
-      expect(tagline).toHaveClass('dark:text-gray-400');
+      expect(tagline).toHaveClass('dark:text-[#b0aea5]');
     });
   });
 
@@ -317,13 +306,12 @@ describe('Hero Component', () => {
   });
 
   describe('Visual Consistency', () => {
-    it('maintains brand color scheme', () => {
+    it('maintains Anthropic brand color scheme', () => {
       const { container } = render(<Hero />);
-      const iconContainer = container.querySelector('.bg-gradient-to-br');
+      const iconContainer = container.querySelector('.bg-\\[\\#d97757\\]');
 
-      // Brand gradient: blue-500 to purple-600
-      expect(iconContainer).toHaveClass('from-blue-500');
-      expect(iconContainer).toHaveClass('to-purple-600');
+      // Anthropic orange accent
+      expect(iconContainer).toHaveClass('bg-[#d97757]');
     });
 
     it('uses consistent max-width with application', () => {
@@ -388,11 +376,11 @@ describe('Hero Component', () => {
 
       const requiredClasses = [
         'border-b',
-        'border-gray-200/50',
-        'bg-white/80',
+        'border-[#e8e6dc]',
+        'bg-[#faf9f5]/80',
         'backdrop-blur-lg',
-        'dark:border-gray-800/50',
-        'dark:bg-gray-900/80'
+        'dark:border-[#b0aea5]/50',
+        'dark:bg-[#141413]/80'
       ];
 
       requiredClasses.forEach(className => {
@@ -400,7 +388,7 @@ describe('Hero Component', () => {
       });
     });
 
-    it('title has all gradient text classes', () => {
+    it('title has all required text classes', () => {
       render(<Hero />);
       const title = screen.getByText('HookHub');
 
@@ -408,13 +396,8 @@ describe('Hero Component', () => {
         'text-3xl',
         'font-bold',
         'tracking-tight',
-        'bg-gradient-to-r',
-        'from-gray-900',
-        'to-gray-600',
-        'bg-clip-text',
-        'text-transparent',
-        'dark:from-white',
-        'dark:to-gray-400'
+        'text-[#141413]',
+        'dark:text-[#faf9f5]'
       ];
 
       requiredClasses.forEach(className => {
@@ -424,14 +407,13 @@ describe('Hero Component', () => {
 
     it('icon container has all required classes', () => {
       const { container } = render(<Hero />);
-      const iconContainer = container.querySelector('.rounded-xl.bg-gradient-to-br');
+      const iconContainer = container.querySelector('.rounded-xl.bg-\\[\\#d97757\\]');
 
       const requiredClasses = [
         'rounded-xl',
-        'bg-gradient-to-br',
-        'from-blue-500',
-        'to-purple-600',
-        'p-2.5'
+        'bg-[#d97757]',
+        'p-2.5',
+        'shadow-sm'
       ];
 
       requiredClasses.forEach(className => {

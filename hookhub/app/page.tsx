@@ -7,7 +7,7 @@ export default function Home() {
   const hooks = hooksData.hooks as Hook[];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-950 dark:via-blue-950 dark:to-purple-950">
+    <div className="min-h-screen bg-gradient-to-br from-[#faf9f5] via-[#e8e6dc] to-[#d97757]/10 dark:from-[#141413] dark:via-[#141413] dark:to-[#d97757]/5">
       <Hero />
 
       {/* Main Content */}
@@ -16,9 +16,9 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200/50 bg-white/50 backdrop-blur-sm dark:border-gray-800/50 dark:bg-gray-900/50 mt-16">
+      <footer className="border-t border-[#e8e6dc] bg-[#faf9f5]/50 backdrop-blur-sm dark:border-[#b0aea5]/50 dark:bg-[#141413]/50 mt-16">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-center text-sm text-[#b0aea5]">
             Built for the Claude Code community
           </p>
         </div>
