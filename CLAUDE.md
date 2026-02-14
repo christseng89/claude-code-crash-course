@@ -23,11 +23,16 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 - `README-6AdvancedWorkflow.md` - Plan mode and complex workflows
 - `README-7Subagents.md` - Creating and using specialized subagents
 - `README-8OutputStyles.md` - Output formatting and statusline customization
+- `README-9Skills.md` - Skills fundamentals, marketplace plugins, and progressive disclosure
 - `RAG-architecture.md` - RAG pipeline architecture diagrams
 - `RAG-Flow-Diagram.md` - Detailed RAG flow with decision points
 - `ComplianceCheckGuidance.md` - Banking compliance check procedures (enterprise use case)
 - `HooksMarketplaceSpecV2.1.md` - Complete HookHub application specification
 - `GITHUB-MCP-SETUP.md` - GitHub MCP server setup guide
+
+**Educational Resources:**
+- `Agent Skills Overview1-6.webp` - Visual guides to agent skills system (6 images)
+- `resources/` - Video tutorials and technical documentation (gitignored, contains mp4 files and advanced README files)
 
 ## Getting Started
 
@@ -80,7 +85,14 @@ claude --mcp-config .mcp.json.verbose
 - `.env`, `.env.local` - Environment variables (secrets and tokens)
 - `.venv` - Python virtual environment
 - `nul` - Windows null device output file
-- `resources/` - Large resource files (documentation, images)
+- `resources/` - Educational video tutorials and advanced technical documentation (gitignored due to large mp4 files)
+
+**About resources/ directory:**
+Contains supplementary learning materials not tracked in git:
+- Video tutorials on context engineering, git integration, Claude Code commands
+- Technical documentation (SWIFT, Kafka, JMS integration examples)
+- Advanced architecture guides
+This directory exists locally for reference but is excluded from version control to keep repository size manageable.
 
 When working in this repository, respect these ignore patterns and avoid committing these files.
 
@@ -215,11 +227,11 @@ git checkout main
 - `my-app/` - Tutorial Next.js app (basic App Router patterns)
 - `context-engineering-mcp/` - MCP integration examples with fine-grained config
 - `examples/` - Advanced patterns (context-switch.sh)
-- Root-level README files - Numbered learning documentation (README-1.md through README-8.md)
+- Root-level README files - Numbered learning documentation (README-1.md through README-9.md)
 - Python examples - `fibonacci.py`, `text_processor.py`
 - RAG documentation - Architecture diagrams and flow charts
 - `.mcp.json` - MCP server configurations
-- `start-claude.ps1` - PowerShell launcher with environment setup
+- `.hintrc` - Webhint configuration for accessibility testing (WCAG compliance)
 
 **Note:** Modify `settings.local.json` for your personal configuration. The `settings.json` file contains project-wide defaults that are committed to git.
 
@@ -263,35 +275,52 @@ Each branch is self-contained with chronological commits. Use `git log --oneline
 - Example: `/git-commit`
 
 **Available on Main Branch:**
-- **Commands**:
+- **Commands** (`.claude/commands/*.md`):
   - `commit-code` - Automated commit message generation
   - `dad-joke` - Generate programming-related dad jokes
   - `infinite` - Infinite agentic loop (experimental)
-- **Skills**:
+- **Project Skills** (`.claude/skills/*/SKILL.md`):
   - `explain-code` - Visual code explanations with diagrams
   - `git-commit` - Interactive commit workflow
-- **Agents**:
+  - `git-pushing` - Stage, commit, and push with conventional commits
+- **Project Agents** (`.claude/agents/*.md`):
   - `code-reviewer` - Quality, security, and maintainability review
   - `code-roast-reviewer` - Humorous code critique
   - `debugger` - Error and test failure handler
   - `mermaid-diagram-generator` - Diagram generation
   - `performance-optimizer` - Performance analysis
   - `test-runner` - Automated testing
-- **Output Styles**:
+- **Output Styles** (`.claude/output-styles/*/STYLE.md`):
   - `retro-ascii-blog` - ASCII art formatting
   - `yaml-concise` - Compact YAML output
 
+**Enabled Plugin Skills** (via `settings.json`):
+The majority of available skills come from installed marketplace plugins:
+- `example-skills@anthropic-agent-skills` - Official Anthropic skills (pdf, docx, pptx, xlsx, frontend-design, etc.)
+- `engineering-workflow-skills@mhattingpete-claude-skills` - Git workflows, PR creation, feature planning
+- `visual-documentation-skills@mhattingpete-claude-skills` - Architecture diagrams, flowcharts, timelines
+- `code-operations-skills@mhattingpete-claude-skills` - Code execution, refactoring, file operations
+- `productivity-skills@mhattingpete-claude-skills` - Code auditing, documentation generation, conversation analysis
+- `feature-dev@claude-code-plugins` - Feature development agents
+- `code-review@claude-code-plugins` - Code review capabilities
+- `security-guidance@claude-code-plugins` - Security analysis
+- `learning-output-style@claude-code-plugins` - Educational output formatting
+
+Use `/skills` to see all available skills. Plugin skills use the format `plugin-name:skill-name` (e.g., `/pdf`, `/docx`).
+
 ## MCP Server Configuration
 
-**Enabled Servers** (see `.mcp.json`):
+The `.mcp.json` file defines available MCP servers. To enable/disable servers, configure `enabledMcpjsonServers` in `settings.local.json`.
+
+**Configured Servers** (in `.mcp.json`):
 - **github** - GitHub API integration (requires `.env` with `GITHUB_PERSONAL_ACCESS_TOKEN`)
 - **playwright** - Microsoft Playwright browser automation and screenshots
 - **context7** - Context7 HTTP-based MCP server for documentation queries (`https://mcp.context7.com/mcp`)
 - **verbose-server** (development) - HTTP-based verbose MCP server for debugging (`http://127.0.0.1:8000/mcp`)
-
-**Other Available Servers** (configured but not enabled by default):
 - **puppeteer-mcp-server** - Browser automation via Puppeteer (alternative to Playwright)
 - **sequential-thinking** - Step-by-step reasoning for complex problem-solving
+
+**Note:** Only `context7` and `sequential-thinking` are enabled by default in the current configuration. Enable others by adding them to `settings.local.json`.
 
 **Environment Setup for MCP Servers:**
 
@@ -562,6 +591,44 @@ funny review @fibonacci.py
 - Return condensed results to main agent
 
 See [README-7Subagents.md](README-7Subagents.md) for agent orchestration patterns and hierarchy examples.
+
+## Plugin Architecture
+
+Claude Code uses a plugin system to extend functionality. Plugins are configured in `.claude/settings.json`:
+
+**Plugin Sources:**
+- **@claude-code-plugins** - Official Claude Code plugins
+- **@anthropic-agent-skills** - Anthropic's open-source skill library
+- **@mhattingpete-claude-skills** - Community marketplace plugins
+
+**Installing Plugins:**
+```bash
+claude
+/plugin marketplace add anthropics/skills     # Official Anthropic skills
+/plugin marketplace add mhattingpete/claude-skills  # Community plugins
+/plugin                                        # View and manage installed plugins
+```
+
+**Progressive Disclosure Pattern:**
+Skills use a three-layer loading strategy to conserve context tokens:
+1. **Layer 1**: Only skill name and description preloaded in system prompt
+2. **Layer 2**: Full SKILL.md loaded when Claude determines relevance
+3. **Layer 3**: Additional reference files loaded only when needed
+
+This design prevents context window bloat while maintaining fast skill discovery.
+
+## Accessibility Testing
+
+The `.hintrc` file configures webhint for accessibility testing:
+- Extends the "development" ruleset
+- Disables `aria-valid-attr-value` check (intentionally, for dynamic React attributes)
+- Used for WCAG 2.1 AA compliance verification in HookHub project
+
+Run accessibility checks:
+```bash
+npx hint .                    # Check entire project
+npx hint hookhub/app         # Check specific directory
+```
 
 ## Testing Approach
 
