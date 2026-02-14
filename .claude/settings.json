@@ -4,6 +4,10 @@
     "code-review@claude-code-plugins": true,
     "learning-output-style@claude-code-plugins": true,
     "example-skills@anthropic-agent-skills": true,
-    "security-guidance@claude-code-plugins": true
+    "security-guidance@claude-code-plugins": true,
+    "engineering-workflow-skills@mhattingpete-claude-skills": true,
+    "visual-documentation-skills@mhattingpete-claude-skills": true,
+    "code-operations-skills@mhattingpete-claude-skills": true,
+    "productivity-skills@mhattingpete-claude-skills": true
   }
 }

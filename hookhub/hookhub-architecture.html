@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HookHub - Architecture Overview</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #2d3748;
+      background: #f7fafc;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 60px 40px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    header p {
+      font-size: 1.2em;
+      opacity: 0.95;
+    }
+
+    .section {
+      background: white;
+      padding: 40px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .section h2 {
+      color: #667eea;
+      font-size: 2em;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .section h3 {
+      color: #4a5568;
+      font-size: 1.5em;
+      margin: 25px 0 15px 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .card {
+      background: #f7fafc;
+      padding: 25px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .card h4 {
+      color: #2d3748;
+      margin-bottom: 12px;
+      font-size: 1.2em;
+    }
+
+    .card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card li {
+      padding: 8px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .card li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    svg {
+      max-width: 100%;
+      height: auto;
+      margin: 30px 0;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .tech-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .phase-indicator {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85em;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    .phase-current {
+      background: #48bb78;
+      color: white;
+    }
+
+    .phase-planned {
+      background: #ed8936;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    .metric {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .metric-value {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .metric-label {
+      color: #718096;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    code {
+      background: #edf2f7;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9em;
+    }
+
+    .warning-box {
+      background: #fff5e6;
+      border-left: 4px solid #ed8936;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 6px;
+    }
+
+    .info-box {
+      background: #e6f7ff;
+      border-left: 4px solid #4299e1;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 6px;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      .section {
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎣 HookHub Architecture</h1>
+      <p>Community-Driven Marketplace for Claude Code Hooks</p>
+    </header>
+
+    <!-- Business Context -->
+    <section class="section">
+      <h2>📊 Business Context</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h4>🎯 Objectives</h4>
+          <ul>
+            <li>Community-driven hook marketplace</li>
+            <li>Streamline hook discovery and installation</li>
+            <li>Enable quality assessment and ratings</li>
+            <li>Foster Claude Code ecosystem growth</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>👥 Target Users</h4>
+          <ul>
+            <li>Claude Code developers</li>
+            <li>Hook creators and maintainers</li>
+            <li>Enterprise teams standardizing workflows</li>
+            <li>Open source contributors</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>💎 Value Proposition</h4>
+          <ul>
+            <li>Centralized hook repository</li>
+            <li>Verified quality and security</li>
+            <li>Live GitHub integration</li>
+            <li>Community-driven ratings</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 30px;">
+        <div class="metric">
+          <div class="metric-value">22+</div>
+          <div class="metric-label">Hooks Available</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">13</div>
+          <div class="metric-label">Hook Categories</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">90%</div>
+          <div class="metric-label">Test Coverage</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">3</div>
+          <div class="metric-label">Development Phases</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Flow Diagrams -->
+    <section class="section">
+      <h2>🔄 Data Flow Architecture</h2>
+
+      <h3>Current Flow (Phase 1 - MVP Enhanced) <span class="phase-indicator phase-current">ACTIVE</span></h3>
+
+      <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#4a5568" />
+          </marker>
+          <filter id="shadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+          </filter>
+        </defs>
+
+        <!-- Data Source -->
+        <rect x="50" y="100" width="180" height="200" rx="8" fill="#4299e1" filter="url(#shadow)"/>
+        <text x="140" y="140" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Data Source</text>
+        <text x="140" y="170" text-anchor="middle" fill="white" font-size="13">hooks.json</text>
+        <text x="140" y="195" text-anchor="middle" fill="white" font-size="12">• 22 hooks</text>
+        <text x="140" y="215" text-anchor="middle" fill="white" font-size="12">• Full metadata</text>
+        <text x="140" y="235" text-anchor="middle" fill="white" font-size="12">• GitHub stats</text>
+        <text x="140" y="255" text-anchor="middle" fill="white" font-size="12">• Quality metrics</text>
+
+        <!-- Arrow 1 -->
+        <path d="M230,200 L310,200" stroke="#4a5568" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="270" y="190" text-anchor="middle" fill="#4a5568" font-size="12">SSR Load</text>
+
+        <!-- Server Component -->
+        <rect x="310" y="120" width="180" height="160" rx="8" fill="#9f7aea" filter="url(#shadow)"/>
+        <text x="400" y="155" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Server Component</text>
+        <text x="400" y="180" text-anchor="middle" fill="white" font-size="13">page.tsx</text>
+        <text x="400" y="205" text-anchor="middle" fill="white" font-size="12">• Import JSON</text>
+        <text x="400" y="225" text-anchor="middle" fill="white" font-size="12">• Type cast</text>
+        <text x="400" y="245" text-anchor="middle" fill="white" font-size="12">• Pass to client</text>
+
+        <!-- Arrow 2 -->
+        <path d="M490,200 L570,200" stroke="#4a5568" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="530" y="190" text-anchor="middle" fill="#4a5568" font-size="12">Props</text>
+
+        <!-- Client Component -->
+        <rect x="570" y="80" width="180" height="240" rx="8" fill="#ed8936" filter="url(#shadow)"/>
+        <text x="660" y="115" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Client Component</text>
+        <text x="660" y="140" text-anchor="middle" fill="white" font-size="13">HookGrid</text>
+        <text x="660" y="165" text-anchor="middle" fill="white" font-size="12">• useState filters</text>
+        <text x="660" y="185" text-anchor="middle" fill="white" font-size="12">• useMemo filtering</text>
+        <text x="660" y="205" text-anchor="middle" fill="white" font-size="12">• SearchBar</text>
+        <text x="660" y="225" text-anchor="middle" fill="white" font-size="12">• CategoryFilter</text>
+        <text x="660" y="245" text-anchor="middle" fill="white" font-size="12">• Instant updates</text>
+        <text x="660" y="265" text-anchor="middle" fill="white" font-size="12">• No API calls</text>
+
+        <!-- Arrow 3 -->
+        <path d="M750,200 L830,200" stroke="#4a5568" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="790" y="190" text-anchor="middle" fill="#4a5568" font-size="12">Render</text>
+
+        <!-- UI Output -->
+        <rect x="830" y="100" width="180" height="200" rx="8" fill="#48bb78" filter="url(#shadow)"/>
+        <text x="920" y="140" text-anchor="middle" fill="white" font-size="16" font-weight="bold">UI Output</text>
+        <text x="920" y="165" text-anchor="middle" fill="white" font-size="13">HookCard Grid</text>
+        <text x="920" y="190" text-anchor="middle" fill="white" font-size="12">• Responsive layout</text>
+        <text x="920" y="210" text-anchor="middle" fill="white" font-size="12">• Dark mode</text>
+        <text x="920" y="230" text-anchor="middle" fill="white" font-size="12">• Quality badges</text>
+        <text x="920" y="250" text-anchor="middle" fill="white" font-size="12">• Interactive cards</text>
+
+        <!-- User interaction feedback loop -->
+        <path d="M920,320 L920,340 L660,340 L660,320" stroke="#667eea" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)" fill="none"/>
+        <text x="790" y="360" text-anchor="middle" fill="#667eea" font-size="12">User Interaction (Filter/Search)</text>
+      </svg>
+
+      <h3>Planned Flow (Phase 2-3 - Full Stack) <span class="phase-indicator phase-planned">ROADMAP</span></h3>
+
+      <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- PostgreSQL -->
+        <rect x="30" y="150" width="140" height="180" rx="8" fill="#336791" filter="url(#shadow)"/>
+        <text x="100" y="180" text-anchor="middle" fill="white" font-size="14" font-weight="bold">PostgreSQL</text>
+        <text x="100" y="205" text-anchor="middle" fill="white" font-size="11">• Hooks table</text>
+        <text x="100" y="225" text-anchor="middle" fill="white" font-size="11">• Users table</text>
+        <text x="100" y="245" text-anchor="middle" fill="white" font-size="11">• Reviews</text>
+        <text x="100" y="265" text-anchor="middle" fill="white" font-size="11">• Installations</text>
+        <text x="100" y="285" text-anchor="middle" fill="white" font-size="11">• Prisma ORM</text>
+
+        <!-- Arrow to API -->
+        <path d="M170,240 L230,240" stroke="#4a5568" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+        <!-- API Routes -->
+        <rect x="230" y="50" width="160" height="380" rx="8" fill="#9f7aea" filter="url(#shadow)"/>
+        <text x="310" y="80" text-anchor="middle" fill="white" font-size="14" font-weight="bold">API Routes</text>
+
+        <rect x="245" y="95" width="130" height="40" rx="4" fill="#7c3aed"/>
+        <text x="310" y="120" text-anchor="middle" fill="white" font-size="11">/api/hooks</text>
+
+        <rect x="245" y="145" width="130" height="40" rx="4" fill="#7c3aed"/>
+        <text x="310" y="170" text-anchor="middle" fill="white" font-size="11">/api/hooks/[id]</text>
+
+        <rect x="245" y="195" width="130" height="40" rx="4" fill="#7c3aed"/>
+        <text x="310" y="220" text-anchor="middle" fill="white" font-size="11">/api/search</text>
+
+        <rect x="245" y="245" width="130" height="40" rx="4" fill="#7c3aed"/>
+        <text x="310" y="270" text-anchor="middle" fill="white" font-size="11">/api/auth/[...]</text>
+
+        <rect x="245" y="295" width="130" height="40" rx="4" fill="#7c3aed"/>
+        <text x="310" y="320" text-anchor="middle" fill="white" font-size="11">/api/reviews</text>
+
+        <rect x="245" y="345" width="130" height="40" rx="4" fill="#7c3aed"/>
+        <text x="310" y="370" text-anchor="middle" fill="white" font-size="11">/api/submit</text>
+
+        <!-- Redis Cache -->
+        <rect x="230" y="450" width="160" height="30" rx="4" fill="#dc2626"/>
+        <text x="310" y="470" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Redis Cache Layer</text>
+
+        <!-- Arrow to Server Components -->
+        <path d="M390,240 L450,240" stroke="#4a5568" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <text x="420" y="230" text-anchor="middle" fill="#4a5568" font-size="10">SSR</text>
+
+        <!-- Server Components -->
+        <rect x="450" y="140" width="150" height="200" rx="8" fill="#ed8936" filter="url(#shadow)"/>
+        <text x="525" y="170" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Server</text>
+        <text x="525" y="188" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Components</text>
+        <text x="525" y="215" text-anchor="middle" fill="white" font-size="11">• page.tsx</text>
+        <text x="525" y="235" text-anchor="middle" fill="white" font-size="11">• hooks/[id]</text>
+        <text x="525" y="255" text-anchor="middle" fill="white" font-size="11">• Fetch data</text>
+        <text x="525" y="275" text-anchor="middle" fill="white" font-size="11">• SEO ready</text>
+        <text x="525" y="295" text-anchor="middle" fill="white" font-size="11">• Suspense</text>
+
+        <!-- Arrow to Client -->
+        <path d="M600,240 L660,240" stroke="#4a5568" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <text x="630" y="230" text-anchor="middle" fill="#4a5568" font-size="10">Props</text>
+
+        <!-- Client Components -->
+        <rect x="660" y="100" width="150" height="280" rx="8" fill="#4299e1" filter="url(#shadow)"/>
+        <text x="735" y="130" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Client</text>
+        <text x="735" y="148" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Components</text>
+        <text x="735" y="175" text-anchor="middle" fill="white" font-size="11">• HookGrid</text>
+        <text x="735" y="195" text-anchor="middle" fill="white" font-size="11">• SearchBar</text>
+        <text x="735" y="215" text-anchor="middle" fill="white" font-size="11">• Filters</text>
+        <text x="735" y="235" text-anchor="middle" fill="white" font-size="11">• Zustand store</text>
+        <text x="735" y="255" text-anchor="middle" fill="white" font-size="11">• Theme toggle</text>
+        <text x="735" y="275" text-anchor="middle" fill="white" font-size="11">• Reviews UI</text>
+        <text x="735" y="295" text-anchor="middle" fill="white" font-size="11">• Auth modals</text>
+
+        <!-- Arrow to UI -->
+        <path d="M810,240 L870,240" stroke="#4a5568" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+        <!-- UI Output -->
+        <rect x="870" y="140" width="150" height="200" rx="8" fill="#48bb78" filter="url(#shadow)"/>
+        <text x="945" y="175" text-anchor="middle" fill="white" font-size="14" font-weight="bold">User Interface</text>
+        <text x="945" y="205" text-anchor="middle" fill="white" font-size="11">• Responsive</text>
+        <text x="945" y="225" text-anchor="middle" fill="white" font-size="11">• Accessible</text>
+        <text x="945" y="245" text-anchor="middle" fill="white" font-size="11">• Dark mode</text>
+        <text x="945" y="265" text-anchor="middle" fill="white" font-size="11">• Real-time</text>
+        <text x="945" y="285" text-anchor="middle" fill="white" font-size="11">• Interactive</text>
+
+        <!-- Background Jobs -->
+        <rect x="50" y="10" width="140" height="100" rx="8" fill="#f59e0b" filter="url(#shadow)"/>
+        <text x="120" y="35" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Bull Queue</text>
+        <text x="120" y="55" text-anchor="middle" fill="white" font-size="10">• GitHub sync</text>
+        <text x="120" y="72" text-anchor="middle" fill="white" font-size="10">• Validation</text>
+        <text x="120" y="89" text-anchor="middle" fill="white" font-size="10">• Analytics</text>
+
+        <!-- GitHub Integration -->
+        <rect x="1050" y="10" width="130" height="100" rx="8" fill="#24292e" filter="url(#shadow)"/>
+        <text x="1115" y="35" text-anchor="middle" fill="white" font-size="13" font-weight="bold">GitHub API</text>
+        <text x="1115" y="55" text-anchor="middle" fill="white" font-size="10">• OAuth</text>
+        <text x="1115" y="72" text-anchor="middle" fill="white" font-size="10">• Live stats</text>
+        <text x="1115" y="89" text-anchor="middle" fill="white" font-size="10">• Webhooks</text>
+
+        <!-- MeiliSearch -->
+        <rect x="1050" y="380" width="130" height="100" rx="8" fill="#ff5caa" filter="url(#shadow)"/>
+        <text x="1115" y="410" text-anchor="middle" fill="white" font-size="13" font-weight="bold">MeiliSearch</text>
+        <text x="1115" y="430" text-anchor="middle" fill="white" font-size="10">• Fuzzy search</text>
+        <text x="1115" y="447" text-anchor="middle" fill="white" font-size="10">• Filters</text>
+        <text x="1115" y="464" text-anchor="middle" fill="white" font-size="10">• Ranking</text>
+
+        <!-- Connections -->
+        <path d="M120,110 L100,150" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+        <path d="M310,50 L1050,60" stroke="#24292e" stroke-width="2" stroke-dasharray="4,4"/>
+        <path d="M310,430 L1050,430" stroke="#ff5caa" stroke-width="2" stroke-dasharray="4,4"/>
+
+        <!-- User interaction loop -->
+        <path d="M945,360 L945,400 L735,400 L735,380" stroke="#667eea" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)" fill="none"/>
+        <text x="840" y="420" text-anchor="middle" fill="#667eea" font-size="11">User Actions → API Calls</text>
+      </svg>
+    </section>
+
+    <!-- System Architecture -->
+    <section class="section">
+      <h2>🏗️ System Architecture</h2>
+
+      <h3>Component Hierarchy</h3>
+
+      <div class="info-box">
+        <strong>Server Component Strategy:</strong> Next.js App Router uses Server Components by default for optimal performance and SEO. Client Components (marked with <code>"use client"</code>) are used only for interactive UI elements that require state management.
+      </div>
+
+      <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- Root Layout -->
+        <rect x="350" y="20" width="300" height="80" rx="8" fill="#667eea" filter="url(#shadow)"/>
+        <text x="500" y="50" text-anchor="middle" fill="white" font-size="16" font-weight="bold">app/layout.tsx</text>
+        <text x="500" y="75" text-anchor="middle" fill="white" font-size="12">(Root Layout - Server Component)</text>
+
+        <!-- Arrow down -->
+        <path d="M500,100 L500,140" stroke="#4a5568" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <!-- Page Component -->
+        <rect x="350" y="140" width="300" height="100" rx="8" fill="#9f7aea" filter="url(#shadow)"/>
+        <text x="500" y="170" text-anchor="middle" fill="white" font-size="16" font-weight="bold">app/page.tsx</text>
+        <text x="500" y="195" text-anchor="middle" fill="white" font-size="13">(Server Component)</text>
+        <text x="500" y="215" text-anchor="middle" fill="white" font-size="11">Loads hooks.json → Pass to HookGrid</text>
+
+        <!-- Arrow down to HookGrid -->
+        <path d="M500,240 L500,280" stroke="#4a5568" stroke-width="3" marker-end="url(#arrow)"/>
+
+        <!-- HookGrid -->
+        <rect x="350" y="280" width="300" height="120" rx="8" fill="#ed8936" filter="url(#shadow)"/>
+        <text x="500" y="310" text-anchor="middle" fill="white" font-size="16" font-weight="bold">HookGrid</text>
+        <text x="500" y="335" text-anchor="middle" fill="white" font-size="13">("use client" - Client Component)</text>
+        <text x="500" y="360" text-anchor="middle" fill="white" font-size="11">useState: selectedCategory, searchQuery</text>
+        <text x="500" y="380" text-anchor="middle" fill="white" font-size="11">useMemo: filter hooks by category & search</text>
+
+        <!-- Arrows to child components -->
+        <path d="M400,400 L200,460" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M500,400 L500,460" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M600,400 L800,460" stroke="#4a5568" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- SearchBar -->
+        <rect x="50" y="460" width="200" height="90" rx="8" fill="#4299e1" filter="url(#shadow)"/>
+        <text x="150" y="490" text-anchor="middle" fill="white" font-size="14" font-weight="bold">SearchBar</text>
+        <text x="150" y="513" text-anchor="middle" fill="white" font-size="11">(Client Component)</text>
+        <text x="150" y="533" text-anchor="middle" fill="white" font-size="10">onChange → setSearchQuery</text>
+
+        <!-- CategoryFilter -->
+        <rect x="300" y="460" width="200" height="90" rx="8" fill="#4299e1" filter="url(#shadow)"/>
+        <text x="400" y="490" text-anchor="middle" fill="white" font-size="14" font-weight="bold">CategoryFilter</text>
+        <text x="400" y="513" text-anchor="middle" fill="white" font-size="11">(Client Component)</text>
+        <text x="400" y="533" text-anchor="middle" fill="white" font-size="10">onClick → setSelectedCategory</text>
+
+        <!-- HookCard Array -->
+        <rect x="700" y="460" width="200" height="90" rx="8" fill="#48bb78" filter="url(#shadow)"/>
+        <text x="800" y="490" text-anchor="middle" fill="white" font-size="14" font-weight="bold">HookCard[]</text>
+        <text x="800" y="513" text-anchor="middle" fill="white" font-size="11">(Presentational)</text>
+        <text x="800" y="533" text-anchor="middle" fill="white" font-size="10">Map filtered hooks</text>
+      </svg>
+
+      <h3>Technology Stack</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Current (Phase 1)</th>
+            <th>Planned (Phase 2-3)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Frontend Framework</strong></td>
+            <td>Next.js 16.1.6 (App Router), React 19.2.3</td>
+            <td>Same + Suspense boundaries</td>
+          </tr>
+          <tr>
+            <td><strong>Language</strong></td>
+            <td>TypeScript 5</td>
+            <td>TypeScript 5</td>
+          </tr>
+          <tr>
+            <td><strong>Styling</strong></td>
+            <td>Tailwind CSS 4, next-themes</td>
+            <td>Same</td>
+          </tr>
+          <tr>
+            <td><strong>State Management</strong></td>
+            <td>Zustand 5.0.11 (client state)</td>
+            <td>Zustand + Server state caching</td>
+          </tr>
+          <tr>
+            <td><strong>UI Components</strong></td>
+            <td>Radix UI, lucide-react</td>
+            <td>Same + additional primitives</td>
+          </tr>
+          <tr>
+            <td><strong>Data Storage</strong></td>
+            <td>Static JSON (hooks.json)</td>
+            <td>PostgreSQL + Prisma ORM</td>
+          </tr>
+          <tr>
+            <td><strong>Caching</strong></td>
+            <td>Browser cache only</td>
+            <td>Redis Cloud (hook data, search results)</td>
+          </tr>
+          <tr>
+            <td><strong>Search</strong></td>
+            <td>Client-side filter (useMemo)</td>
+            <td>MeiliSearch (fuzzy, ranked)</td>
+          </tr>
+          <tr>
+            <td><strong>Authentication</strong></td>
+            <td>None</td>
+            <td>NextAuth.js + GitHub OAuth</td>
+          </tr>
+          <tr>
+            <td><strong>API Integration</strong></td>
+            <td>None</td>
+            <td>@octokit/rest (GitHub API)</td>
+          </tr>
+          <tr>
+            <td><strong>Background Jobs</strong></td>
+            <td>None</td>
+            <td>Bull queue (sync, validation)</td>
+          </tr>
+          <tr>
+            <td><strong>Testing</strong></td>
+            <td>Jest + React Testing Library</td>
+            <td>Same + Playwright E2E</td>
+          </tr>
+          <tr>
+            <td><strong>Monitoring</strong></td>
+            <td>None</td>
+            <td>Sentry + Pino logging</td>
+          </tr>
+          <tr>
+            <td><strong>Deployment</strong></td>
+            <td>Vercel (static)</td>
+            <td>Vercel (SSR + API routes)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tech-stack">
+        <span class="tech-badge">Next.js 16.1.6</span>
+        <span class="tech-badge">React 19.2.3</span>
+        <span class="tech-badge">TypeScript 5</span>
+        <span class="tech-badge">Tailwind CSS 4</span>
+        <span class="tech-badge">Zustand 5.0.11</span>
+        <span class="tech-badge">Radix UI</span>
+        <span class="tech-badge">Jest</span>
+        <span class="tech-badge">PostgreSQL (Planned)</span>
+        <span class="tech-badge">Redis (Planned)</span>
+        <span class="tech-badge">MeiliSearch (Planned)</span>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section">
+      <h2>✨ Features & Capabilities</h2>
+
+      <h3>Current Features (Phase 1) <span class="phase-indicator phase-current">LIVE</span></h3>
+
+      <div class="grid">
+        <div class="card">
+          <h4>🔍 Browse & Discover</h4>
+          <ul>
+            <li>22+ hooks with rich metadata</li>
+            <li>13 hook categories</li>
+            <li>GitHub stars, forks, issues</li>
+            <li>Author reputation scores</li>
+            <li>Quality badges</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>🎯 Filter & Search</h4>
+          <ul>
+            <li>Real-time category filtering</li>
+            <li>Multi-field search</li>
+            <li>Instant results (useMemo)</li>
+            <li>No API latency</li>
+            <li>Responsive grid layout</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>🎨 User Experience</h4>
+          <ul>
+            <li>Dark mode support</li>
+            <li>Responsive design (1-3 cols)</li>
+            <li>Accessible UI (WCAG 2.1 AA)</li>
+            <li>Category color coding</li>
+            <li>Hover states & animations</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>📊 Hook Metadata</h4>
+          <ul>
+            <li>Version tracking</li>
+            <li>Platform compatibility</li>
+            <li>Dependencies list</li>
+            <li>Documentation scores</li>
+            <li>Security audit status</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Planned Features (Phase 2-3) <span class="phase-indicator phase-planned">ROADMAP</span></h3>
+
+      <div class="grid">
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🔐 Authentication & Users</h4>
+          <ul>
+            <li>GitHub OAuth login</li>
+            <li>User profiles</li>
+            <li>Hook ownership</li>
+            <li>Favorite hooks</li>
+            <li>Installation history</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>📝 Submissions & Reviews</h4>
+          <ul>
+            <li>Submit new hooks</li>
+            <li>Automated validation</li>
+            <li>Rating system (1-5 stars)</li>
+            <li>Written reviews</li>
+            <li>Community voting</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🔎 Advanced Search</h4>
+          <ul>
+            <li>MeiliSearch integration</li>
+            <li>Fuzzy matching</li>
+            <li>Multi-facet filters</li>
+            <li>Relevance ranking</li>
+            <li>Tag-based filtering</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🔄 Live Integration</h4>
+          <ul>
+            <li>GitHub API sync (hourly)</li>
+            <li>Real-time star counts</li>
+            <li>Webhook listeners</li>
+            <li>Automated updates</li>
+            <li>Version tracking</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>📈 Analytics & Insights</h4>
+          <ul>
+            <li>Installation tracking</li>
+            <li>Daily active users</li>
+            <li>Trending hooks</li>
+            <li>Usage statistics</li>
+            <li>Category popularity</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🛡️ Security & Quality</h4>
+          <ul>
+            <li>Security audits</li>
+            <li>Verified hooks</li>
+            <li>Rate limiting</li>
+            <li>Malware scanning</li>
+            <li>Code quality checks</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hook Categories -->
+    <section class="section">
+      <h2>📂 Hook Categories</h2>
+
+      <div class="info-box">
+        HookHub organizes hooks into <strong>13 distinct categories</strong> based on Claude Code's lifecycle events and hook types.
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PreToolUse</strong></td>
+            <td>Lifecycle</td>
+            <td>Executes before tool usage</td>
+            <td>activity-logger, prompt-validator</td>
+          </tr>
+          <tr>
+            <td><strong>PostToolUse</strong></td>
+            <td>Lifecycle</td>
+            <td>Executes after tool usage</td>
+            <td>format-typescript, auto-git-stage</td>
+          </tr>
+          <tr>
+            <td><strong>SessionStart</strong></td>
+            <td>Lifecycle</td>
+            <td>Runs when session begins</td>
+            <td>session-logger, env-checker</td>
+          </tr>
+          <tr>
+            <td><strong>SessionEnd</strong></td>
+            <td>Lifecycle</td>
+            <td>Runs when session ends</td>
+            <td>cleanup-temp-files, session-summary</td>
+          </tr>
+          <tr>
+            <td><strong>UserPromptSubmit</strong></td>
+            <td>Context</td>
+            <td>Triggered on user input</td>
+            <td>context-enhancer, auto-context-loader</td>
+          </tr>
+          <tr>
+            <td><strong>PermissionRequest</strong></td>
+            <td>Context</td>
+            <td>Handles permission prompts</td>
+            <td>auto-approver, security-check</td>
+          </tr>
+          <tr>
+            <td><strong>SubagentStop</strong></td>
+            <td>Context</td>
+            <td>Subagent completion handler</td>
+            <td>result-summarizer, notification-sender</td>
+          </tr>
+          <tr>
+            <td><strong>PreCompact</strong></td>
+            <td>Context</td>
+            <td>Before context compression</td>
+            <td>context-saver, memory-manager</td>
+          </tr>
+          <tr>
+            <td><strong>Stop</strong></td>
+            <td>Lifecycle</td>
+            <td>Cleanup before shutdown</td>
+            <td>state-saver, backup-creator</td>
+          </tr>
+          <tr>
+            <td><strong>Notification</strong></td>
+            <td>User-Facing</td>
+            <td>Custom notifications</td>
+            <td>sound-notifier, desktop-alert</td>
+          </tr>
+          <tr>
+            <td><strong>Utility</strong></td>
+            <td>Meta</td>
+            <td>General utilities</td>
+            <td>code-formatter, linter</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow</strong></td>
+            <td>Meta</td>
+            <td>Multi-step workflows</td>
+            <td>commit-and-push, test-and-deploy</td>
+          </tr>
+          <tr>
+            <td><strong>Other</strong></td>
+            <td>Meta</td>
+            <td>Uncategorized hooks</td>
+            <td>Experimental or misc</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Deployment -->
+    <section class="section">
+      <h2>🚀 Deployment Architecture</h2>
+
+      <h3>Current Deployment (Phase 1) <span class="phase-indicator phase-current">ACTIVE</span></h3>
+
+      <div class="card">
+        <h4>Vercel Static Site</h4>
+        <ul>
+          <li><strong>Platform:</strong> Vercel (free tier)</li>
+          <li><strong>Build:</strong> <code>next build</code> → Static generation</li>
+          <li><strong>CDN:</strong> Global edge network</li>
+          <li><strong>Performance:</strong> Sub-second page loads</li>
+          <li><strong>Deployment:</strong> Auto-deploy on git push to main</li>
+          <li><strong>Preview:</strong> Preview deployments for PRs</li>
+        </ul>
+      </div>
+
+      <h3>Planned Deployment (Phase 2-3) <span class="phase-indicator phase-planned">ROADMAP</span></h3>
+
+      <svg viewBox="0 0 1200 450" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vercel -->
+        <rect x="400" y="50" width="400" height="150" rx="8" fill="#000000" filter="url(#shadow)"/>
+        <text x="600" y="90" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Vercel</text>
+        <text x="600" y="115" text-anchor="middle" fill="white" font-size="13">Next.js App + API Routes</text>
+        <text x="600" y="140" text-anchor="middle" fill="white" font-size="12">• Edge Functions</text>
+        <text x="600" y="160" text-anchor="middle" fill="white" font-size="12">• Serverless Functions</text>
+        <text x="600" y="180" text-anchor="middle" fill="white" font-size="12">• Global CDN</text>
+
+        <!-- Database -->
+        <rect x="50" y="250" width="200" height="120" rx="8" fill="#336791" filter="url(#shadow)"/>
+        <text x="150" y="285" text-anchor="middle" fill="white" font-size="16" font-weight="bold">PostgreSQL</text>
+        <text x="150" y="310" text-anchor="middle" fill="white" font-size="12">Managed Database</text>
+        <text x="150" y="330" text-anchor="middle" fill="white" font-size="11">(Vercel Postgres or</text>
+        <text x="150" y="348" text-anchor="middle" fill="white" font-size="11">Supabase)</text>
+
+        <!-- Redis -->
+        <rect x="300" y="250" width="200" height="120" rx="8" fill="#dc2626" filter="url(#shadow)"/>
+        <text x="400" y="285" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Redis Cloud</text>
+        <text x="400" y="310" text-anchor="middle" fill="white" font-size="12">Caching Layer</text>
+        <text x="400" y="330" text-anchor="middle" fill="white" font-size="11">• Hook data</text>
+        <text x="400" y="348" text-anchor="middle" fill="white" font-size="11">• Search results</text>
+
+        <!-- MeiliSearch -->
+        <rect x="550" y="250" width="200" height="120" rx="8" fill="#ff5caa" filter="url(#shadow)"/>
+        <text x="650" y="285" text-anchor="middle" fill="white" font-size="16" font-weight="bold">MeiliSearch</text>
+        <text x="650" y="310" text-anchor="middle" fill="white" font-size="12">Search Engine</text>
+        <text x="650" y="330" text-anchor="middle" fill="white" font-size="11">• Full-text search</text>
+        <text x="650" y="348" text-anchor="middle" fill="white" font-size="11">• Fuzzy matching</text>
+
+        <!-- GitHub -->
+        <rect x="800" y="250" width="200" height="120" rx="8" fill="#24292e" filter="url(#shadow)"/>
+        <text x="900" y="285" text-anchor="middle" fill="white" font-size="16" font-weight="bold">GitHub</text>
+        <text x="900" y="310" text-anchor="middle" fill="white" font-size="12">Integration</text>
+        <text x="900" y="330" text-anchor="middle" fill="white" font-size="11">• OAuth</text>
+        <text x="900" y="348" text-anchor="middle" fill="white" font-size="11">• Webhooks</text>
+
+        <!-- Connections -->
+        <path d="M600,200 L150,250" stroke="#4a5568" stroke-width="2" stroke-dasharray="3,3"/>
+        <path d="M600,200 L400,250" stroke="#4a5568" stroke-width="2" stroke-dasharray="3,3"/>
+        <path d="M600,200 L650,250" stroke="#4a5568" stroke-width="2" stroke-dasharray="3,3"/>
+        <path d="M600,200 L900,250" stroke="#4a5568" stroke-width="2" stroke-dasharray="3,3"/>
+      </svg>
+
+      <div class="grid">
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🌐 Frontend Hosting</h4>
+          <ul>
+            <li>Vercel Edge Network</li>
+            <li>Automatic HTTPS</li>
+            <li>Custom domain support</li>
+            <li>Analytics & monitoring</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>💾 Data Layer</h4>
+          <ul>
+            <li>PostgreSQL (Vercel Postgres)</li>
+            <li>Prisma ORM migrations</li>
+            <li>Connection pooling</li>
+            <li>Automated backups</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>⚡ Performance</h4>
+          <ul>
+            <li>Redis caching (Redis Cloud)</li>
+            <li>Edge functions (auth check)</li>
+            <li>ISR for hook pages</li>
+            <li>Image optimization</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🔍 Search Infrastructure</h4>
+          <ul>
+            <li>MeiliSearch Cloud</li>
+            <li>Index syncing via webhook</li>
+            <li>Sub-50ms search queries</li>
+            <li>Typo tolerance</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ Production Prerequisites:</strong>
+        <ul style="margin-top: 10px; margin-left: 20px;">
+          <li>Environment variables configured (<code>DATABASE_URL</code>, <code>REDIS_URL</code>, <code>NEXTAUTH_SECRET</code>, <code>GITHUB_CLIENT_ID</code>, etc.)</li>
+          <li>Database migrations applied via Prisma</li>
+          <li>MeiliSearch indexes created and synced</li>
+          <li>GitHub OAuth app registered</li>
+          <li>Rate limiting configured</li>
+          <li>Error tracking (Sentry) initialized</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Testing Strategy -->
+    <section class="section">
+      <h2>🧪 Testing & Quality Assurance</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h4>✅ Current Testing (Phase 1)</h4>
+          <ul>
+            <li><strong>Framework:</strong> Jest + React Testing Library</li>
+            <li><strong>Coverage:</strong> 90% minimum required</li>
+            <li><strong>Unit Tests:</strong> Component rendering, filtering logic</li>
+            <li><strong>Integration:</strong> Search + filter interactions</li>
+            <li><strong>CI:</strong> Automated on PR creation</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-left-color: #ed8936;">
+          <h4>🎯 Planned Testing (Phase 2-3)</h4>
+          <ul>
+            <li><strong>E2E:</strong> Playwright for user flows</li>
+            <li><strong>API Tests:</strong> Endpoint testing with Supertest</li>
+            <li><strong>Load Tests:</strong> k6 for performance</li>
+            <li><strong>Visual Regression:</strong> Percy or Chromatic</li>
+            <li><strong>A11y:</strong> axe-core automated checks</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Test Commands</h3>
+      <div style="background: #1a202c; padding: 20px; border-radius: 8px; color: #e2e8f0; font-family: monospace;">
+        <div style="margin: 10px 0;">$ <span style="color: #48bb78;">npm test</span> <span style="color: #a0aec0;"># Run tests once</span></div>
+        <div style="margin: 10px 0;">$ <span style="color: #48bb78;">npm run test:watch</span> <span style="color: #a0aec0;"># Watch mode</span></div>
+        <div style="margin: 10px 0;">$ <span style="color: #48bb78;">npm run test:coverage</span> <span style="color: #a0aec0;"># Generate coverage report</span></div>
+        <div style="margin: 10px 0;">$ <span style="color: #48bb78;">npm run test:ci</span> <span style="color: #a0aec0;"># CI mode with coverage</span></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 40px; color: #718096; margin-top: 40px; border-top: 2px solid #e2e8f0;">
+      <p style="font-size: 0.9em;">Generated Architecture Documentation for HookHub</p>
+      <p style="font-size: 0.8em; margin-top: 10px;">Community-Driven Marketplace for Claude Code Hooks</p>
+      <p style="font-size: 0.75em; margin-top: 20px; color: #a0aec0;">Last Updated: February 2026 | Phase 1 Complete | Phase 2-3 In Planning</p>
+    </footer>
+  </div>
+</body>
+</html>

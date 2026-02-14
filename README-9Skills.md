@@ -282,7 +282,7 @@ What skills are available?
 /exit
 ```
 
-### Install the entire marketplace of skills with one command
+## Install the mhattingpete marketplace skills example
 
 <https://github.com/mhattingpete/claude-skills-marketplace/tree/main>
 
@@ -293,37 +293,56 @@ Massive token savings: Process 100 files with **1K** tokens instead of 100K
 - ✅ Auto-secure: PII/secret masking, sandbox execution
 
 ```bash
-claude
-
-# In Claude Code - installs the entire plugin with all skills and agents
+claude 
 /plugin marketplace add mhattingpete/claude-skills-marketplace
 
 # Add just the engineering workflow plugin
-/plugin marketplace add mhattingpete/claude-skills-marketplace/engineering-workflow-plugin --scope project 
+/plugin install engineering-workflow-skills@mhattingpete-claude-skills
 
 # Add just the visual documentation plugin
-/plugin marketplace add mhattingpete/claude-skills-marketplace/visual-documentation-plugin --scope project 
+/plugin install visual-documentation-skills@mhattingpete-claude-skills 
 
 /exit
-```
 
-### After installing marketplace plugin
-
-```bash
-~/.claude/plugins/marketplaces/mhattingpete-claude-skills/execution-runtime/setup.sh
-ls ~/.claude/plugins/marketplaces/mhattingpete-claude-skills/
-
-```
-
-### Example: Refactor 100 files with a custom skill
-
-```bash
 claude
+which skills are available from marketplace mhattingpete?
+Using architecture-diagram-creator skill for the hookhub project in the hookhub directory
 
-/plugin
-    > mhattingpete-claude-skills
-    ◯ code-operations-plugin
-    ◯ engineering-workflow-plugin
-    ◯ productivity-skills-plugin
-    ◯ visual-documentation-skills 
-    > Install for all collaborators on this repository (project scope)
+```
+
+```md
+...
+  Engineering Workflow Skills 🔧
+
+  - engineering-workflow-skills:pr - Create pull requests
+  - engineering-workflow-skills:ensemble-solving - Generate multiple solutions in parallel
+  - engineering-workflow-skills:feature-planning - Break down features into plans
+  - engineering-workflow-skills:git-pushing - Stage, commit, and push changes
+  - engineering-workflow-skills:review-implementing - Process code review feedback
+  - engineering-workflow-skills:test-fixing - Run and fix failing tests
+
+  ...
+
+  Visual Documentation Skills 📊
+
+  - visual-documentation-skills:architecture-diagram-creator - Create HTML architecture diagrams
+  - visual-documentation-skills:dashboard-creator - Create KPI dashboards
+  - visual-documentation-skills:flowchart-creator - Create process flowcharts
+  - visual-documentation-skills:technical-doc-creator - Create technical documentation
+  - visual-documentation-skills:timeline-creator - Create timelines and Gantt charts
+
+  Code Operations Skills 💻
+
+  - code-operations-skills:code-execution - Execute Python code locally with API access
+  - code-operations-skills:code-refactor - Bulk code refactoring operations
+  - code-operations-skills:code-transfer - Transfer code between files
+  - code-operations-skills:file-operations - Analyze files and get metadata
+
+  Productivity Skills 🚀
+
+  - productivity-skills:code-auditor - Comprehensive codebase analysis
+  - productivity-skills:codebase-documenter - Generate comprehensive documentation
+  - productivity-skills:conversation-analyzer - Analyze conversation history patterns
+  - productivity-skills:project-bootstrapper - Set up new projects with best practices
+...
+```
