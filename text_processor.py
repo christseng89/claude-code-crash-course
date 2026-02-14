@@ -11,7 +11,7 @@ def clean_invalid_chars(input_file, output_file):
     """
     Remove invalid character sequences from text file.
 
-    Removes encoding artifacts like "6 E", "0 V", random ASCII chars, etc.
+    Removes encoding artifacts like ": ]* v8 t/ p2 R8 w% o8 l" style patterns
     while preserving valid Chinese text.
     """
     with open(input_file, 'r', encoding='utf-8') as f:
@@ -22,19 +22,66 @@ def clean_invalid_chars(input_file, output_file):
     cleaned_lines = []
 
     for line in lines:
-        # Remove patterns like "6 E", "0 V", "6 u  K", etc. at the end of lines
-        # Pattern: digits/spaces followed by capital letters and optional lowercase/spaces
-        cleaned = re.sub(r'[\d\s]*[A-Z][\s\w]*$', '', line)
+        # Strip trailing whitespace FIRST to ensure $ anchor works correctly
+        cleaned = line.rstrip()
 
-        # Also remove patterns with punctuation and random chars at line end
-        cleaned = re.sub(r'[\d\s]*[~!@#$%^&*()\-_=+\[\]{}|;:,.<>/?`\'"\\]+[\s\w~!@#$%^&*()\-_=+\[\]{}|;:,.<>/?`\'"\\]*$', '', cleaned)
+        # Remove ASCII garbage patterns at end of lines
+        # KEY FIX: Use [a-zA-Z0-9_] instead of \w to ONLY match ASCII word chars (not Chinese!)
 
-        # Remove standalone patterns like "5 i", "7 l", etc.
-        cleaned = re.sub(r'\d+\s+[A-Za-z](?:\s+[A-Za-z])*$', '', cleaned)
+        # Pattern 0a: Protect closing paren from garbage removal (run FIRST!)
+        # Example: "F4"); F  T/ P2 ` -> keep "F4")
+        cleaned = re.sub(r'(\)["\']?)[;,:\s]+[a-zA-Z0-9\s!@#$%^&*()_+=\[\]{}|;:,.<>?/\\\'"`~\-]+$', r'\1', cleaned)
 
-        # Clean up trailing spaces
-        cleaned = cleaned.rstrip()
+        # Pattern 0b: Protect closing paren when followed by digit+garbage
+        # Example: ")2 B* ]9 a$ -> keep )
+        cleaned = re.sub(r'(\))\d+\s+[a-zA-Z0-9\s!@#$%^&*()_+=\[\]{}|;:,.<>?/\\\'"`~\-]+$', r'\1', cleaned)
 
+        # Pattern 1: Capital letter followed by mixed ASCII chars WITH SPACES
+        # Example: "R8 w% o8 l" (must have spaces to avoid matching "F4")
+        # Requires at least one space to distinguish garbage from valid content
+        cleaned = re.sub(r'[A-Z][\sa-zA-Z0-9_]*\s+[\sa-zA-Z0-9_]+$', '', cleaned)
+
+        # Pattern 2: Punctuation followed by mixed ASCII chars
+        # Example: ": ]* v8 t/ p2 R8 w%", "% c! Y" \3 q! o"
+        # Using explicit ASCII charset, EXCLUDING quotes to preserve quoted strings
+        asciiChars = r'a-zA-Z0-9_~!@#$%^&*()\-=+\[\]{}|;:,.<>/?`\'\"\\ '
+        # Removed \' and \" from initial punct to not match quoted content
+        cleaned = re.sub(r'[\d\s]*[~!@#$%^&*(\-_=+\[\]{}|;:,.<>/?`\\]+[' + asciiChars + r']*$', '', cleaned)
+
+        # Pattern 3: Quote/apostrophe followed by ASCII chars
+        # Example: "' N+ L1 j$ v) }) M$ ]  g4 @"
+        cleaned = re.sub(r'[\'\"`]\s+[a-zA-Z0-9\s+$%@!#&*()_\-\[\]{}|;:,.<>?/\\]+$', '', cleaned)
+
+        # Pattern 4: Digit followed by space and single letter patterns
+        # Example: "5 q", "7 l", "1 S"
+        cleaned = re.sub(r'\d+\s+[a-zA-Z](?:\s+[a-zA-Z0-9_])*$', '', cleaned)
+
+        # Pattern 5: Letter+digit combinations like "P7 K5 h5 m"
+        # Requires at least 2 combinations to avoid removing "F4"
+        cleaned = re.sub(r'(?:[a-zA-Z]\d+\s+){2,}[a-zA-Z0-9]*\s*$', '', cleaned)
+
+        # Pattern 6: Single trailing digit after Chinese character
+        # Example: "好色3"
+        cleaned = re.sub(r'(?<=[\u4e00-\u9fff])\d+\s*$', '', cleaned)
+
+        # Pattern 7: Slash followed by ASCII at line end
+        # Example: "/ C"
+        cleaned = re.sub(r'/\s+[a-zA-Z0-9_]+$', '', cleaned)
+
+        # Pattern 8: Multiple asterisks
+        cleaned = re.sub(r'\*{5,}.*$', '', cleaned)
+
+        # Pattern 9: Catchall for ASCII garbage CONTAINING SPACES at line end
+        # Matches sequences like "5 q", "2 O$", "P7 K5 h5 m"
+        # REQUIRES at least one space to avoid removing valid content like "F4" or ")"
+        # Must be preceded by Chinese char to avoid removing valid English text
+        cleaned = re.sub(r'(?<=[\u4e00-\u9fff])[^\u4e00-\u9fff\n]*\s+[^\u4e00-\u9fff\n]+$', '', cleaned)
+
+        # Pattern 10: Lines that are ONLY garbage (digit space letter)
+        if re.match(r'^\s*\d+\s+[a-zA-Z](?:\s+[a-zA-Z0-9_])*\s*$', cleaned):
+            cleaned = ''
+
+        # Trailing spaces already removed at the start
         cleaned_lines.append(cleaned)
 
     # Join and write
