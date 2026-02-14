@@ -56,7 +56,7 @@ export default function HookCard({ hook }: HookCardProps) {
         <h3 className="text-xl font-semibold text-[#141413] dark:text-[#faf9f5]">
           {hook.name}
         </h3>
-        <p className="text-sm leading-relaxed text-[#b0aea5] line-clamp-3 dark:text-[#b0aea5]">
+        <p className="text-sm leading-relaxed text-gray-600 line-clamp-3 dark:text-gray-400">
           {hook.description}
         </p>
       </div>
@@ -66,7 +66,7 @@ export default function HookCard({ hook }: HookCardProps) {
           {hook.metadata.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="rounded-md bg-[#e8e6dc] px-2 py-1 text-xs text-[#141413] dark:bg-[#141413] dark:text-[#b0aea5]"
+              className="rounded-md bg-[#e8e6dc] px-2 py-1 text-xs text-[#141413] dark:bg-[#141413] dark:text-gray-400"
             >
               {tag}
             </span>

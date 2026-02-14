@@ -60,7 +60,7 @@ export default function HookGrid({ hooks }: HookGridProps) {
       />
 
       {/* Results Count */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2" aria-live="polite" aria-atomic="true">
         <div className="h-1 w-1 rounded-full bg-[#d97757]"></div>
         <p className="text-sm font-medium text-[#141413] dark:text-[#faf9f5]">
           {filteredHooks.length} hook{filteredHooks.length !== 1 ? "s" : ""} found
@@ -76,11 +76,11 @@ export default function HookGrid({ hooks }: HookGridProps) {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#e8e6dc] bg-[#faf9f5]/50 py-16 text-center backdrop-blur-sm dark:border-[#b0aea5]/50 dark:bg-[#141413]/50">
-          <div className="mb-4 rounded-full bg-[#e8e6dc] p-4 dark:bg-[#141413]">
-            <Search className="h-8 w-8 text-[#b0aea5]" />
+          <div className="mb-4 rounded-full bg-[#e8e6dc] p-4 dark:bg-[#141413]" aria-hidden="true">
+            <Search className="h-8 w-8 text-gray-400" />
           </div>
           <p className="text-lg font-semibold text-[#141413] dark:text-[#faf9f5]">No hooks found</p>
-          <p className="mt-2 text-sm text-[#b0aea5]">
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Try adjusting your search or filter criteria
           </p>
         </div>

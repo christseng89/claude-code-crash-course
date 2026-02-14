@@ -14,7 +14,10 @@ export default function CategoryFilter({
       {categories.map((category) => (
         <button
           key={category}
+          type="button"
           onClick={() => onSelectCategory(category)}
+          aria-pressed={(selectedCategory === category).toString()}
+          aria-label={`Filter by ${category} category${selectedCategory === category ? ' (selected)' : ''}`}
           className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${
             selectedCategory === category
               ? "bg-[#d97757] text-[#faf9f5] shadow-lg shadow-[#d97757]/30 dark:shadow-[#d97757]/20"
