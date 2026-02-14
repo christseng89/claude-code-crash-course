@@ -55,7 +55,8 @@
       "Bash(chmod:*)",
       "Bash(test:*)",
       "Bash(bash:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(npm run test:ci:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -318,14 +318,15 @@ describe('RootLayout', () => {
       expect(typeof RootLayout).toBe('function');
     });
 
-    it('renders children prop correctly', () => {
+    it('renders children prop correctly through ThemeProvider', () => {
+      // Test the inner content without the html/body wrapper to avoid hydration warnings
       render(
-        <RootLayout>
+        <ThemeProvider>
           <main data-testid="main-content">
             <h1>Page Title</h1>
             <p>Page Description</p>
           </main>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('main-content')).toBeInTheDocument();
@@ -334,10 +335,11 @@ describe('RootLayout', () => {
     });
 
     it('wraps children in ThemeProvider', () => {
+      // Test ThemeProvider wrapping directly
       render(
-        <RootLayout>
+        <ThemeProvider>
           <div data-testid="wrapped-content">Themed Content</div>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('wrapped-content')).toBeInTheDocument();
@@ -346,11 +348,11 @@ describe('RootLayout', () => {
 
     it('handles multiple children elements', () => {
       render(
-        <RootLayout>
+        <ThemeProvider>
           <header data-testid="header">Header</header>
           <main data-testid="main">Main Content</main>
           <footer data-testid="footer">Footer</footer>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('header')).toBeInTheDocument();
@@ -360,12 +362,12 @@ describe('RootLayout', () => {
 
     it('preserves child component structure and props', () => {
       render(
-        <RootLayout>
+        <ThemeProvider>
           <article data-testid="article" className="article-class" aria-label="Test Article">
             <h2>Article Title</h2>
             <p>Article content here</p>
           </article>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       const article = screen.getByTestId('article');
@@ -378,7 +380,7 @@ describe('RootLayout', () => {
     it('renders without crashing with complex nested children', () => {
       expect(() => {
         render(
-          <RootLayout>
+          <ThemeProvider>
             <div>
               <nav>
                 <ul>
@@ -396,16 +398,16 @@ describe('RootLayout', () => {
                 </section>
               </main>
             </div>
-          </RootLayout>
+          </ThemeProvider>
         );
       }).not.toThrow();
     });
 
     it('maintains Readonly children type constraint', () => {
       render(
-        <RootLayout>
+        <ThemeProvider>
           <div data-testid="readonly-test">Readonly Children</div>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('readonly-test')).toBeInTheDocument();
@@ -413,9 +415,9 @@ describe('RootLayout', () => {
 
     it('renders with string children', () => {
       render(
-        <RootLayout>
+        <ThemeProvider>
           <div data-testid="string-child">Simple Text</div>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('string-child')).toHaveTextContent('Simple Text');
@@ -425,9 +427,9 @@ describe('RootLayout', () => {
       const TestComponent = () => <div data-testid="react-element">React Element</div>;
 
       render(
-        <RootLayout>
+        <ThemeProvider>
           <TestComponent />
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('react-element')).toBeInTheDocument();
@@ -435,11 +437,11 @@ describe('RootLayout', () => {
 
     it('integrates with ThemeProvider for theme switching', () => {
       render(
-        <RootLayout>
+        <ThemeProvider>
           <button data-testid="theme-aware-button" className="dark:bg-gray-900">
             Theme Aware
           </button>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       const button = screen.getByTestId('theme-aware-button');
@@ -455,9 +457,9 @@ describe('RootLayout', () => {
       );
 
       render(
-        <RootLayout>
+        <ThemeProvider>
           <ChildComponent />
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('functional-child')).toBeInTheDocument();
@@ -466,28 +468,28 @@ describe('RootLayout', () => {
 
     it('renders layout structure consistently', () => {
       const { rerender } = render(
-        <RootLayout>
+        <ThemeProvider>
           <div data-testid="content-1">Content 1</div>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('content-1')).toBeInTheDocument();
 
       rerender(
-        <RootLayout>
+        <ThemeProvider>
           <div data-testid="content-2">Content 2</div>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('content-2')).toBeInTheDocument();
     });
 
     it('supports Server Component rendering pattern', () => {
-      // RootLayout is a Server Component - it should render without issues
+      // RootLayout is a Server Component - test the ThemeProvider wrapper
       const { container } = render(
-        <RootLayout>
+        <ThemeProvider>
           <div data-testid="server-content">Server Rendered Content</div>
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('server-content')).toBeInTheDocument();
@@ -496,18 +498,51 @@ describe('RootLayout', () => {
 
     it('renders with array of children', () => {
       render(
-        <RootLayout>
+        <ThemeProvider>
           {[
             <div key="1" data-testid="child-1">Child 1</div>,
             <div key="2" data-testid="child-2">Child 2</div>,
             <div key="3" data-testid="child-3">Child 3</div>
           ]}
-        </RootLayout>
+        </ThemeProvider>
       );
 
       expect(screen.getByTestId('child-1')).toBeInTheDocument();
       expect(screen.getByTestId('child-2')).toBeInTheDocument();
       expect(screen.getByTestId('child-3')).toBeInTheDocument();
+    });
+
+    it('RootLayout returns html element with correct attributes', () => {
+      // Test the structure through JSX analysis, not rendering
+      // RootLayout returns: <html lang="en" suppressHydrationWarning>
+      const layoutJSX = RootLayout({ children: <div>Test</div> });
+
+      expect(layoutJSX.type).toBe('html');
+      expect(layoutJSX.props.lang).toBe('en');
+      expect(layoutJSX.props.suppressHydrationWarning).toBe(true);
+    });
+
+    it('RootLayout body element includes font variables and antialiased class', () => {
+      // Test the structure through JSX analysis
+      const layoutJSX = RootLayout({ children: <div>Test</div> });
+      const bodyElement = layoutJSX.props.children;
+
+      expect(bodyElement.type).toBe('body');
+      expect(bodyElement.props.className).toContain('antialiased');
+      expect(bodyElement.props.className).toContain('--font-poppins');
+      expect(bodyElement.props.className).toContain('--font-lora');
+      expect(bodyElement.props.className).toContain('--font-geist-mono');
+    });
+
+    it('RootLayout wraps children in ThemeProvider within body', () => {
+      // Test the structure through JSX analysis
+      const testChild = <div data-testid="test">Test Content</div>;
+      const layoutJSX = RootLayout({ children: testChild });
+      const bodyElement = layoutJSX.props.children;
+      const themeProvider = bodyElement.props.children;
+
+      expect(themeProvider.type).toBe(ThemeProvider);
+      expect(themeProvider.props.children).toBe(testChild);
     });
   });
 });

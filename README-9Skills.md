@@ -308,6 +308,12 @@ claude
 which skills are available from marketplace mhattingpete?
 Using architecture-diagram-creator skill for the hookhub project in the hookhub directory
 
+Use conversation-analyzer
+
+Use code-auditor for project hookhub in hookhub directory  
+
+    ● Skill(productivity-skills:code-auditor)                                                                      ⎿  Successfully loaded skill 
+    
 ```
 
 ```md
