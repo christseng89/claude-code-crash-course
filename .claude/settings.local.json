@@ -54,7 +54,8 @@
       "Bash(echo:*)",
       "Bash(chmod:*)",
       "Bash(test:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "WebFetch(domain:github.com)"
     ]
   },
   "enableAllProjectMcpServers": true,

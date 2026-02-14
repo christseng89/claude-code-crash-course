@@ -74,12 +74,6 @@ Skills 的核心設計原則，分為三個層次：
 <https://github.com/mhattingpete/claude-skills-marketplace/tree/main>
 <https://github.com/mhattingpete/claude-skills-marketplace/tree/main/engineering-workflow-plugin/skills>
 
-Massive token savings: Process 100 files with **1K** tokens instead of 100K
-
-- ✅ Faster operations: Local execution vs multiple API round-trips
-- ✅ Stateful workflows: Resume multi-step refactoring across sessions
-- ✅ Auto-secure: PII/secret masking, sandbox execution
-
 ````bash
 cat << 'EOF' > .claude/skills/git-pushing/SKILL.md
 ---
@@ -284,19 +278,32 @@ claude
 
 What skills are available?  
 
+/clear/plugin marketplace add mhattingpete/claude-skills-marketplace --scope project 
+/exit
 ```
 
+### Install the entire marketplace of skills with one command
+
+<https://github.com/mhattingpete/claude-skills-marketplace/tree/main>
+
+Massive token savings: Process 100 files with **1K** tokens instead of 100K
+
+- ✅ Faster operations: Local execution vs multiple API round-trips
+- ✅ Stateful workflows: Resume multi-step refactoring across sessions
+- ✅ Auto-secure: PII/secret masking, sandbox execution
+
 ```bash
+claude
+
 # In Claude Code - installs the entire plugin with all skills and agents
 /plugin marketplace add mhattingpete/claude-skills-marketplace
 
-/plugin
-    > mhattingpete-claude-skills-marketplace
-    ◯ code-operations-plugin
-    ◯ engineering-workflow-plugin
-    ◯ productivity-skills-plugin
-    ◯ visual-documentation-skills 
-    > Install for all collaborators on this repository (project scope)
+# Add just the engineering workflow plugin
+/plugin marketplace add mhattingpete/claude-skills-marketplace/engineering-workflow-plugin --scope project 
+
+# Add just the visual documentation plugin
+/plugin marketplace add mhattingpete/claude-skills-marketplace/visual-documentation-plugin --scope project 
+
 /exit
 ```
 
