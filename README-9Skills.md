@@ -687,3 +687,121 @@ Routine 工作的特徵是：流程固定、標準明確、重複性高。
 - 創意工作需要一個**臨時派出、用完即棄**的探索者 → 方式二的 fork 是一次性的
 
 當然，這不是絕對的分界。兩種方式可以靈活混用，但如果要選一個主要方向的話，邏輯是這樣的。
+
+## **Subagents、Skills、MCP Servers** 深度比較與最佳實踐
+
+---
+
+### 核心定位差異
+
+- **Skills（技能）** 是可攜帶、可重用的「知識包」。Claude 透過漸進式揭露（progressive disclosure）來保持效率——先掃描 Skill 的名稱和描述，若匹配當前任務才載入完整指令。 本質上，Skills 是把你反覆使用的 prompt 和流程文件打包成一個目錄（包含 `SKILL.md` 主文件和可選的腳本、範例），讓 Claude **自動判斷何時啟用**，不需你手動呼叫。
+
+- **Subagents（子代理）** 是擁有獨立上下文窗口的 Claude 實例。Claude 將整個任務委派給 Subagent，Subagent 在隔離的環境中完成工作後只回傳結果，不會把中間過程的大量 context 灌進你的主對話。 它們可以前台或背景並行運行，適合重度探索和並行任務。
+
+- **MCP Servers（模型上下文協議伺服器）** 是連接外部系統的標準化橋樑。每個 MCP Server 暴露一或多個工具或資料介面，Claude 透過標準化請求與 GitHub、資料庫、Slack 等外部服務互動。
+
+---
+
+### 對比摘要
+
+| 維度 | Skills | Subagents | MCP Servers |
+|------|--------|-----------|-------------|
+| **是什麼** | 知識/流程包 | 獨立 Claude 實例 | 外部工具連接器 |
+| **觸發方式** | 自動匹配描述 | 手動 `@agent` 或 Claude 自行委派 | Claude 呼叫 MCP 工具 |
+| **主要解決問題** | 反覆使用的專業知識與 SOP | Context 隔離、並行執行 | 存取外部資料與 API |
+| **技術門檻** | 低（Markdown + 可選腳本） | 中（YAML frontmatter + prompt 調校） | 較高（需安裝/配置 server） |
+| **跨平台** | Claude Code、Claude.ai、API 都可用 | 僅 Claude Code | Claude Code 及支援 MCP 的客戶端 |
+
+---
+
+## 實際 Best Practices 案例
+
+#### 案例 1：三階段開發 Pipeline（PubNub 團隊實踐）
+
+PubNub 團隊建立了三階段 Subagent Pipeline：`pm-spec`（讀取需求、撰寫規格書）→ `architect-review`（驗證設計、產出架構決策記錄）→ `implementer-tester`（實作程式碼與測試、更新文件）。
+
+關鍵做法：
+- 每個 Subagent 只給一個明確目標、輸入、輸出和交接規則，描述保持動作導向。
+- 依角色限定工具範圍：PM 和 Architect 偏重讀取類工具（搜尋、MCP 文件查閱）；Implementer 才給 Edit/Write/Bash 加上 UI 測試權限。
+- 架構師 Subagent 透過 **MCP Server** 連接 PubNub 的 SDK 文件，確保設計時使用最新的 API 規範。
+
+這個案例展示了三者的組合：Subagent 做任務隔離與並行，MCP 提供即時外部資料，Skills 則可以嵌入各 Subagent 中提供程式碼風格等通用知識。
+
+#### 案例 2：給 Subagent 配備專屬 MCP 工具組
+
+一位開發者將 Subagent 比喻為「小兵團隊」，關鍵轉折是停止把它們當萬能通才、而是按角色分配專用工具。具體做法：
+
+- **Debugger 子代理**：配置 Supabase MCP（唯讀模式），只能瀏覽資料庫 schema 和 log，不能寫入——遵循最小權限原則，因為 agent 和人一樣都可能誤刪生產資料庫。
+- **Architect 子代理**：配置 Zen MCP 工具組，可以呼叫其他模型進行方案辯論。
+- **Reviewer 子代理**：系統 prompt 中直接要求使用 `secaudit` 工具，而非只是泛泛地「review code」。
+
+#### 案例 3：Skills + Subagents 混合架構
+
+Subagent 可以利用 Skills 獲取專業知識，將獨立性與可攜帶知識合併。實際範例：
+
+- `python-developer` 子代理搭配 `pandas-analysis` Skill → 按團隊慣例執行資料轉換
+- `documentation-writer` 子代理搭配 `technical-writing` Skill → 統一 API 文件格式
+- `code-reviewer` 子代理搭配語言特定的 best-practice Skill → 將通用審查流程與語言專屬規範分離
+
+核心洞察：如果你發現自己在多個對話中反覆輸入同樣的 prompt，就該把它做成 Skill。
+
+### 案例 4：Slash Command 串接 Subagent 的工作流
+
+Slash Command 可以在指令中指定啟動特定 Subagent、呼叫特定 Skill，像 pipeline 一樣串接「研究 → 程式碼掃描 → 撰寫文件」的流程。例如：
+
+```
+/create-feature  →  啟動 pm-spec subagent（規格）
+                 →  啟動 architect subagent（設計）
+                 →  啟動 implementer subagent（實作 + 測試）
+```
+
+每個 Subagent 可以內建 Skills（如 TDD skill、brand-guidelines skill），同時透過 MCP 連接 GitHub、資料庫。
+
+---
+
+### 何時選用什麼？決策指引
+
+- **你需要的是「專業知識/SOP」且希望自動生效** → 用 **Skills**
+- **你需要隔離 context、並行處理、或做重度探索** → 用 **Subagents**
+- **你需要讀寫外部系統（DB、GitHub、Slack）** → 用 **MCP Servers**
+- **複雜真實場景** → 三者組合：MCP 提供資料，Skills 提供知識，Subagents 做任務分工
+
+最強大的用法不是三選一，而是將它們**組合成一個分工明確的 agent 架構。**
+
+## *Plugin 正是把這些組件打包分發的機制**
+
+Plugin 是將 **Skills**、**Subagents** 、 **Commands** 、 **Hooks**+ （可選的 **MCP 配置**）捆綁成一個完整單元，用於跨團隊或跨專案分發。最適合團隊標準化和推廣統一的配置。
+
+Plugin = Skills + Subagents + Commands + Hooks + （可選的 MCP 配置）
+
+舉個具體例子：假設你團隊有一套「Feature Development」的標準流程，你可以打包成一個 Plugin：
+
+```
+my-feature-plugin/
+├── skills/
+│   ├── tdd-practice/SKILL.md          # TDD 知識
+│   └── code-style/SKILL.md            # 團隊程式碼風格
+├── agents/
+│   ├── pm-spec.md                     # 規格撰寫 subagent
+│   ├── architect-review.md            # 架構審查 subagent
+│   └── implementer-tester.md          # 實作測試 subagent
+├── commands/
+│   ├── create-feature.md              # /create-feature 啟動整個 pipeline
+│   └── code-review.md                 # /code-review 觸發審查流程
+└── install.sh                         # 安裝腳本
+```
+
+Plugin 的安裝腳本會偵測你的 Claude Code 目錄，自動把所有檔案複製到正確位置，不需要手動管理檔案結構。
+
+所以整個生態的思考方式是：
+
+- **MCP** → 解決「連接什麼外部工具」
+- **Skills** → 解決「知道什麼專業知識」
+- **Subagents** → 解決「怎麼分工執行」
+- **Slash Commands** → 解決「怎麼方便觸發」
+- **Hooks** → 解決「什麼事件自動反應」
+- **Plugin** → 把以上全部打包，一鍵安裝、團隊共享
+
+從實踐經驗來看，Skills 填補了過去 Subagent 之間共用指令難以維護的痛點——以前需要在多個 agent 檔案中重複維護模板化的指令，現在 Skills 讓這件事變得輕鬆許多。
+
+Plugin 就是讓這整套架構變成**可版本控制、可分發、可複製**的最終形態。
