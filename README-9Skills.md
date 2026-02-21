@@ -776,7 +776,7 @@ Plugin = Skills + Subagents + Commands + Hooks + （可選的 MCP 配置）
 
 舉個具體例子：假設你團隊有一套「Feature Development」的標準流程，你可以打包成一個 Plugin：
 
-```
+```directory
 my-feature-plugin/
 ├── skills/
 │   ├── tdd-practice/SKILL.md          # TDD 知識
