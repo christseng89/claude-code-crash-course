@@ -451,6 +451,9 @@ AI 缺乏"常识"，依赖明确指令。若未在提示词中说明，极易遗
 
 ## Claude Code with Minimax 2.5
 
+<https://www.youtube.com/watch?v=jmYwRMMGxUc>
+<https://ollama.com/library/minimax-m2.5>
+
 ```bash
 ollama launch claude --model minimax-m2.5:cloud
 
@@ -458,4 +461,6 @@ claude
 /model
 
   ❯ 6. minimax-m2.5:cloud ✔   Custom model
+
+tell me about this project  
 ```
