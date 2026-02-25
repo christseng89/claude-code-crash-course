@@ -57,7 +57,8 @@
       "Bash(bash:*)",
       "WebFetch(domain:github.com)",
       "Bash(npm run test:ci:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(git:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

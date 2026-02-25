@@ -8,6 +8,9 @@
     "engineering-workflow-skills@mhattingpete-claude-skills": true,
     "visual-documentation-skills@mhattingpete-claude-skills": true,
     "code-operations-skills@mhattingpete-claude-skills": true,
-    "productivity-skills@mhattingpete-claude-skills": true
+    "productivity-skills@mhattingpete-claude-skills": true,
+    "context7@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true
   }
 }

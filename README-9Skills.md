@@ -61,7 +61,7 @@ Skills 的核心設計原則，分為三個層次：
 第二層：當 Claude 認為某個 Skill 相關時，才讀取完整的 SKILL.md
 第三層：Skill 可包含額外檔案，Claude 只在需要時才進一步導航和讀取 (例如 PDF Skill 中的 forms.md)
 
-### Skills 的設計是按需載入的，避免不必要地佔用上下文窗口的空間。
+### Skills 的設計是按需載入的，避免不必要地佔用上下文窗口的空間
 
 - Agent 啟動時，只會將每個已安裝 Skill 的 name 和 description 預載入系統提示中。 claude這是第一層的漸進式揭露——提供剛好足夠的資訊讓 Claude 判斷何時該使用哪個 Skill，而不會把所有內容都塞進上下文。
 
@@ -278,7 +278,8 @@ claude
 
 What skills are available?  
 
-/clear/plugin marketplace add mhattingpete/claude-skills-marketplace --scope project 
+/clear
+/plugin marketplace add mhattingpete/claude-skills-marketplace --scope project 
 /exit
 ```
 
@@ -714,13 +715,14 @@ Routine 工作的特徵是：流程固定、標準明確、重複性高。
 
 ---
 
-## 實際 Best Practices 案例
+### 實際 Best Practices 案例
 
 #### 案例 1：三階段開發 Pipeline（PubNub 團隊實踐）
 
 PubNub 團隊建立了三階段 Subagent Pipeline：`pm-spec`（讀取需求、撰寫規格書）→ `architect-review`（驗證設計、產出架構決策記錄）→ `implementer-tester`（實作程式碼與測試、更新文件）。
 
 關鍵做法：
+
 - 每個 Subagent 只給一個明確目標、輸入、輸出和交接規則，描述保持動作導向。
 - 依角色限定工具範圍：PM 和 Architect 偏重讀取類工具（搜尋、MCP 文件查閱）；Implementer 才給 Edit/Write/Bash 加上 UI 測試權限。
 - 架構師 Subagent 透過 **MCP Server** 連接 PubNub 的 SDK 文件，確保設計時使用最新的 API 規範。
@@ -805,3 +807,17 @@ Plugin 的安裝腳本會偵測你的 Claude Code 目錄，自動把所有檔案
 從實踐經驗來看，Skills 填補了過去 Subagent 之間共用指令難以維護的痛點——以前需要在多個 agent 檔案中重複維護模板化的指令，現在 Skills 讓這件事變得輕鬆許多。
 
 Plugin 就是讓這整套架構變成**可版本控制、可分發、可複製**的最終形態。
+
+```bash
+claude
+/plugin
+
+ ❯ ◯ code-review · claude-plugins-official · 104K installs
+     Automated code review for pull requests using multiple sp...
+     > Install for all collaborators on this repository (project scope)
+     ✓ Installed code-review. Restart Claude Code to load new plugins.
+/exit
+
+claude
+/skills
+```

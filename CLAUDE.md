@@ -24,6 +24,8 @@ This is a **Claude Code Crash Course** - a branch-based learning repository desi
 - `README-7Subagents.md` - Creating and using specialized subagents
 - `README-8OutputStyles.md` - Output formatting and statusline customization
 - `README-9Skills.md` - Skills fundamentals, marketplace plugins, and progressive disclosure
+- `README-A.0DeepAgents.md` - Deep agents overview and patterns
+- `README-A.1DeepAgents_ClaudeCode.md` - Claude Code architecture guide for deep agents
 - `RAG-architecture.md` - RAG pipeline architecture diagrams
 - `RAG-Flow-Diagram.md` - Detailed RAG flow with decision points
 - `ComplianceCheckGuidance.md` - Banking compliance check procedures (enterprise use case)
@@ -226,6 +228,7 @@ git checkout main
 - `hookhub/` - Hook marketplace Next.js app (see `hookhub/CLAUDE.md` for detailed architecture)
 - `my-app/` - Tutorial Next.js app (basic App Router patterns)
 - `context-engineering-mcp/` - MCP integration examples with fine-grained config
+- `OwsapZap/` - OWASP ZAP security testing setup via Docker Compose (headless daemon on port 8086, browser GUI on port 8096)
 - `examples/` - Advanced patterns (context-switch.sh)
 - Root-level README files - Numbered learning documentation (README-1.md through README-9.md)
 - Python examples - `fibonacci.py`, `text_processor.py`
@@ -315,12 +318,11 @@ The `.mcp.json` file defines available MCP servers. To enable/disable servers, c
 **Configured Servers** (in `.mcp.json`):
 - **github** - GitHub API integration (requires `.env` with `GITHUB_PERSONAL_ACCESS_TOKEN`)
 - **playwright** - Microsoft Playwright browser automation and screenshots
-- **context7** - Context7 HTTP-based MCP server for documentation queries (`https://mcp.context7.com/mcp`)
 - **verbose-server** (development) - HTTP-based verbose MCP server for debugging (`http://127.0.0.1:8000/mcp`)
 - **puppeteer-mcp-server** - Browser automation via Puppeteer (alternative to Playwright)
 - **sequential-thinking** - Step-by-step reasoning for complex problem-solving
 
-**Note:** Only `context7` and `sequential-thinking` are enabled by default in the current configuration. Enable others by adding them to `settings.local.json`.
+**Note:** Only `sequential-thinking` is enabled by default in the current `.mcp.json` configuration. **Context7** is available via the `context7@claude-plugins-official` plugin (not a standalone MCP server entry). Enable other servers by adding them to `settings.local.json`.
 
 **Environment Setup for MCP Servers:**
 
