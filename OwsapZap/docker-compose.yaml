@@ -1,0 +1,64 @@
+services:
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    container_name: owasp-zap
+    user: zap
+    ports:
+      - "8086:8080"
+    command: >
+      zap.sh -daemon
+      -host 0.0.0.0
+      -port 8080
+      -config api.addrs.addr.name=.*
+      -config api.addrs.addr.regex=true
+      -config api.key=changeme
+    volumes:
+      - zap-data:/zap/wrk
+    networks:
+      - zapnet
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080/JSON/core/view/version/?apikey=changeme",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    environment:
+      - ZAP_PORT=8080
+
+  zap-webswing:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    container_name: owasp-zap-gui
+    user: zap
+    ports:
+      - "8096:8080"
+    command: zap-webswing.sh # ← add this back
+    volumes:
+      - zap-gui-data:/zap/wrk
+    networks:
+      - zapnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s # ← give it more time to start
+    restart: unless-stopped
+    environment:
+      - ZAP_PORT=8080
+
+networks:
+  zapnet:
+    driver: bridge
+
+volumes:
+  zap-data:
+    driver: local
+  zap-gui-data:
+    driver: local
