@@ -58,7 +58,10 @@
       "WebFetch(domain:github.com)",
       "Bash(npm run test:ci:*)",
       "Bash(wc:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "mcp__notebooklm-mcp__notebook_create",
+      "mcp__notebooklm-mcp__notebook_add_url",
+      "mcp__notebooklm-mcp__notebook_query"
     ]
   },
   "enableAllProjectMcpServers": true,

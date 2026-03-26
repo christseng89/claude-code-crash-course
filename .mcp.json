@@ -27,6 +27,9 @@
     "verbose-server": {
       "type": "http",
       "url": "http://127.0.0.1:8000/mcp"
+    },
+    "notebooklm-mcp": {
+      "command": "C:/Users/samfi/.local/bin/notebooklm-mcp"
     }
   }
 }
